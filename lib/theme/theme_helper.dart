@@ -183,6 +183,10 @@ class ColorSchemes {
     secondaryContainer: Color(0XFF989692),
     background:Color.fromRGBO(51, 51, 51, 0.75),
     inversePrimary: Color.fromRGBO(250, 255, 10, 0.22),
+    error: Color.fromRGBO(255, 0, 0, 1.0),
+
+    onBackground: Color(0XffF28C28),
+    onSecondary:Color(0XffF28C28) ,
 
     // Error colors
     errorContainer: Color(0XFFFF0000),

@@ -1,8 +1,7 @@
-import 'package:credit_card_validator/credit_card_validator.dart';
 import 'package:get/get.dart';
 
 class Validator{
-  CreditCardValidator _ccValidator = CreditCardValidator();
+
   static String? isPasswordValid ({required String? value}) {
     if (value == null ||value.trim().isEmpty){
       return "Please enter password";

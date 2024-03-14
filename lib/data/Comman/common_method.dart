@@ -20,10 +20,15 @@ class CM{
         Color? textColor,
       }) {
     Fluttertoast.showToast(
+
       msg: msg,
       backgroundColor:backgraoundCollor??ColorSchemes.primaryColorScheme.background ,
       textColor: textColor??Color(0xffffffff),
       gravity: gravity ?? ToastGravity.TOP,
+      fontSize: 14,
+
+      toastLength: Toast.LENGTH_LONG,
+
     );
   }
   static void noInternet() {

@@ -1,4 +1,4 @@
-import 'dart:ffi';
+
 
 import 'package:preeti_s_application3/data/apiModal/testmonialDescriptionModal.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -116,7 +116,9 @@ class NewsPageScreen extends GetWidget<NewsPageController> {
                                       SizedBox(height: 9.v),
                                       _buildUserProfile(),
                                       SizedBox(height: 10.v),
-                                      pageSliderModal(),
+                                      pageSliderModal(
+
+                                      ),
                                       SizedBox(height: 20.v,),
                                       CW.termCondition(satOfficerEmail.value),
                                       SizedBox(height: 60.v,),

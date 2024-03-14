@@ -5,6 +5,8 @@ import 'package:preeti_s_application3/data/apiModal/getDashboardModal.dart';
 import 'package:preeti_s_application3/presentation/status_screen/models/status_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../data/local_database/database_helper/database_helper.dart';
+
 /// A controller class for the StatusScreen.
 ///
 /// This class manages the state of the StatusScreen, including the
@@ -12,14 +14,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 class StatusController extends GetxController {
   final getDashboardData = Rxn<GetDashBoardModel>();
   Rx<StatusModel> statusModelObj = StatusModel().obs;
+  final DatabaseHelper dbHelper = DatabaseHelper();
   RxString password = ''.obs;
   RxString randomText1 = ''.obs;
   RxString randomText2 = ''.obs;
+  final db = Rxn<UserModel>();
   @override
-  void onInit() {
-   print("status page called");
+  void onInit()async {
+
+   db.value = await dbHelper.getUsers();
+   password.value= db.value!.password;
+   print(password.value);
     super.onInit();
-   getPassword();
+
    randomText1.value = generateRandomText(16);
    randomText2.value = generateRandomText(16);
 
@@ -33,14 +40,5 @@ class StatusController extends GetxController {
           length, (_) => chars.codeUnitAt(random.nextInt(chars.length))),
     );
   }
-  getPassword() async {
-    print('running');
-    final prefs = await SharedPreferences.getInstance();
-    final key = prefs.get('password');
 
-    password.value  = key.toString();
-
-    print('YOUR password - $password');
-    print('YOUR password KEY - $key');
-  }
   }

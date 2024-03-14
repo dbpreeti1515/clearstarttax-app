@@ -93,7 +93,7 @@ final List<Widget> imageSliders = imgList.map((item) {
 
 
                 // overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.bodySmall,
+                style: theme.textTheme.bodySmall!.copyWith(fontSize: 11),
               ),
             ),
           ],

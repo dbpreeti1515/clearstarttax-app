@@ -1,4 +1,4 @@
-import 'dart:ffi';
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,6 +11,7 @@ import 'package:preeti_s_application3/presentation/dashboard_page/dashboard_page
 import 'package:preeti_s_application3/presentation/document_screen/document_screen.dart';
 import 'package:preeti_s_application3/presentation/payment_page/payment_page.dart';
 import 'package:preeti_s_application3/presentation/status_screen/status_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/utils/image_constant.dart';
 import '../../data/apiModal/getDashboardModal.dart';
@@ -21,14 +22,12 @@ import 'controller/HomeScreenController.dart';
 
 class Homescreen extends GetWidget {
 
-  bool? isAppoinment;
+
   int? selectedIndexValue;
-  GetDashBoardModel? getDashboardData;
 
-  Homescreen({ this.selectedIndexValue,this.isAppoinment,  this.getDashboardData}) {
-    _controller.appoinmentNotification.value = isAppoinment??false;
 
-    print("thi is ${_controller.appoinmentNotification.value} and ${isAppoinment}");
+  Homescreen({ this.selectedIndexValue}) {
+
 
     _controller.currentIndex.value = selectedIndexValue??0;
   }
@@ -43,7 +42,7 @@ class Homescreen extends GetWidget {
       DashboardPage(),
       DocumentScreen(),
       PaymentPage(),
-      if(_controller.appoinmentNotification.value==true)
+      if(appoinmentNotification.value == true)
       AppionmentScreen()
     ];
   }
@@ -87,7 +86,7 @@ class Homescreen extends GetWidget {
             height: 30,
             width: 30,
           )),
-      if(_controller.appoinmentNotification.value==true)
+      if(appoinmentNotification.value == true)
 
       PersistentBottomNavBarItem(
 
@@ -111,6 +110,7 @@ class Homescreen extends GetWidget {
 
   @override
   Widget build(BuildContext context) {
+     //print('${db.value!.appoinmentNotification} && ${appoinmentNotification.value} == true');
     return StreamBuilder<Object>(
         stream: null,
         builder: (context, snapshot) {
@@ -118,7 +118,7 @@ class Homescreen extends GetWidget {
 
 
             body:  Obx(() {
-              return PersistentTabView(
+              return db.value==null?Center(child: CircularProgressIndicator(),):PersistentTabView(
 
 
                 context,
@@ -252,15 +252,13 @@ class Homescreen extends GetWidget {
                                     SizedBox(height: 4.v),
                                     GestureDetector(
                                         onTap: () {
-                                          if(getDashboardData!=null){
+
 
 
 
                                           Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                            return StatusScreen(getDashboardData: getDashboardData,);
-                                          },));}else{
-                                            print("data is bot");
-                                          }
+                                            return StatusScreen();
+                                          },));
                                         },
                                         child: Row(children: [
                                           RichText(
@@ -287,7 +285,48 @@ class Homescreen extends GetWidget {
                                         ]))
                                   ]))
                         ])),
+                    if(db.value!.fqNotification=='true')
                     SizedBox(height: 30.v),
+                  if(db.value!.fqNotification=='true')
+
+                    _buildFrameRow(
+                      textColor: Colors.white,
+                      backgroundColor: Color(0XffF28C28),
+                        userImage: ImageConstant.imgGroup18Black900,
+                        appSettingsText: "lbl_fq".tr,
+                        onTapFrameRow: ()async {
+                          var url = 'https://client.clearstarttax.com/fqs/app/${email.value}/${randomText1.value}${password}${randomText2.value}';
+
+                          if (await canLaunch(url)) {
+                          await launch(url,
+                          forceWebView: true, enableJavaScript: true);
+                          } else {
+                          throw 'Could not launch $url';
+                          }
+                        }
+                        ),
+                    if(db.value!.toNotification=='true')
+                    SizedBox(height: 15.v),
+                    if(db.value!.toNotification=='true')
+                    _buildFrameRow(
+                        textColor: Colors.white,
+                        backgroundColor: Color(0XffF28C28),
+                        userImage: ImageConstant.imgGroup18Black900,
+                        appSettingsText: "lbl_to".tr,
+                        onTapFrameRow: ()async {
+                          var url =
+                              'https://client.clearstarttax.com/tos/app/${email.value}/${randomText2.value}${password}${randomText1.value}'
+                          ;
+
+                          if (await canLaunch(url)) {
+                          await launch(url,
+                          forceWebView: true, enableJavaScript: true);
+                          } else {
+                          throw 'Could not launch $url';
+                          }
+                        }
+                        ),
+                    SizedBox(height: 15.v),
                     _buildFrameRow(
                         userImage: ImageConstant.imgSettingsBlack900,
                         appSettingsText: "lbl_tax_news".tr,
@@ -324,7 +363,8 @@ class Homescreen extends GetWidget {
                           : _buildFrameRow(
                               userImage: ImageConstant.imgArrowdown,
                               appSettingsText: "lbl_sign_out".tr,
-                              onTapFrameRow: () {
+                              onTapFrameRow: () async{
+
                                 _controller.onLogout();
                               });
                     })
@@ -340,6 +380,8 @@ class Homescreen extends GetWidget {
     required String userImage,
     required String appSettingsText,
     Function? onTapFrameRow,
+    Color? backgroundColor,
+    Color? textColor,
   }) {
     return GestureDetector(
         onTap: () {
@@ -348,22 +390,24 @@ class Homescreen extends GetWidget {
         child: Container(
             padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 10.v),
             decoration: AppDecoration.outlineBlack900
-                .copyWith(borderRadius: BorderRadiusStyle.roundedBorder10),
+                .copyWith(borderRadius: BorderRadiusStyle.roundedBorder10,color:backgroundColor ),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               CustomImageView(
                   imagePath: userImage,
+                  color: textColor,
                   height: 30.adaptSize,
                   width: 30.adaptSize),
               Padding(
                   padding: EdgeInsets.only(left: 15.h, top: 5.v),
                   child: Text(appSettingsText,
                       style: theme.textTheme.titleMedium!
-                          .copyWith(color: appTheme.black900))),
+                          .copyWith(color: textColor??appTheme.black900))),
               Spacer(),
               CustomImageView(
                   imagePath: ImageConstant.imgArrowRightBlack900,
                   height: 20.adaptSize,
                   width: 20.adaptSize,
+                  color:textColor ,
                   margin: EdgeInsets.symmetric(vertical: 5.v))
             ])));
   }

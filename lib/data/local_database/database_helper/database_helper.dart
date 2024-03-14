@@ -1,149 +1,209 @@
-import 'dart:async';
-
-
-// ignore: depend_on_referenced_packages
-import 'package:path/path.dart';
+import 'package:preeti_s_application3/data/local_database/database_const/database_const.dart';
 import 'package:sqflite/sqflite.dart';
-
-import '../database_const/database_const.dart';
+import 'package:path/path.dart';
 
 class DatabaseHelper {
-  static Database? db;
-  static final DatabaseHelper databaseHelperInstance =
-      DatabaseHelper._privateConstructor();
-
-  DatabaseHelper._privateConstructor();
+  static final DatabaseHelper _instance = DatabaseHelper._internal();
+  Database? _database;
 
   factory DatabaseHelper() {
-    return databaseHelperInstance;
+    return _instance;
   }
 
-  Future<Database?> openDB() async {
-    db = await openDatabase(
-      join(await getDatabasesPath(), DatabaseConst.databaseName),
-      onCreate: (db, version) async {
+  DatabaseHelper._internal();
 
-        await createDatabase(db: db);
-        await createUserLoginDatabase(db: db);
-      },
-      version: DatabaseConst.version,
-      onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion < newVersion) {
+  Future<Database> get database async {
+    if (_database != null) return _database!;
 
-            await db.execute("DROP TABLE IF EXISTS ${DatabaseConst.tableName}");
-            await db.execute("DROP TABLE IF EXISTS ${DatabaseConst.tableNameUserLogin}");
-            await createDatabase(db: db);
-            await createUserLoginDatabase(db: db);
-        }
-      },
+    _database = await _initDatabase();
+    return _database!;
+  }
+
+  Future<Database> _initDatabase() async {
+    final databasesPath = await getDatabasesPath();
+    final path = join(databasesPath, DatabaseConst.databaseName);
+
+    return await openDatabase(path, version: 1, onCreate: _onCreate);
+  }
+
+  Future<void> _onCreate(Database db, int version) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS user (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        token TEXT,
+        email TEXT,
+        name TEXT,
+        greeting TEXT,
+        password TEXT,
+        status TEXT,
+        case_id TEXT,
+        status_id TEXT,
+        toNotification TEXT,
+        fqNotification TEXT,
+        appoinmentNotification TEXT
+      )
+    ''');
+  }
+
+  Future<int> insertUser(UserModel user) async {
+    print("data inserted");
+    final db = await database;
+    return await db.insert('user', user.toMap());
+  }
+
+  Future<List<UserModel>> getAllUsers() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('user');
+    return List.generate(maps.length, (i) => UserModel.fromMap(maps[i]));
+  }
+  Future<UserModel?> getUsers() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('user', limit: 1);
+    if (maps.isNotEmpty) {
+      return UserModel.fromMap(maps.first);
+    } else {
+      return null; // Return null if no user is found
+    }
+  }
+  Future<int> deleteAllUsers() async {
+    final db = await database;
+    return await db.delete('user');
+  }
+
+
+  Future<int> deleteFirstUser() async {
+    print("user deleted");
+    final db = await database;
+    final firstUser = await db.query('user', limit: 1);
+
+    if (firstUser.isNotEmpty) {
+      final firstUserId = firstUser[0]['id'];
+      return await db.delete('user', where: 'id = ?', whereArgs: [firstUserId]);
+    } else {
+      return 0; // Return 0 if no user is found
+    }
+  }
+  Future<int> updateFirstUserColumn(String columnName, String newValue) async {
+
+    print("data updated $newValue");
+    final db = await database;
+
+    // Get the first user
+    final List<Map<String, dynamic>> users = await db.query('user', limit: 1);
+
+    if (users.isNotEmpty) {
+      final int firstUserId = users[0]['id'];
+
+      // Update the specified column for the first user
+      return await db.update(
+        'user',
+        {columnName: newValue},
+        where: 'id = ?',
+        whereArgs: [firstUserId],
+      );
+    } else {
+      return 0; // Return 0 if no user is found
+    }
+  }
+  // @override
+  // void onUpgrade( int oldVersion, int newVersion) async {
+  //   print('Perform database schema changes when upgrading');
+  //   final db = await database;
+  //   if (oldVersion < 2) {
+  //     await db.execute('''
+  //       ALTER TABLE user
+  //       ADD COLUMN isUserLogin TEXT
+  //     ''');
+  //   }
+  //   // Add more upgrade conditions as needed for future changes
+  // }
+  @override
+  void onUpgrade(int oldVersion, int newVersion) async {
+    // Perform database schema changes when upgrading
+    print('Perform database schema changes when upgrading');
+    final db = await database;
+    if (oldVersion < 2) {
+      // Check if the column exists before trying to add it
+      var isColumnExists = await _isColumnExists(db, 'user', 'isUserLogin');
+      if (!isColumnExists) {
+        await db.execute('''
+          ALTER TABLE user
+          ADD COLUMN isUserLogin TEXT
+        ''');
+      }
+    }
+    // Add more upgrade conditions as needed for future changes
+  }
+
+  Future<bool> _isColumnExists(Database db, String tableName, String columnName) async {
+    var result = await db.rawQuery('PRAGMA table_info($tableName)');
+    return result.any((column) => column['name'] == columnName);
+  }
+
+}
+
+
+class UserModel {
+  int? id;
+  String token;
+  String email;
+  String name;
+  String greeting;
+  String password;
+  String status;
+  String caseId;
+  String statusId;
+  String toNotification;
+  String fqNotification;
+  String appoinmentNotification;
+
+  UserModel({
+    this.id,
+    required this.token,
+    required this.email,
+    required this.name,
+    required this.greeting,
+    required this.password,
+    required this.status,
+    required this.caseId,
+    required this.statusId,
+    required this.toNotification,
+    required this.fqNotification,
+    required this.appoinmentNotification,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'token': token,
+      'email': email,
+      'name': name,
+      'greeting': greeting,
+      'password': password,
+      'status': status,
+      'case_id': caseId,
+      'status_id': statusId,
+      'toNotification': toNotification,
+      'fqNotification': fqNotification,
+      'appoinmentNotification': appoinmentNotification,
+    };
+  }
+
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
+      id: map['id'],
+      token: map['token'],
+      email: map['email'],
+      name: map['name'],
+      greeting: map['greeting'],
+      password: map['password'],
+      status: map['status'],
+      caseId: map['case_id'],
+      statusId: map['status_id'],
+      toNotification: map['toNotification'],
+      fqNotification: map['fqNotification'],
+      appoinmentNotification: map['appoinmentNotification'],
     );
-    return db;
-  }
-
-  Future<void> closeDB() async {
-    final db = await databaseHelperInstance.openDB();
-    db?.close();
-  }
-
-  Future<void> createDatabase({required Database? db}) async {
-    await db?.execute('''CREATE TABLE IF NOT EXISTS  ${DatabaseConst.tableName}
-        (${DatabaseConst.columnPrimaryKey} ${DatabaseConst.idType}
-        , ${DatabaseConst.columnId} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnName} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnEmail} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnMobile} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnUserImage} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnEmailVerifyAt} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnUserRole} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnStatus} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnUserId} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnMembershipPlan} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnMembershipDate} ${DatabaseConst.textType} , 
-        ${DatabaseConst.columnMembershipExpireDate} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnIp} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnDeviceType} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnCreatedAt} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnUpdatedAt} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnToken} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnMyCollection} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnCompleteBook} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnOnGoing} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnNotificationOnOff} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnAppUpdateOnOff} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnMode} ${DatabaseConst.textType}
-        , ${DatabaseConst.columnCountryCode} ${DatabaseConst.textType}
-        )''');
-  }
-
-  Future<void> createUserLoginDatabase({required Database? db}) async {
-    await db?.execute(
-        '''CREATE TABLE IF NOT EXISTS  ${DatabaseConst.tableNameUserLogin}
-        (${DatabaseConst.columIsLogIn} ${DatabaseConst.textType})''');
-  }
-
-  Future<bool> insert(
-      {required Database? db,
-      required Map<String, dynamic> data,
-      String tableName = DatabaseConst.tableName}) async {
-    int id = await db?.insert(tableName, data) ?? -1;
-    if (id != -1) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<void> update(
-      {required Database? db,
-      required Map<String, dynamic> data,
-      String tableName = DatabaseConst.tableName}) async {
-    await db?.update(tableName, data);
-  }
-
-  Future<String> getParticularData(
-      {required String key, String tableName = DatabaseConst.tableName}) async {
-    db = await openDB();
-    if (!await isDatabaseHaveData(db: db, tableName: tableName)) {
-      List<Map<String, Object?>> listOfData =
-          await db?.rawQuery('SELECT * FROM $tableName') ?? [];
-      return listOfData.first[key].toString();
-    } else {
-      return "";
-    }
-  }
-
-  Future<void> updateParticularData(
-      {required String key,
-      required String val,
-      String tableName = DatabaseConst.tableName}) async {
-    db = await openDB();
-    Map<String, dynamic> value = {};
-    value = {key: val};
-    await db?.update(tableName, value,
-            where: '${DatabaseConst.columnPrimaryKey} = ?', whereArgs: [1]) ??
-        [];
-  }
-
-  Future<bool> isDatabaseHaveData(
-      {required Database? db,
-      String tableName = DatabaseConst.tableName}) async {
-    List<Map<String, Object?>> listOfData =
-        await db?.rawQuery('SELECT * FROM $tableName') ?? [];
-    if (listOfData.isEmpty) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<bool> delete(
-      {required Database? db,
-      String tableName = DatabaseConst.tableName}) async {
-    int id = await db?.delete(tableName) ?? -1;
-    if (id != -1) {
-      return true;
-    } else {
-      return false;
-    }
   }
 }
+

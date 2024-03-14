@@ -1,3 +1,5 @@
+
+
 import '../../core/validator/validator.dart';
 import '../../widgets/app_bar/appbar_leading_image.dart';
 import '../../widgets/comman_widget.dart';
@@ -63,15 +65,15 @@ class LoginPageScreen extends GetWidget<LoginPageController> {
                     
 
                     child: Form(
-                      key: controller.formKey,
+                      key: controller.form_Key,
                         child: Column(
                       children: [
                         _buildWelcomeBackTo(),
-                        SizedBox(height: 10.v),
-                        emailInputBox(),
-                        SizedBox(height: 9.v),
-                        passwordInputBox(),
-                        SizedBox(height: 10.v),
+                        SizedBox(height: 25.v),
+                        emailInputBox(context),
+                        SizedBox(height: 15.v),
+                        passwordInputBox(context),
+
                         signInButtton(),
                         SizedBox(height: 20.v),
                       ],
@@ -91,20 +93,21 @@ class LoginPageScreen extends GetWidget<LoginPageController> {
   /// Section Widget
   Widget _buildWelcomeBackTo() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
-      child: Text('Welcome to Your Exclusive Client Portal!',
-      style: CustomTextStyles.titleSmallBlack900,),
+      margin: EdgeInsets.only(top: 25),
+      child: Text('msg_welcome'.tr,
+      style: CustomTextStyles.titleMediumPrimary,),
     );
   }
 
   /// Section Widget
-  Widget emailInputBox() {
+  Widget emailInputBox(BuildContext context) {
     return Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.h),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text("msg_enter_address".tr, style: CustomTextStyles.titleSmallWhite),
-          SizedBox(height: 5.v),
+          Text("msg_enter_address".tr, style: CustomTextStyles.titleMedium),
+          SizedBox(height: 8.v),
           CW.commonTextFieldForLoginSignUP(
+            context: context,
             contentPadding: EdgeInsets.all(6),
             controller: controller.emailController,
             prefixIcon: CustomImageView(
@@ -120,14 +123,15 @@ class LoginPageScreen extends GetWidget<LoginPageController> {
   }
 
   /// Section Widget
-  Widget passwordInputBox() {
+  Widget passwordInputBox(BuildContext context) {
     return Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.h),
 
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text("lbl_password".tr, style: CustomTextStyles.titleSmallWhite),
-          SizedBox(height: 5.v),
+          Text("lbl_password".tr, style: CustomTextStyles.titleMedium),
+          SizedBox(height: 8.v),
           CW.commonTextFieldForLoginSignUP(
+            context: context,
             contentPadding: EdgeInsets.all(6),
             controller: controller.passwordController,
             hintStyle: TextStyle(fontSize:14 ),
@@ -149,24 +153,47 @@ class LoginPageScreen extends GetWidget<LoginPageController> {
   Widget signInButtton() {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 10.h),
-        child: Column(children: [
-          Align(
-              alignment: Alignment.centerLeft,
-              child: Obx(() => CustomCheckboxButton(
-                  alignment: Alignment.centerLeft,
-                  text: "lbl_remember_me".tr,
-                  textStyle: CustomTextStyles.checkboxheading,
-                  value: controller.rememberMe.value,
-                  decoration: BoxDecoration(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+          // Align(
+          //     alignment: Alignment.centerLeft,
+          //     child: Obx(() => CustomCheckboxButton(
+          //         alignment: Alignment.centerLeft,
+          //         text: "lbl_remember_me".tr,
+          //         textStyle: CustomTextStyles.checkboxheading,
+          //         value: controller.rememberMe.value,
+          //         decoration: BoxDecoration(
+          //
+          //         ),
+          //         padding: EdgeInsets.symmetric(vertical: 1.v),
+          //         onChange: (value) {
+          //           controller.rememberMe.value = value;
+          //         }))),
+          Container(
 
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 1.v),
-                  onChange: (value) {
-                    controller.rememberMe.value = value;
-                  }))),
-          SizedBox(height: 10.v),
+
+
+            child: TextButton(
+                style: TextButton.styleFrom(padding: EdgeInsets.only(right: 5),
+
+                ),
+                onPressed: () {
+                  controller.onTapTxtForgotYourPassword();
+                },
+                child: Text("msg_forgot_your_password".tr,
+                    style: CustomTextStyles.bodyLargePrimary
+                       )),
+          ),
+
+
+
           Obx(() {
-            return  controller.isLoading.value?Center(child: CircularProgressIndicator(),):  CustomOutlinedButton(
+            return  controller.isLoading.value?Center(
+              child: CircularProgressIndicator(),):
+            CustomOutlinedButton(
+              height: 40,
+
               text: "lbl_sign_in".tr,
               decoration: BoxDecoration(
                   color: ColorSchemes.primaryColorScheme.primary,
@@ -175,44 +202,38 @@ class LoginPageScreen extends GetWidget<LoginPageController> {
             );
           })
        ,
-          Container(
 
-            height: 30,
-            margin: EdgeInsets.only(top: 10),
-            child: TextButton(
-                style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                onPressed: () {
-                  controller.onTapTxtForgotYourPassword();
-                },
-                child: Text("msg_forgot_your_password".tr,
-                    style: CustomTextStyles.bodyMediumPrimary
-                        .copyWith(decoration: TextDecoration.underline,))),
-          ),
 
           Container(
 
-            height: 30,
+
             margin: EdgeInsets.only(top: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 10),
+                Center(
                   child: Text("msg_don_t_have_an_account".tr,
+                      textAlign: TextAlign.center,
                       style: theme.textTheme.bodyLarge!.copyWith(color: Colors.white)),
                 ),
+                SizedBox(width: 5.h,),
                 TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero,),
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: Size(40, 30),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,),
                     onPressed: () {
                       controller.onTapTxtSignUpNow();
                     },
                     child: Text("lbl_sign_up_now".tr,
-                        style: CustomTextStyles.bodyMediumPrimary
-                            .copyWith(decoration: TextDecoration.underline,)))
+                        style: CustomTextStyles.bodyExtraLargePrimary))
               ],
             ),
           ),
-          CW.buildContact()
+          SizedBox(height: 20.v,),
+
+          CW.termCondition('msg_info_clearstarttax_com'.tr,textColor: Colors.white)
 
 
 

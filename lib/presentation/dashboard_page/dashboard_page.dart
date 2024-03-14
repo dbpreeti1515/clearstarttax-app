@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/scheduler.dart';
@@ -76,9 +74,8 @@ class DashboardPage extends GetWidget<DashboardController> {
               ])),
         ),
         body: Obx(() {
-          return controller.getUserData.value == null &&
-              controller.getDashboardData.value == null && controller.testMonialData.value.isEmpty
-
+          return controller.getDashboardData.value == null ||
+                  controller.testMonialData.value.isEmpty
               ? Center(
                   child: CircularProgressIndicator(),
                 )
@@ -103,19 +100,41 @@ class DashboardPage extends GetWidget<DashboardController> {
                                           Obx(() {
                                             return controller
                                                     .fqNotification.value
-                                                ? NotificationModal(
-                                                    context,
+                                                ? NotificationModal(context,
                                                     'lbl_fq_notification'.tr,
-                                                    '')
+                                                    () async {
+                                                    var url =
+                                                        'https://client.clearstarttax.com/fqs/app/${email.value}/${randomText1.value}${password}${randomText2.value}';
+
+                                                    if (await canLaunch(url)) {
+                                                      await launch(url,
+                                                          forceWebView: true,
+                                                          enableJavaScript:
+                                                              true);
+                                                    } else {
+                                                      throw 'Could not launch $url';
+                                                    }
+                                                  })
                                                 : SizedBox();
                                           }),
                                           Obx(() {
                                             return controller
                                                     .toNotification.value
-                                                ? NotificationModal(
-                                                    context,
+                                                ? NotificationModal(context,
                                                     'lbl_to_notification'.tr,
-                                                    '')
+                                                    () async {
+                                                    var url =
+                                                        'https://client.clearstarttax.com/tos/app/${email.value}/${randomText2.value}${password}${randomText1.value}';
+
+                                                    if (await canLaunch(url)) {
+                                                      await launch(url,
+                                                          forceWebView: true,
+                                                          enableJavaScript:
+                                                              true);
+                                                    } else {
+                                                      throw 'Could not launch $url';
+                                                    }
+                                                  })
                                                 : SizedBox();
                                           }),
                                           Obx(() {
@@ -125,8 +144,11 @@ class DashboardPage extends GetWidget<DashboardController> {
                                                 ? NotificationModal(
                                                     context,
                                                     'lbl_appoinment_notification'
-                                                        .tr,
-                                              AppRoutes.homeScreen,)
+                                                        .tr, () {
+                                                    Get.offAllNamed(
+                                                        AppRoutes.homeScreen);
+                                                    selectedIndex.value = 3;
+                                                  })
                                                 : SizedBox();
                                           }),
                                         ],
@@ -138,8 +160,8 @@ class DashboardPage extends GetWidget<DashboardController> {
                               _buildPageNavigation(
                                 context,
                                 ImageConstant.imgSolarDocumentAddOutline,
-                                "Document Center",
-                                "View and Upload Essential Case Files",
+                                "lbl_document_center".tr,
+                                "msg_view_and_upload".tr,
                                 AppRoutes.homeScreen,
                                 index: 1.obs,
                               ),
@@ -149,8 +171,8 @@ class DashboardPage extends GetWidget<DashboardController> {
                               _buildPageNavigation(
                                   context,
                                   ImageConstant.imgSettings,
-                                  "Payment Hub",
-                                  "Make a Payment, Review History, Update Method",
+                                  "lbl_payment_heading".tr,
+                                  "msg_make_a_payment".tr,
                                   AppRoutes.homeScreen,
                                   index: 2.obs),
                               SizedBox(
@@ -160,20 +182,38 @@ class DashboardPage extends GetWidget<DashboardController> {
                                 _buildPageNavigation(
                                     context,
                                     ImageConstant.imgCalendar,
-                                    "Schedule an Appointment",
-                                    "Set Up Your Appointment in a Few Clicks",
+                                    "msg_schedule_an_appointment".tr,
+                                    "msg_set_up_your_appointment".tr,
                                     AppRoutes.homeScreen,
                                     index: 3.obs),
                               if (controller.appoinmentNotification.value)
+                                SizedBox(
+                                  height: 15.v,
+                                ),
+                              _buildPageNavigation(
+                                  context,
+                                  ImageConstant.imgSolarChatDotsBroken,
+                                  "lbl_get_in_touch".tr,
+                                  "msg_connect_with_your".tr,
+                                  AppRoutes.getInTouchScreen),
                               SizedBox(
                                 height: 15.v,
                               ),
                               _buildPageNavigation(
                                   context,
                                   ImageConstant.imgSolarChatDotsBroken,
-                                  "Get In Touch",
-                                  "Connect with Your Assigned Case Manager via Message",
-                                  AppRoutes.getInTouchScreen),
+                                  "msg_faq_screen".tr,
+                                  "lbl_faq_answer".tr,
+                                  AppRoutes.faqScreen),
+                              SizedBox(
+                                height: 15.v,
+                              ),
+                              _buildPageNavigation(
+                                  context,
+                                  ImageConstant.imgSolarChatDotsBroken,
+                                  "lbl_tax_news".tr,
+                                  "lbl_stay_update".tr,
+                                  AppRoutes.taxNewsScreen),
                               SizedBox(height: 20.v),
                               _buildFrameColumn(),
                               SizedBox(height: 20.v),
@@ -190,7 +230,11 @@ class DashboardPage extends GetWidget<DashboardController> {
         }));
   }
 
-  Container NotificationModal(BuildContext context, text, function) {
+  Container NotificationModal(
+    BuildContext context,
+    text,
+    VoidCallback? clickOnButton,
+  ) {
     return Container(
       margin: EdgeInsets.only(bottom: 15, top: 10),
       padding: EdgeInsets.only(left: 20.h, top: 10.v, bottom: 10.h),
@@ -205,14 +249,14 @@ class DashboardPage extends GetWidget<DashboardController> {
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                height: 55,
+                height: MediaQuery.sizeOf(context).height * 0.068,
                 width: MediaQuery.of(context).size.width * 0.68,
                 child: SizedBox.expand(
                   //    width: MediaQuery.of(context).size.width*0.68,
@@ -223,10 +267,12 @@ class DashboardPage extends GetWidget<DashboardController> {
                 ),
               ),
               TextButton(
-                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                  onPressed: () {
-                    Get.offAllNamed(function);
-                  },
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size(30, 20),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  onPressed: clickOnButton,
                   child: Text("lbl_click_here".tr,
                       textAlign: TextAlign.left,
                       style: CustomTextStyles.bodyMediumPrimary
@@ -237,10 +283,15 @@ class DashboardPage extends GetWidget<DashboardController> {
             onPressed: () {
               controller.onClickNotification();
             },
-            alignment: Alignment.topCenter,
-            icon: SvgPicture.asset(ImageConstant.imgDashboardCross,
-                color: theme.primaryColor),
-            color: theme.primaryColor,
+            alignment: Alignment.topRight,
+            padding: EdgeInsets.only(top: 0, right: 8),
+            icon: SvgPicture.asset(
+              ImageConstant.imgDashboardCross,
+              color: Colors.black,
+              height: 15,
+              width: 15,
+            ),
+            color: Colors.black,
           )
         ],
       ),
@@ -269,8 +320,7 @@ class DashboardPage extends GetWidget<DashboardController> {
 
   /// Section Widget
   Widget _buildFrameNineColumn() {
-    return
-      Container(
+    return Container(
         decoration: AppDecoration.outlineBlack900
             .copyWith(borderRadius: BorderRadiusStyle.roundedBorder10),
         child: Column(
@@ -278,36 +328,40 @@ class DashboardPage extends GetWidget<DashboardController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Obx(() {
-                return controller
-                    .getDashboardData.value!=null
-                    ?   CW.statusCard(
-                    text: "msg_your_case_status".tr +
-                        controller
-                            .getDashboardData.value!.data!.statusName! ??
-                        '',
-                    height: 100.h)
-                    :SizedBox();
+                return controller.getDashboardData.value != null
+                    ? CW.statusCard(
+                        text: "msg_your_case_status".tr +
+                                controller.getDashboardData.value!.data!
+                                    .statusName! ??
+                            '',
+                        height: 100.h)
+                    : SizedBox();
               }),
-
 
               SizedBox(height: 19.v),
               Obx(() {
-                return controller.getDashboardData.value!=null? Padding(
-                    padding: EdgeInsets.only(left: 20.h, right: 39.h),
-                    child: _buildYourNextStepsRow(
-                        yourNextStepsText: "msg_what_this_means".tr,
-                        detailsShownHereText: controller.getDashboardData.value!
-                            .data!.statusinfo!.whatThisMeans??'')):SizedBox();
+                return controller.getDashboardData.value != null
+                    ? Padding(
+                        padding: EdgeInsets.only(left: 20.h, right: 39.h),
+                        child: _buildYourNextStepsRow(
+                            yourNextStepsText: "msg_what_this_means".tr,
+                            detailsShownHereText: controller.getDashboardData
+                                    .value!.data!.statusinfo!.whatThisMeans ??
+                                ''))
+                    : SizedBox();
               }),
 
               SizedBox(height: 20.v),
               Obx(() {
-                return  controller.getDashboardData.value!=null?    Padding(
-                    padding: EdgeInsets.only(left: 20.h, right: 39.h),
-                    child: _buildYourNextStepsRow(
-                        yourNextStepsText: "msg_your_next_steps".tr,
-                        detailsShownHereText: controller.getDashboardData.value!
-                            .data!.statusinfo!.whatHappensNext??'')):SizedBox();
+                return controller.getDashboardData.value != null
+                    ? Padding(
+                        padding: EdgeInsets.only(left: 20.h, right: 39.h),
+                        child: _buildYourNextStepsRow(
+                            yourNextStepsText: "msg_your_next_steps".tr,
+                            detailsShownHereText: controller.getDashboardData
+                                    .value!.data!.statusinfo!.whatHappensNext ??
+                                ''))
+                    : SizedBox();
               }),
 
               SizedBox(height: 17.v),
@@ -352,17 +406,22 @@ class DashboardPage extends GetWidget<DashboardController> {
                 vertical: 25.v,
               ),
               decoration: BoxDecoration(
-                color: theme.colorScheme.primary,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10,),
-                    topLeft: Radius.circular(10,)
-                )
-              ),
+                  color: theme.colorScheme.primary,
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(
+                        10,
+                      ),
+                      topLeft: Radius.circular(
+                        10,
+                      ))),
               child: CustomImageView(
                 radius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10,),
-                    topLeft: Radius.circular(10,)
-                ),
+                    bottomLeft: Radius.circular(
+                      10,
+                    ),
+                    topLeft: Radius.circular(
+                      10,
+                    )),
                 imagePath: image,
                 height: 50.adaptSize,
                 width: 50.adaptSize,
@@ -404,109 +463,119 @@ class DashboardPage extends GetWidget<DashboardController> {
   /// Section Widget
   Widget _buildEightyColumn() {
     return Obx(() {
-      return controller.testMonialDataLenght.value!=0?Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-      Text("lbl_our_tax_news".tr, style: CustomTextStyles.titleMediumPrimary),
-      SizedBox(height: 9.v),
-      ListView.separated(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          separatorBuilder: (context, index) {
-            return SizedBox(height: 10.v);
-          },
-          itemCount: controller.testMonialDataLenght.value,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                Get.off(()=>NewsPageScreen(id: controller.testMonialData.value[index]['ID'],));
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 1.v),
-                decoration: AppDecoration.outlineBlack900.copyWith(
-                  borderRadius: BorderRadiusStyle.roundedBorder10,
-                ),
-                child: Row(
-                  children: [
-                    Obx(
-                          () => Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10))
+      return controller.testMonialDataLenght.value != 0
+          ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text("lbl_our_tax_news".tr,
+                  style: CustomTextStyles.titleMediumPrimary),
+              SizedBox(height: 9.v),
+              ListView.separated(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  separatorBuilder: (context, index) {
+                    return SizedBox(height: 10.v);
+                  },
+                  itemCount: controller.testMonialDataLenght.value,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Get.off(() => NewsPageScreen(
+                              id: controller.testMonialData.value[index]['ID'],
+                            ));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 1.v),
+                        decoration: AppDecoration.outlineBlack900.copyWith(
+                          borderRadius: BorderRadiusStyle.roundedBorder10,
                         ),
-                        child: CustomImageView(
-                          radius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10,),
-                            topLeft: Radius.circular(10,)
-                          ),
-                          imagePath: controller.testMonialData.value[index]['image']??'',
-                          height: 100.v,
-                          width: 146.h,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: 15.h,
-                        top: 9.v,
-                        bottom: 9.v,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 179.h,
-                            child: Obx(
-                                  () => Text(
-                                controller
-                                    .testMonialData.value[index]['post_title']
-                                    .toString(),
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                                style: theme.textTheme.labelLarge,
+                        child: Row(
+                          children: [
+                            Obx(
+                              () => Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(10))),
+                                child: CustomImageView(
+                                  radius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(
+                                        10,
+                                      ),
+                                      topLeft: Radius.circular(
+                                        10,
+                                      )),
+                                  imagePath: controller.testMonialData
+                                          .value[index]['image'] ??
+                                      '',
+                                  height: 100.v,
+                                  width: 146.h,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(height: 9.v),
-                          GestureDetector(
-                            onTap: () {
-                              //onTapFrameEighteen!.call();
-                            },
-                            child: Row(
-                              children: [
-                                Text(
-                                  "more data",
-                                  style: CustomTextStyles.bodySmallOnError,
-                                ),
-                                CustomImageView(
-                                  imagePath: ImageConstant.imgArrowRight,
-                                  height: 15.adaptSize,
-                                  width: 15.adaptSize,
-                                  margin: EdgeInsets.only(left: 5.h),
-                                ),
-                              ],
+                            Padding(
+                              padding: EdgeInsets.only(
+                                left: 15.h,
+                                top: 9.v,
+                                bottom: 9.v,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: 179.h,
+                                    child: Obx(
+                                      () => Text(
+                                        controller.testMonialData
+                                            .value[index]['post_title']
+                                            .toString(),
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: theme.textTheme.labelLarge,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 9.v),
+                                  GestureDetector(
+                                    onTap: () {
+                                      //onTapFrameEighteen!.call();
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "more data",
+                                          style:
+                                              CustomTextStyles.bodySmallOnError,
+                                        ),
+                                        CustomImageView(
+                                          imagePath:
+                                              ImageConstant.imgArrowRight,
+                                          height: 15.adaptSize,
+                                          width: 15.adaptSize,
+                                          margin: EdgeInsets.only(left: 5.h),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }),
-            SizedBox(height: 9.v),
-            Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {
-                    Get.offNamed(AppRoutes.taxNewsScreen);
-                  },
-                  child: Text("lbl_view_more".tr,
-                      style: CustomTextStyles.titleSmallPrimary),
-                ))
-    ]
-    ):SizedBox();});
+                    );
+                  }),
+              SizedBox(height: 9.v),
+              Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      Get.offNamed(AppRoutes.taxNewsScreen);
+                    },
+                    child: Text("lbl_view_more".tr,
+                        style: CustomTextStyles.titleSmallPrimary),
+                  ))
+            ])
+          : SizedBox();
+    });
   }
 
   /// Section Widget
@@ -515,9 +584,7 @@ class DashboardPage extends GetWidget<DashboardController> {
         decoration: AppDecoration.fillOnPrimaryContainer
             .copyWith(borderRadius: BorderRadiusStyle.roundedBorder10),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          if(controller.testMonialDataLenght.value!=0)
-          _buildEightyColumn(),
-
+          if (controller.testMonialDataLenght.value != 0) _buildEightyColumn(),
         ]));
   }
 

@@ -7,9 +7,11 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:preeti_s_application3/core/app_export.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../data/local_database/database_helper/database_helper.dart';
 import '../presentation/dashboard_page/controller/dashboard_controller.dart';
 
 class CW {
+
   static void _launchEmail() async {
     const String email = 'mailto:billing@clearstarttax.com';
     if (await canLaunch(email)) {
@@ -29,6 +31,7 @@ class CW {
   }
 
   static Widget commonTextFieldForLoginSignUP({
+    BuildContext? context,
     double? elevation,
     String? hintText,
     EdgeInsetsGeometry? contentPadding,
@@ -54,8 +57,12 @@ class CW {
     bool readOnly = false,
   }) {
     return Container(
+
       height: maxHeight,
       child: TextFormField(
+        onTapOutside: (event) {
+          FocusScope.of(context!).unfocus();
+        },
         cursorHeight: cursorHeight,
         onTap: onTap,
         controller: controller,
@@ -82,7 +89,7 @@ class CW {
           fillColor: fillColor ?? Colors.white,
           filled: true,
           prefixIcon: prefixIcon,
-          errorStyle: TextStyle(fontSize: 12),
+          errorStyle: TextStyle(fontSize: 12,color:ColorSchemes.primaryColorScheme.error),
           contentPadding:
               contentPadding ?? EdgeInsets.symmetric(horizontal: 20.h),
           hintStyle: hintStyle ??
@@ -139,7 +146,8 @@ class CW {
         padding: EdgeInsets.only(left: 4.h, right: 5.h, top: 0, bottom: 0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text("msg_if_you_have_questions".tr,
-              style: CustomTextStyles.bodyMediumPrimary),
+              textAlign: TextAlign.center,
+              style: CustomTextStyles.bodyMedium),
           SizedBox(height: 9.v),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Icon(
@@ -195,7 +203,7 @@ class CW {
     );
   }
 
-  static Widget termCondition(String email) {
+  static Widget termCondition(String email,{Color? textColor, double? fontSize}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -203,12 +211,17 @@ class CW {
 
           Text("msg_if_you_have_questions".tr,
               textAlign: TextAlign.center,
-              style: CustomTextStyles.bodySmallPrimaryContainer10),
+              style: theme.textTheme.bodySmall!.copyWith(
+                  fontSize: 12,
+                  color: textColor??Colors.black
+              )),
+          SizedBox(height: 10.v,),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             CustomImageView(
                 imagePath: ImageConstant.imgSolarPhoneCallingBroken,
-                height: 15.adaptSize,
-                width: 15.adaptSize),
+                color: textColor??Colors.black,
+                height: 16.adaptSize,
+                width: 16.adaptSize),
             TextButton(
               style: TextButton.styleFrom(
                 padding: EdgeInsets.only(left: 5, top: 0),
@@ -220,16 +233,17 @@ class CW {
                 _launchPhone();
               },
               child: Text("lbl_888_235_0004".tr,
-                  style: TextStyle(
-                    color: theme.primaryColor,
-                    fontSize: 13.fSize,
-                    fontWeight: FontWeight.w500,
+                  style: theme.textTheme.bodyLarge!.copyWith(
+                    color: theme.colorScheme.primary,
+                    fontSize: 12
+
                   )),
             ),
             CustomImageView(
                 imagePath: ImageConstant.imgSystemUiconsMailPrimarycontainer,
-                height: 15.adaptSize,
-                width: 15.adaptSize,
+                height: 16.adaptSize,
+                width: 16.adaptSize,
+                color: textColor??Colors.black,
                 margin: EdgeInsets.only(left: 10.h)),
             TextButton(
                 style: TextButton.styleFrom(
@@ -242,10 +256,7 @@ class CW {
                   _launchEmail();
                 },
                 child: Text(email,
-                    style: TextStyle(
-                        color: theme.primaryColor,
-                        fontSize: 13.fSize,
-                        fontWeight: FontWeight.w500)))
+                    style: CustomTextStyles.bodyLargePrimary))
           ]),
         ],
       ),

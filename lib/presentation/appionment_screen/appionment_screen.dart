@@ -84,10 +84,16 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                       SizedBox(height: 20.v),
                                       _buildColumnFrame(),
                                       Obx(() {
-                                        return _controller
-                                                    .isAppointmentAppear.value ==
-                                                true
-                                            ? Container(
+                                        print("${_controller
+                                            .isAppointmentAppear.value ==
+                                            true} and ${db.value!.status=="active"}");
+                                        return
+
+                                          db.value!.status=="active"
+                                            ?  _controller
+                                              .isAppointmentAppear.value ==
+                                              true
+                                              ?Container(
                                                 padding:
                                                     EdgeInsets.only(left: 15),
                                                 child: Column(
@@ -99,7 +105,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                                     mainAxisSize:
                                                         MainAxisSize.min,
                                                     children: [
-                                                      SizedBox(height: 10.v),
+                                                      SizedBox(height: 20.v),
                                                       Obx(
                                                         () => Padding(
                                                           padding:
@@ -126,6 +132,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                                                       .left),
                                                         ),
                                                       ),
+
                                                       if (_controller
                                                               .formattterSelectedDate
                                                               .value !=
@@ -133,7 +140,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                                         Container(
                                                           margin:
                                                               EdgeInsets.only(
-                                                                  bottom: 10,
+                                                                  bottom: 5,
                                                                   top: 10,
                                                                   left: 5),
                                                           child: Row(
@@ -188,26 +195,21 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                                           ],
                                                         ),
                                                       ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 5,
-                                                                right: 15),
-                                                        child: Divider(
-                                                          height: 2,
-                                                          color:
-                                                              Color(0xff989692),
-                                                        ),
-                                                      ),
+
                                                       // Add more radio button rows as needed
 
-                                                      SizedBox(height: 12.v),
+                                                      SizedBox(height: 15.v),
                                                       _buildColumnThirtySix(
                                                           context),
                                                       SizedBox(height: 30.v),
                                                     ]),
-                                              )
+                                              ):appoinmentTime(
+                                              _controller.str,
+                                              _controller
+                                                  .formattterSelectedDate
+                                                  .value,
+                                              _controller
+                                                  .selectedTimeZone.name)
                                             : appoinmentTime(
                                                 _controller.str,
                                                 _controller
@@ -287,7 +289,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
               ),
             ),
           ]),
-          SizedBox(height: 25.v),
+          SizedBox(height: 30.v),
           CustomOutlinedButton(
               width: 216.h,
               buttonStyle:
@@ -317,11 +319,14 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
   ) {
     showDialog(
       useSafeArea: true,
+
+
       context: context,
       builder: (BuildContext context) {
         RxBool isColor = false.obs;
         return AlertDialog(
-          contentPadding: EdgeInsets.only(left: 20, right: 20),
+          insetPadding: EdgeInsets.all(25),
+          contentPadding: EdgeInsets.only(left: 15, right: 15),
           shadowColor: Colors.transparent,
           backgroundColor: Colors.white,
           titlePadding: EdgeInsets.zero,
@@ -421,7 +426,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                 width: mediaQueryData.size.width,
                                 padding: EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                    color:isColor.value
+                                    color:isColor.value ==false
                                         ? theme.secondaryHeaderColor
                                         : Colors.white,
                                     border:
@@ -621,8 +626,8 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
 
   Widget appoinmentTime(String TimeSlot, String Date, String TimeZone) {
     print("This is date $Date");
-    //  DateTime inputDate = DateFormat('dd/MM/yyyy').parse(Date);
-    //String formattedDate = DateFormat('EEEE, MMMM d yyyy').format(inputDate);
+      DateTime inputDate = DateFormat('dd/MM/yyyy').parse(Date);
+    String formattedDate = DateFormat('EEEE, MMMM d yyyy').format(inputDate);
 
     return Container(
       margin: EdgeInsets.only(left: 15, right: 15, bottom: 20),
@@ -632,11 +637,11 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
               child: CustomImageView(
             imagePath: ImageConstant.imgSechdule,
             color: theme.primaryColor,
-            height: 60,
-            width: 60,
+            height: 40,
+            width: 40,
           )),
           SizedBox(
-            height: 10.v,
+            height: 20.v,
           ),
           Text(
             "msg_confirmation".tr,
@@ -646,10 +651,10 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                 fontSize: 16),
           ),
           SizedBox(
-            height: 20.h,
+            height: 15.h,
           ),
           Container(
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.black, width: 1),
                 borderRadius: BorderRadius.circular(5)),
@@ -681,7 +686,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                         Container(
                           width: mediaQueryData.size.width / 3.4,
                           child: Text(
-                            'formattedDate',
+                            formattedDate,
                             style: CustomTextStyles.textBlackMedium,
                           ),
                         ),
@@ -701,14 +706,14 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
             ),
           ),
           SizedBox(
-            height: 15.h,
+            height: 20.h,
           ),
           Text(
             "msg_appointmen_time".tr,
             style: TextStyle(color: Colors.black),
           ),
           SizedBox(
-            height: 15.h,
+            height: 10.h,
           ),
           RichText(
             text: TextSpan(
@@ -739,7 +744,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                 ]),
           ),
           SizedBox(
-            height: 20,
+            height: 15,
           ),
         ],
       ),

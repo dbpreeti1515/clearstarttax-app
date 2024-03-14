@@ -1,5 +1,7 @@
 
 
+import 'package:flutter/cupertino.dart';
+
 import '../../widgets/comman_widget.dart';
 import 'controller/get_in_touch_controller.dart';
 import 'package:flutter/material.dart';
@@ -73,11 +75,11 @@ class GetInTouchScreen extends GetWidget<GetInTouchController> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 _buildColumnFrameTwentySix(),
-                                SizedBox(height: 22.v),
-                                _nameField(),
+                                // SizedBox(height: 22.v),
+                                // _nameField(),
                           
-                                SizedBox(height: 11.v),
-                                _emailField(),
+                                // SizedBox(height: 11.v),
+                                // _emailField(),
                                 SizedBox(height: 13.v),
                                 _subjectField(),
                           
@@ -142,7 +144,7 @@ class GetInTouchScreen extends GetWidget<GetInTouchController> {
   /// Section Widget
   Widget _messageField(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.h),
+        padding: EdgeInsets.symmetric(horizontal: 14.h),
         child: Column(children: [
           Align(
               alignment: Alignment.centerLeft,
@@ -162,6 +164,38 @@ class GetInTouchScreen extends GetWidget<GetInTouchController> {
               },
               maxLines: 4),
           SizedBox(height: 20.v),
+          Align(
+              alignment: Alignment.centerLeft,
+              child:
+              Text("lbl_upload_docment".tr, style: theme.textTheme.titleMedium)),
+          SizedBox(height: 5.v),
+
+
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey.shade500,
+                    padding: EdgeInsets.all(10),
+
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))
+                  ),
+                    onPressed: (){
+                    controller.uploadFile();
+
+
+                }, child: Text("Choose file",style: TextStyle(color: Colors.white,fontSize: 12,fontWeight: FontWeight.w600),)),
+                SizedBox(width: 10.h,),
+                Obx(() =>
+                Flexible(child: Text(controller.uploadUrl.value, style: theme.textTheme.bodySmall)))
+
+              ],
+            ),
+          ),
+
+          SizedBox(height: 25.v),
           Obx(() {
             return _controller.isLoading.value?Center(child: CircularProgressIndicator(),): CustomOutlinedButton(
                 buttonStyle: ElevatedButton.styleFrom(
@@ -178,7 +212,7 @@ class GetInTouchScreen extends GetWidget<GetInTouchController> {
             );
           })
          ,
-          SizedBox(height: 19.v),
+          SizedBox(height: 25.v),
           Text("msg_need_to_call_us".tr, ),
           SizedBox(height: 10.v),
           RichText(
@@ -234,38 +268,41 @@ class GetInTouchScreen extends GetWidget<GetInTouchController> {
   }
 
 Widget _subjectField(){
-  return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Padding(
-            padding: EdgeInsets.only(
-                left: 10.h),
-            child: Text(
-                "lbl_subject".tr,
-                style: theme.textTheme
-                    .titleMedium)),
-        SizedBox(height: 10.v),
-        Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: 10.h),
-            child: CustomTextFormField(
-                validator: (value) {
-                  if (!isText(value)||value==null||value.isEmpty) {
-                    return "msg_enter_this_field"
-                        .tr;
-                  }
-                  return null;
-                },
-                controller: controller
-                    .subjectPlaceholderController,
-                hintText:
-                "lbl_write_subject"
-                    .tr,
-                hintStyle: CustomTextStyles
-                    .bodyLargeGray60001)),
-      ],
-    );
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 4),
+    child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+              padding: EdgeInsets.only(
+                  left: 10.h),
+              child: Text(
+                  "lbl_subject".tr,
+                  style: theme.textTheme
+                      .titleMedium)),
+          SizedBox(height: 10.v),
+          Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: 10.h),
+              child: CustomTextFormField(
+                  validator: (value) {
+                    if (!isText(value)||value==null||value.isEmpty) {
+                      return "msg_enter_this_field"
+                          .tr;
+                    }
+                    return null;
+                  },
+                  controller: controller
+                      .subjectPlaceholderController,
+                  hintText:
+                  "lbl_write_subject"
+                      .tr,
+                  hintStyle: CustomTextStyles
+                      .bodyLargeGray60001)),
+        ],
+      ),
+  );
 }
 Widget _nameField(){
   return Container(

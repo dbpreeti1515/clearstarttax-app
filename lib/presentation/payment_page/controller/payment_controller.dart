@@ -1,7 +1,6 @@
 import 'dart:convert';
-import 'dart:ffi';
 
-import 'package:credit_card_validator/credit_card_validator.dart';
+
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:intl/intl.dart';
@@ -10,11 +9,12 @@ import 'package:preeti_s_application3/presentation/payment_page/models/payment_m
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../api_constant/api_constant.dart';
+import '../../../core/http_methods/http_methods.dart';
 import '../../../data/API_Services/apiEndpoint.dart';
 import '../../../data/Comman/common_method.dart';
 import '../../../data/apiModal/getPaymentModal.dart';
-import '../../../data/api_constant/api_constant.dart';
-import '../../../data/http_methods/http_methods.dart';
+
 import '../../../data/models/SuccessDialogBox/SuccessBox.dart';
 import '../../../widgets/comman_widget.dart';
 import '../../dashboard_page/controller/dashboard_controller.dart';
@@ -49,7 +49,7 @@ class PaymentController extends GetxController
 
   TextEditingController emailController = TextEditingController();
   Rx<TextEditingController> paymentController = TextEditingController().obs;
-  CreditCardValidator ccValidator = CreditCardValidator();
+
   //Rx<PaymentModel> paymentModelObj;
 
   TextEditingController transferZipController = TextEditingController();
@@ -86,16 +86,14 @@ class PaymentController extends GetxController
 
   void setSelectedValue(String value) {
     selectedAmount.value = value;
-
   }
-  void setSelectedState(String value,int type) {
-    if(type==1){
+
+  void setSelectedState(String value, int type) {
+    if (type == 1) {
       selectValue.value = value;
-    }else{
+    } else {
       transferSelectValue.value = value;
     }
-
-
   }
 
   List<StateItem> states = [
@@ -168,45 +166,43 @@ class PaymentController extends GetxController
     // TODO: implement onInit
     super.onInit();
     await getPaymentAPI();
-    emailController.text = email.value;
-    transferEmailController.text = email.value;
+
 
     tabController = TabController(length: 2, vsync: this);
     //  await creditCardAPI();
   }
-void cardClear(){
-  nameController.clear();
-  cardinformationvalueController.clear();
-  cvvController..clear();
-  emailController..clear();
-  nameController..clear();
-  monthController..clear();
-  yearController..clear();
-  zipController..clear();
-  add1Controller..clear();
-  add2Controller..clear();
-  cityController..clear();
 
-  cardinformationvalueController.clear();
-  cvvController.clear();
-  emailController.clear();
+  void cardClear() {
+    nameController.clear();
+    cardinformationvalueController.clear();
+    cvvController..clear();
+    emailController..clear();
+    nameController..clear();
+    monthController..clear();
+    yearController..clear();
+    zipController..clear();
+    add1Controller..clear();
+    add2Controller..clear();
+    cityController..clear();
 
-}
-void bankClear(){
-  bankNameController.clear();
-  bankHolderController.clear();
-  routingController.clear();
-  accountController.clear();
+    cardinformationvalueController.clear();
+    cvvController.clear();
+    emailController.clear();
+  }
 
+  void bankClear() {
+    bankNameController.clear();
+    bankHolderController.clear();
+    routingController.clear();
+    accountController.clear();
+    transferAccountController.clear();
+    transferZipController.clear();
+    transferAdd1Controller.clear();
+    transferAdd2Controller.clear();
+    transferEmailController.clear();
+    transferCityController.clear();
+  }
 
-
-
-  transferZipController.clear();
-  transferAdd1Controller.clear();
-  transferAdd2Controller.clear();
-  transferEmailController.clear();
-  transferCityController.clear();
-}
   @override
   void dispose() {
     super.dispose();
@@ -268,45 +264,32 @@ void bankClear(){
         url: UriConstant.getPaymentURL,
       );
 
-      getPaymentData.value =
-          GetPaymentModal.fromJson(jsonDecode(response!.body));
-      selectedAmount.value =
-          getPaymentData.value!.data!.data!.pastDue.toString();
-      print(getPaymentData.value!.data!.paymentSchedular![0].scheduledDate);
-      print(getPaymentData.value!.data!.paymentSchedular![0].amount);
-      var dateString =
-          getPaymentData.value!.data!.paymentSchedular![0].scheduledDate;
-      DateTime dateTime = DateTime.parse(dateString!);
-      String formattedDate = DateFormat('dd/MM/yyyy').format(dateTime);
-      print(formattedDate);
-      // if (getPaymentData.value != null &&
-      //     getPaymentData.value?.data != null) {
-      //
-      //
-      //
-      // }
+      if (response?.statusCode == 200) {
+        getPaymentData.value =
+            GetPaymentModal.fromJson(jsonDecode(response!.body));
+
+        if (getPaymentData.value != null &&
+            getPaymentData.value?.data != null) {
+          selectedAmount.value =
+              getPaymentData.value!.data!.data!.pastDue.toString();
+          emailController.text = getPaymentData.value!.data!.data!.email.toString();
+          transferEmailController.text = getPaymentData.value!.data!.data!.email.toString();
+
+          var dateString =
+              getPaymentData.value!.data!.paymentSchedular![0].scheduledDate;
+          DateTime dateTime = DateTime.parse(dateString!);
+          String formattedDate = DateFormat('dd/MM/yyyy').format(dateTime);
+          print(formattedDate);
+
+
+
+        }
+      }
     } catch (error) {
       isLoading.value = false;
       // Handle errors
       print('Error fetching data: $error');
     }
-  }
-
-  bool validateCreditCard() {
-    var creditCardNumber = cardinformationvalueController.text.trim();
-    print(creditCardNumber);
-
-    if (ccValidator.validateCCNum(creditCardNumber) == true) {
-      validationResult.value = 'Valid Credit Card Number';
-      print(validationResult.value);
-      isValidCardNumber.value = true;
-    } else {
-      validationResult.value = 'Invalid Credit Card Number';
-      print(validationResult.value);
-      isValidCardNumber.value = false;
-    }
-
-    return isValidCardNumber.value;
   }
 
   Future<bool> creditCardAPI(BuildContext context) async {
@@ -343,8 +326,8 @@ void bankClear(){
         cardStatusMsg.value = responseMapForCard['data']['status'];
         cardTransectionMsg.value = responseMapForCard['data']['status'];
         if (cardStatusMsg.value == 'success') {
-          PaymentModel.showCardPaymentDialog(
-              context, emailController.text, selectedAmount.value,responseMapForCard['data'][ApiKey.tran_id]);
+          PaymentModel.showCardPaymentDialog(context, emailController.text,
+              selectedAmount.value, responseMapForCard['data'][ApiKey.tran_id]);
         } else {
           PaymentModel.showTransactionFailedDialog(
               context, cardStatusMsg.value);
@@ -376,8 +359,7 @@ void bankClear(){
       ApiKey.bank_name: bankNameController.text,
       ApiKey.bankrouteingno: routingController.text,
       ApiKey.case_id: caseId.value,
-
-      ApiKey.accountno:transferAccountController.text,
+      ApiKey.accountno: transferAccountController.text,
       ApiKey.amount: transferAccountController.text,
       ApiKey.State: transferSelectValue.value,
       ApiKey.City: transferCityController.text,
@@ -403,7 +385,10 @@ void bankClear(){
         bankStatusMsg.value = responseMapForTransfer['data']['status'];
         if (bankStatusMsg.value == 'success') {
           PaymentModel.showBankTransferDialog(
-              context, transferEmailController.text,selectedAmount.value,);
+            context,
+            transferEmailController.text,
+            selectedAmount.value,
+          );
         } else {
           PaymentModel.showTransactionFailedDialog(
               context, bankStatusMsg.value);
@@ -420,8 +405,7 @@ void bankClear(){
       bodyParamsForTransfer.clear();
       isTranserLoading.value = false;
       return true;
-    }
-    else {
+    } else {
       bankClear();
       bodyParamsForTransfer.clear();
       isTranserLoading.value = false;

@@ -15,18 +15,31 @@ class CustomTextStyles {
       );
   static get bodyLargePrimary => theme.textTheme.bodyLarge!.copyWith(
         color: theme.colorScheme.primary,
+
+      );
+  static get bodyExtraLargePrimary => theme.textTheme.bodyLarge!.copyWith(
+        color: theme.colorScheme.primary,
+    fontSize: 13,
+    fontWeight: FontWeight.bold
+
+
       );
   static get bodyLarge_1 => theme.textTheme.bodyLarge!;
   static get bodyMediumOnError => theme.textTheme.bodyMedium!.copyWith(
         color: theme.colorScheme.onError,
       );
+  static get bodyMedium => theme.textTheme.bodyMedium!.copyWith(
+        color: Colors.white,
+    fontSize: 14,
+
+      );
   static get bodyMediumPrimary => theme.textTheme.bodyMedium!.copyWith(
-        color: theme.colorScheme.primary,
+        color: Colors.black,
     decorationColor: theme.primaryColor,
 
       );
   static get bodySmall10 => theme.textTheme.bodySmall!.copyWith(
-        fontSize: 14.fSize,
+        fontSize: 12,
     color: Colors.white
       );
   static get bodySmall8 => theme.textTheme.bodySmall!.copyWith(
@@ -51,7 +64,7 @@ class CustomTextStyles {
       );
   static get bodySmallPrimaryContainer10 => theme.textTheme.bodySmall!.copyWith(
         color: theme.colorScheme.primaryContainer,
-        fontSize: 14.fSize,
+        fontSize: 12,
     fontWeight: FontWeight.w500
       );
   static get bodySmallPrimary_1 => theme.textTheme.bodySmall!.copyWith(
@@ -102,6 +115,11 @@ class CustomTextStyles {
         fontWeight: FontWeight.w700,
 
       );
+  static get titleMedium => theme.textTheme.titleMedium!.copyWith(
+        fontWeight: FontWeight.w400,
+    color: Colors.white
+
+      );
   static get titleMediumBold18 => theme.textTheme.titleMedium!.copyWith(
         fontSize: 18.fSize,
         fontWeight: FontWeight.w700,
@@ -140,7 +158,7 @@ class CustomTextStyles {
       );
   static get titleMediumSourceSerif4OnError =>
       theme.textTheme.titleMedium!.sourceSerif4.copyWith(
-        color: theme.colorScheme.onError,
+        color: theme.primaryColor,
         fontSize: 17.fSize,
         fontWeight: FontWeight.w600,
       );

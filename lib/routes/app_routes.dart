@@ -17,8 +17,6 @@ import 'package:preeti_s_application3/presentation/login_page_screen/login_page_
 import 'package:preeti_s_application3/presentation/login_page_screen/binding/login_page_binding.dart';
 import 'package:preeti_s_application3/presentation/signup_screen/signup_screen.dart';
 import 'package:preeti_s_application3/presentation/signup_screen/binding/signup_binding.dart';
-import 'package:preeti_s_application3/presentation/dashboard_container_screen/dashboard_container_screen.dart';
-import 'package:preeti_s_application3/presentation/dashboard_container_screen/binding/dashboard_container_binding.dart';
 import 'package:preeti_s_application3/presentation/document_screen/document_screen.dart';
 import 'package:preeti_s_application3/presentation/document_screen/binding/document_binding.dart';
 import 'package:preeti_s_application3/presentation/payment_tab_container_screen/payment_tab_container_screen.dart';
@@ -47,10 +45,6 @@ import 'package:preeti_s_application3/presentation/reset_password_screen/reset_p
 import 'package:preeti_s_application3/presentation/reset_password_screen/binding/reset_password_binding.dart';
 import 'package:preeti_s_application3/presentation/payment_success_screen/payment_success_screen.dart';
 import 'package:preeti_s_application3/presentation/payment_success_screen/binding/payment_success_binding.dart';
-import 'package:preeti_s_application3/presentation/message_sent_screen/message_sent_screen.dart';
-import 'package:preeti_s_application3/presentation/message_sent_screen/binding/message_sent_binding.dart';
-import 'package:preeti_s_application3/presentation/app_navigation_screen/app_navigation_screen.dart';
-import 'package:preeti_s_application3/presentation/app_navigation_screen/binding/app_navigation_binding.dart';
 import 'package:get/get.dart';
 
 import '../presentation/splash_screen_four_screen/controller/splash_screen_four_controller.dart';
@@ -170,7 +164,7 @@ class AppRoutes {
       ],
     ),  GetPage(
       name: homeScreen,
-      page: () => Homescreen(isAppoinment: appoinmentNotification.value),
+      page: () => Homescreen(),
       bindings: [
         HomeScreenBinding(),
       ],
@@ -182,13 +176,7 @@ class AppRoutes {
         SignupBinding(),
       ],
     ),
-    GetPage(
-      name: dashboardContainerScreen,
-      page: () => DashboardContainerScreen(),
-      bindings: [
-        DashboardContainerBinding(),
-      ],
-    ),
+
     GetPage(
       name: documentScreen,
       page: () => DocumentScreen(),
@@ -288,20 +276,8 @@ class AppRoutes {
         PaymentSuccessBinding(),
       ],
     ),
-    GetPage(
-      name: messageSentScreen,
-      page: () => MessageSentScreen(),
-      bindings: [
-        MessageSentBinding(),
-      ],
-    ),
-    GetPage(
-      name: appNavigationScreen,
-      page: () => AppNavigationScreen(),
-      bindings: [
-        AppNavigationBinding(),
-      ],
-    ),
+
+
     GetPage(
       name: initialRoute,
       page: () => SplashScreenFourScreen(),

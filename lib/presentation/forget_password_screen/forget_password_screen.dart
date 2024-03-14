@@ -1,5 +1,7 @@
 
 
+
+
 import '../../core/validator/validator.dart';
 import '../../widgets/comman_widget.dart';
 import 'controller/forget_password_controller.dart';
@@ -32,13 +34,12 @@ class ForgetPasswordScreen extends GetWidget<ForgetPasswordController> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(top: 10,),
-                        child: CustomImageView(
-                          height: 25,
-                          width: 25,
-                          imagePath: ImageConstant.imgBack,
-                          color:Colors.white ,
-                          onTap: (){
+                        child:IconButton(
+                          icon: Icon(Icons.arrow_back_ios),
+                          color: Colors.white,
+                          onPressed: (){
                             Get.back();
+
                           },
                         ),
                       ),
@@ -75,14 +76,14 @@ class ForgetPasswordScreen extends GetWidget<ForgetPasswordController> {
                       SizedBox(height: 10.v,),
                       Center(
                         child: Text("msg_reset_password_heading".tr,
-                            style: CustomTextStyles.titleSmallBlack900,textAlign: TextAlign.center,),
+                            style: CustomTextStyles.titleMediumPrimary,textAlign: TextAlign.center,),
 
                       ),
 
 
-                      SizedBox(height: 10.v),
-                      emailInputBox(),
-                      SizedBox(height: 10.v),
+                      SizedBox(height: 30.v),
+                      emailInputBox(context),
+                      SizedBox(height: 35.v),
                       onSubmitButton(context),
                       SizedBox(height: 10.v,),
 
@@ -97,13 +98,14 @@ class ForgetPasswordScreen extends GetWidget<ForgetPasswordController> {
   }
 
 
-  Widget emailInputBox() {
+  Widget emailInputBox(BuildContext context) {
     return Padding(
         padding: EdgeInsets.symmetric(horizontal: 0.h),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text("lbl_email_address2".tr,style: CustomTextStyles.titleSmallWhite),
-          SizedBox(height: 5.v),
+          Text("lbl_email_address2".tr,style: CustomTextStyles.titleMedium),
+          SizedBox(height: 10.v),
           CW.commonTextFieldForLoginSignUP(
+            context: context,
             contentPadding: EdgeInsets.all(6),
 
          //   controller: controller.emailController,
@@ -140,6 +142,7 @@ class ForgetPasswordScreen extends GetWidget<ForgetPasswordController> {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
           CustomOutlinedButton(
+            height: 40,
             text: "lbl_submit".tr,
             decoration: BoxDecoration(
                 color: ColorSchemes.primaryColorScheme.primary,
@@ -150,9 +153,9 @@ class ForgetPasswordScreen extends GetWidget<ForgetPasswordController> {
 
 
           ),
-          SizedBox(height: 14.v),
+          SizedBox(height: 20.v),
 
-          CW.buildContact(),
+          CW.termCondition('msg_info_clearstarttax_com'.tr,textColor: Colors.white),
 
 
 

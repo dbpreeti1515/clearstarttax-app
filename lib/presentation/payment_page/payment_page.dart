@@ -1,10 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_credit_card/flutter_credit_card.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../api_constant/api_constant.dart';
 import '../../core/validator/validator.dart';
+import '../../data/models/SuccessDialogBox/SuccessBox.dart';
 import '../../widgets/app_bar/appbar_leading_image.dart';
 import '../../widgets/app_bar/appbar_title_image.dart';
 import '../../widgets/comman_widget.dart';
@@ -28,6 +30,7 @@ class PaymentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
+    var subtitleFontSize = mediaQueryData.size.width*0.033;
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -69,343 +72,343 @@ class PaymentPage extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 )
               : SizedBox(
-              width: mediaQueryData.size.width,
-              child: SingleChildScrollView(
-                  padding: EdgeInsets.only(top: 19.v),
-                  child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 30.h),
-                      child: Column(children: [
-                        CW.buildDashboardRow(
-                            text: "lbl_payment_heading".tr),
-                        Container(
-                          padding: EdgeInsets.only(bottom: 20),
-                          decoration: AppDecoration.outlineBlack
-                              .copyWith(
-                              borderRadius: BorderRadiusStyle
-                                  .roundedBorder10),
-                          child: Column(
-                            children: [
-                              CW.statusCard(
-                                  text: "lbl_payment".tr,
-                                  height: 57.v),
-                              Column(
-                                mainAxisAlignment:
-                                MainAxisAlignment.center,
+                  width: mediaQueryData.size.width,
+                  child: SingleChildScrollView(
+                      padding: EdgeInsets.only(top: 19.v),
+                      child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 30.h),
+                          child: Column(children: [
+                            CW.buildDashboardRow(
+                                text: "lbl_payment_heading".tr),
+                            Container(
+                              padding: EdgeInsets.only(bottom: 20),
+                              decoration: AppDecoration.outlineBlack.copyWith(
+                                  borderRadius:
+                                      BorderRadiusStyle.roundedBorder10),
+                              child: Column(
                                 children: [
-                                  RadioButtonWidget(
-                                    value: _controller.getPaymentData
-                                        .value!.data!.data!.pastDue!,
-                                    label: "msg_past_due_balance".tr,
-                                    widget: Text(
-                                      "\$" +
-                                          _controller
-                                              .getPaymentData
-                                              .value!
-                                              .data!
-                                              .data!
-                                              .pastDue
-                                              .toString(),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontFamily: 'Poppins',
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400
-                                        /* 187.5% */
-                                      ),
-                                    ),
-                                  ),
-                                  RadioButtonWidget(
-                                    value: _controller.getPaymentData
-                                        .value!.data!.data!.balance!,
-                                    label: "msg_remaining_balance".tr,
-                                    widget: Text(
-                                      "\$" +
-                                          _controller
-                                              .getPaymentData
-                                              .value!
-                                              .data!
-                                              .data!
-                                              .balance
-                                              .toString(),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontFamily: 'Poppins',
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400
-                                        /* 187.5% */
-                                      ),
-                                    ),
-                                  ),
-                                  RadioButtonWidget(
-                                    value: _controller
-                                        .paymentController
-                                        .value
-                                        .text ??
-                                        0.toString(),
-                                    label: "lbl_other_amount".tr,
-                                    widget: Row(
-                                      children: [
-                                        Text(
-                                          '\$',
+                                  CW.statusCard(
+                                      text: "lbl_payment".tr, height: 57.v),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      RadioButtonWidget(
+                                        value: _controller.getPaymentData.value!
+                                            .data!.data!.pastDue!,
+                                        label: "msg_past_due_balance".tr,
+                                        widget: Text(
+                                          "\$" +
+                                              _controller.getPaymentData.value!
+                                                  .data!.data!.pastDue
+                                                  .toString(),
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontFamily: 'Poppins',
-                                              fontSize: 14,
-                                              fontWeight:
-                                              FontWeight.w400
-                                            /* 187.5% */
-                                          ),
-                                        ),
-                                        Container(
-                                            height: 30,
-                                            width: 50.h,
-                                            decoration: BoxDecoration(
-                                              border: Border(
-                                                bottom: BorderSide(
-                                                  color: Colors
-                                                      .black, // Adjust the color as needed
-                                                  width:
-                                                  1.0, // Adjust the width as needed
-                                                ),
+                                              fontSize: subtitleFontSize,
+                                              fontWeight: FontWeight.w400
+                                              /* 187.5% */
                                               ),
+                                        ),
+                                      ),
+                                      RadioButtonWidget(
+                                        value: _controller.getPaymentData.value!
+                                            .data!.data!.balance!,
+                                        label: "msg_remaining_balance".tr,
+                                        widget: Text(
+                                          "\$" +
+                                              _controller.getPaymentData.value!
+                                                  .data!.data!.balance
+                                                  .toString(),
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontFamily: 'Poppins',
+                                              fontSize: subtitleFontSize,
+                                              fontWeight: FontWeight.w400
+                                              /* 187.5% */
+                                              ),
+                                        ),
+                                      ),
+                                      RadioButtonWidget(
+                                        value: _controller
+                                                .paymentController.value.text ??
+                                            0.toString(),
+                                        label: "lbl_other_amount".tr,
+                                        widget: Row(
+                                          children: [
+                                            Text(
+                                              '\$',
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: subtitleFontSize,
+                                                  fontWeight: FontWeight.w400
+                                                  /* 187.5% */
+                                                  ),
                                             ),
-                                            child: CW.commonTextFieldForLoginSignUP(
-                                                wantBorder: true,
-                                                initialBorderColor:
-                                                Colors
-                                                    .transparent,
-                                                cursorHeight: 12,
-                                                keyboardType:
-                                                TextInputType
-                                                    .number,
-                                                contentPadding:
-                                                EdgeInsets.only(
-                                                    left: 5,
-                                                    right: 5,
-                                                    top: 2),
-                                                readOnly: false,
-                                                controller: _controller
-                                                    .paymentController
-                                                    .value,
-                                                onChanged:
-                                                    (value) {}))
-                                      ],
-                                    ),
+                                            Container(
+                                                height: 30,
+                                                width: 50.h,
+                                                decoration: BoxDecoration(
+                                                  border: Border(
+                                                    bottom: BorderSide(
+                                                      color: Colors
+                                                          .black, // Adjust the color as needed
+                                                      width:
+                                                          1.0, // Adjust the width as needed
+                                                    ),
+                                                  ),
+                                                ),
+                                                child: CW
+                                                    .commonTextFieldForLoginSignUP(
+                                                  style: TextStyle(fontSize: subtitleFontSize),
+                                                  context: context,
+                                                        wantBorder: true,
+                                                        initialBorderColor:
+                                                            Colors.transparent,
+                                                        cursorHeight: 12,
+                                                        keyboardType:
+                                                            TextInputType
+                                                                .number,
+                                                        contentPadding:
+                                                            EdgeInsets.only(
+                                                                left: 5,
+                                                                right: 5,
+                                                                top: 2),
+                                                        readOnly: false,
+                                                        controller: _controller
+                                                            .paymentController
+                                                            .value,
+                                                        onChanged: (value) {},
+                                                        inputFormatters: [
+                                                      FilteringTextInputFormatter
+                                                          .digitsOnly,
+                                                    ]))
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.v,
+                                      )
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20.v,
-                        ),
-                        Container(
-                          decoration: AppDecoration.outlineBlack
-                              .copyWith(
-                              borderRadius: BorderRadiusStyle
-                                  .roundedBorder10),
-                          child: Column(
-                            children: [
-                              CW.statusCard(
-                                  text: "msg_billing_summary".tr,
-                                  height: 57.v),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 15.h, horizontal: 15.v),
-                                child: Column(
-                                  children: [
-                                    billingDetails(
-                                        "lbl_total_balance".tr,
-                                        "\$" +
-                                            double.parse(_controller
-                                                .getPaymentData
-                                                .value!
-                                                .data!
-                                                .billingSummary!
-                                                .data!
-                                                .totalFees
-                                                .toString())
-                                                .toStringAsFixed(2)
-                                                .toString(),
-                                        Colors.black),
-                                    SizedBox(
-                                      height: 8.h,
-                                    ),
-                                    billingDetails(
-                                        "lbl_paid".tr,
-                                        "\$" +
-                                            double.parse(_controller
-                                                .getPaymentData
-                                                .value!
-                                                .data!
-                                                .billingSummary!
-                                                .data!
-                                                .paidAmount
-                                                .toString())
-                                                .toStringAsFixed(2)
-                                                .toString(),
-                                        Colors.black),
-                                    SizedBox(
-                                      height: 8.h,
-                                    ),
-                                    billingDetails(
-                                        "lbl_paid2".tr,
-                                        _controller
-                                            .getPaymentData
-                                            .value!
-                                            .data!
-                                            .billingSummary!
-                                            .data!
-                                            .paidPercentage
-                                            .toString(),
-                                        Colors.black),
-                                    SizedBox(
-                                      height: 8.h,
-                                    ),
-                                    billingDetails(
-                                        "msg_remaining_balance".tr,
-                                        "\$" +
-                                            double.parse(_controller
-                                                .getPaymentData
-                                                .value!
-                                                .data!
-                                                .billingSummary!
-                                                .data!
-                                                .balance
-                                                .toString())
-                                                .toStringAsFixed(2)
-                                                .toString(),
-                                        Colors.black),
-                                    SizedBox(
-                                      height: 8.h,
-                                    ),
-                                    billingDetails(
-                                        "lbl_amount_due".tr,
-                                        "\$" +
-                                            double.parse(_controller
-                                                .getPaymentData
-                                                .value!
-                                                .data!
-                                                .billingSummary!
-                                                .data!
-                                                .amountDue
-                                                .toString())
-                                                .toStringAsFixed(2)
-                                                .toString(),
-                                        Colors.black),
-                                    SizedBox(
-                                      height: 8.h,
-                                    ),
-                                    billingDetails(
-                                        "lbl_next_due_date".tr,
-                                        _controller
-                                            .getPaymentData
-                                            .value!
-                                            .data!
-                                            .billingSummary!
-                                            .data!
-                                            .dueDate
-                                            .toString()
-                                            .toString(),
-                                        Colors.black),
-                                    SizedBox(
-                                      height: 8.h,
-                                    ),
-                                    billingDetails(
-                                        "lbl_past_due".tr,
-                                        _controller
-                                            .getPaymentData
-                                            .value!
-                                            .data!
-                                            .billingSummary!
-                                            .data!
-                                            .pastDue! <
-                                            0
-                                            ? "N/A"
-                                            : "\$" +
-                                            double.parse(_controller
-                                                .getPaymentData
-                                                .value!
-                                                .data!
-                                                .billingSummary!
-                                                .data!
-                                                .pastDue!
-                                                .toString())
-                                                .toStringAsFixed(
-                                                2)
-                                                .toString(),
-
-                                             Colors.red
-                                           ),
-                                    SizedBox(
-                                      height: 8.h,
-                                    ),
-
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            ),
+                            SizedBox(
+                              height: 20.v,
+                            ),
+                            Container(
+                              decoration: AppDecoration.outlineBlack.copyWith(
+                                  borderRadius:
+                                      BorderRadiusStyle.roundedBorder10),
+                              child: Column(
+                                children: [
+                                  CW.statusCard(
+                                      text: "msg_billing_summary".tr,
+                                      height: 57.v),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 15.h, horizontal: 15.v),
+                                    child: Column(
                                       children: [
-                                        Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                            "lbl_pay_schedule".tr,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontFamily: 'Poppins',
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500
-                                              /* 187.5% */
-                                            ),
-                                          ),
+                                        billingDetails(
+                                            "lbl_total_balance".tr,
+                                            "\$" +
+                                                double.parse(_controller
+                                                        .getPaymentData
+                                                        .value!
+                                                        .data!
+                                                        .billingSummary!
+                                                        .data!
+                                                        .totalFees
+                                                        .toString())
+                                                    .toStringAsFixed(2)
+                                                    .toString(),
+                                            Colors.black),
+                                        SizedBox(
+                                          height: 8.h,
                                         ),
-
-                                        Expanded(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding: EdgeInsets.only(right:mediaQueryData.size.width*0.035),
-                                            child: TextButton(
-                                              style: TextButton.styleFrom(
-                                                padding: EdgeInsets.zero,
-                                                  minimumSize: Size(30, 20),
-                                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-
-                                              ),
-                                              onPressed: (){
-
-                                               PaymentModel.showDateListDialog(context,_controller.getPaymentData.value!.data!.paymentSchedular!);
-
-                                              },
+                                        billingDetails(
+                                            "lbl_paid".tr,
+                                            "\$" +
+                                                double.parse(_controller
+                                                        .getPaymentData
+                                                        .value!
+                                                        .data!
+                                                        .billingSummary!
+                                                        .data!
+                                                        .paidAmount
+                                                        .toString())
+                                                    .toStringAsFixed(2)
+                                                    .toString(),
+                                            Colors.black),
+                                        SizedBox(
+                                          height: 8.h,
+                                        ),
+                                        billingDetails(
+                                            "lbl_paid2".tr,
+                                            _controller
+                                                .getPaymentData
+                                                .value!
+                                                .data!
+                                                .billingSummary!
+                                                .data!
+                                                .paidPercentage
+                                                .toString(),
+                                            Colors.black),
+                                        SizedBox(
+                                          height: 8.h,
+                                        ),
+                                        billingDetails(
+                                            "msg_remaining_balance".tr,
+                                            "\$" +
+                                                double.parse(_controller
+                                                        .getPaymentData
+                                                        .value!
+                                                        .data!
+                                                        .billingSummary!
+                                                        .data!
+                                                        .balance
+                                                        .toString())
+                                                    .toStringAsFixed(2)
+                                                    .toString(),
+                                            Colors.black),
+                                        SizedBox(
+                                          height: 8.h,
+                                        ),
+                                        billingDetails(
+                                            "lbl_amount_due".tr,
+                                            "\$" +
+                                                double.parse(_controller
+                                                        .getPaymentData
+                                                        .value!
+                                                        .data!
+                                                        .billingSummary!
+                                                        .data!
+                                                        .amountDue
+                                                        .toString())
+                                                    .toStringAsFixed(2)
+                                                    .toString(),
+                                            Colors.black),
+                                        SizedBox(
+                                          height: 8.h,
+                                        ),
+                                        billingDetails(
+                                            "lbl_next_due_date".tr,
+                                            _controller
+                                                .getPaymentData
+                                                .value!
+                                                .data!
+                                                .billingSummary!
+                                                .data!
+                                                .dueDate
+                                                .toString()
+                                                .toString(),
+                                            Colors.black),
+                                        SizedBox(
+                                          height: 8.h,
+                                        ),
+                                        billingDetails(
+                                            "lbl_past_due".tr,
+                                            _controller
+                                                        .getPaymentData
+                                                        .value!
+                                                        .data!
+                                                        .billingSummary!
+                                                        .data!
+                                                        .pastDue! <
+                                                    0
+                                                ? "N/A"
+                                                : "\$" +
+                                                    double.parse(_controller
+                                                            .getPaymentData
+                                                            .value!
+                                                            .data!
+                                                            .billingSummary!
+                                                            .data!
+                                                            .pastDue!
+                                                            .toString())
+                                                        .toStringAsFixed(2)
+                                                        .toString(),
+                                            Colors.red),
+                                        SizedBox(
+                                          height: 8.h,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              flex: 2,
                                               child: Text(
-                                                "lbl_click_to_view".tr,
+                                                "lbl_pay_schedule".tr,
                                                 style: TextStyle(
-                                                    color: theme.primaryColor,
+                                                    color: Colors.black,
                                                     fontFamily: 'Poppins',
                                                     fontSize: 14,
-                                                    fontWeight: FontWeight.w400
-                                                  /* 187.5% */
-                                                ),
+                                                    fontWeight: FontWeight.w500
+                                                    /* 187.5% */
+                                                    ),
                                               ),
                                             ),
-                                          ),
-                                        )
+                                            Expanded(
+                                              flex: 1,
+                                              child: Padding(
+                                                padding: EdgeInsets.only(
+                                                    right: mediaQueryData
+                                                            .size.width * 0.058),
+                                                child: TextButton(
+                                                  style: TextButton.styleFrom(
+                                                    padding: EdgeInsets.zero,
+                                                    minimumSize: Size(30, 20),
+                                                    tapTargetSize:
+                                                        MaterialTapTargetSize
+                                                            .shrinkWrap,
+                                                  ),
+                                                  onPressed: () {
+                                                    PaymentModel.showDateListDialog(
+                                                        context,
+                                                        _controller
+                                                            .getPaymentData
+                                                            .value!
+                                                            .data!
+                                                            .paymentSchedular!);
+
+                                                  },
+                                                  child: Text(
+                                                    "lbl_click_to_view".tr,
+                                                    style: TextStyle(
+                                                        color:
+                                                            theme.primaryColor,
+                                                        fontFamily: 'Poppins',
+                                                        fontSize: subtitleFontSize,
+                                                        fontWeight:
+                                                            FontWeight.w400
+                                                        /* 187.5% */
+                                                        ),
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 8.h,
+                                        ),
                                       ],
                                     ),
-
-                                    SizedBox(
-                                      height: 8.h,
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Form(child: _buildScrollViewSection(context)),
-                      ]))));
+                                  )
+                                ],
+                              ),
+                            ),
+                            Form(child: _buildScrollViewSection(context)),
+                          ]))));
         }));
   }
 
   Widget billingDetails(String billngTitle, String billingAmount, Color color) {
+    var subtitleFontSize = mediaQueryData.size.width*0.033;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -422,7 +425,6 @@ class PaymentPage extends StatelessWidget {
                 ),
           ),
         ),
-
         Expanded(
           flex: 1,
           child: Text(
@@ -430,7 +432,7 @@ class PaymentPage extends StatelessWidget {
             style: TextStyle(
                 color: color,
                 fontFamily: 'Poppins',
-                fontSize: 14,
+                fontSize: subtitleFontSize,
                 fontWeight: FontWeight.w400
                 /* 187.5% */
                 ),
@@ -467,16 +469,16 @@ class PaymentPage extends StatelessWidget {
   }
 
   Widget _buildInputFeild(String heading, String hintText, validator,
-      TextEditingController controller,List<TextInputFormatter> inputformatter,{TextInputType? textInputType}) {
+      TextEditingController controller, List<TextInputFormatter> inputformatter,
+      {TextInputType? textInputType}) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text(heading, style: theme.textTheme.titleMedium),
       SizedBox(height: 11.v),
       CustomTextFormField(
           autofocus: false,
-           controller: controller,
+          controller: controller,
           inputFormatter: inputformatter,
           textInputType: textInputType,
-
           hintText: hintText,
           hintStyle: CustomTextStyles.bodyLargeGray60001,
           validator: validator)
@@ -488,9 +490,10 @@ class PaymentPage extends StatelessWidget {
       Text('msg_zip'.tr, style: theme.textTheme.titleMedium),
       SizedBox(height: 11.v),
       CustomTextFormField(
-        textInputType: TextInputType.number,
+          textInputType: TextInputType.number,
           autofocus: false,
           controller: controller,
+          hintText: 'Enter zip code',
           inputFormatter: [
             LengthLimitingTextInputFormatter(5),
             FilteringTextInputFormatter.digitsOnly,
@@ -542,7 +545,8 @@ class PaymentPage extends StatelessWidget {
       Text("lbl_expiration".tr, style: theme.textTheme.titleMedium),
       SizedBox(height: 10.v),
       Container(
-          child: Row(children: [
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Container(
             width: MediaQuery.of(context).size.width / 2.48,
             padding: EdgeInsets.symmetric(vertical: 1.v, horizontal: 0.h),
@@ -563,7 +567,7 @@ class PaymentPage extends StatelessWidget {
                   _controller.isMonthField.value = false;
                   _controller.expirydateValidation.value =
                       "msg_enter_this_field".tr;
-                } else if (int.parse(value) >= 13||int.parse(value) <= 0) {
+                } else if (int.parse(value) >= 13 || int.parse(value) <= 0) {
                   _controller.isMonthField.value = false;
                   _controller.expirydateValidation.value = "msg_enter_month".tr;
                 } else {
@@ -579,10 +583,7 @@ class PaymentPage extends StatelessWidget {
                           ? Colors.grey
                           : Color.fromARGB(500, 170, 15, 9),
                       width: 1),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(5),
-                    bottomLeft: Radius.circular(5),
-                  )),
+                  borderRadius: BorderRadius.circular(5)),
             )),
         Container(
             width: MediaQuery.of(context).size.width / 2.48,
@@ -610,13 +611,11 @@ class PaymentPage extends StatelessWidget {
                 return null;
               },
               borderDecoration: OutlineInputBorder(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(5),
-                    bottomRight: Radius.circular(5),
-                  ),
+                  borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(
-                      color: _controller.expirydateValidation.value == ''||_controller.expirydateValidation.isEmpty &&
-                              _controller.isMonthField.value == true
+                      color: _controller.expirydateValidation.value == '' ||
+                              _controller.expirydateValidation.isEmpty &&
+                                  _controller.isMonthField.value == true
                           ? Colors.grey
                           : Color.fromARGB(500, 170, 15, 9),
                       width: 1)),
@@ -627,13 +626,14 @@ class PaymentPage extends StatelessWidget {
             )),
       ])),
       SizedBox(height: 8.v),
-      Obx(() => Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Text(
-              _controller.expirydateValidation.value,
-              style: TextStyle(color: Color.fromARGB(500, 170, 15, 9)),
-            ),
-          ))
+      if (_controller.expirydateValidation.value.isNotEmpty)
+        Obx(() => Padding(
+              padding: const EdgeInsets.only(left: 10,bottom: 10),
+              child: Text(
+                _controller.expirydateValidation.value,
+                style: TextStyle(color: Color.fromARGB(500, 170, 15, 9)),
+              ),
+            ))
     ]);
   }
 
@@ -708,15 +708,24 @@ class PaymentPage extends StatelessWidget {
     return SingleChildScrollView(
         child: Column(children: [
       SizedBox(height: 22.v),
-      _buildPaymentScheduleFrameTwentySix(),
+          CW.statusCard(
+              text: "msg_payment_schedule".tr, height: 57.v),
+
       Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10.h),
+          padding: EdgeInsets.symmetric(horizontal: 0.h),
           child: Column(children: [
             TabBar.secondary(
               padding: EdgeInsets.only(left: 20.h, right: 20.h, bottom: 20.v),
               controller: _controller.tabController,
+              labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              unselectedLabelStyle: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.grey),
               tabs: <Widget>[
-                Tab(text: "msg_credit_card".tr),
+                Tab(
+                  text: "msg_credit_card".tr,
+                ),
                 Tab(text: 'msg_bank_transfer'.tr),
               ],
             ),
@@ -733,15 +742,10 @@ class PaymentPage extends StatelessWidget {
                         _buildNameOnCardSection(),
                         SizedBox(height: 12.v),
                         _buildCardInformationSection(),
-
                         SizedBox(height: 14.v),
                         _buildExpirationSection(context),
-
-                        SizedBox(height: 14.v),
                         _buildCvvSection(),
-
                         SizedBox(height: 20.v),
-
                         Text(
                           'msg_billing_address'.tr,
                           style: TextStyle(
@@ -752,43 +756,37 @@ class PaymentPage extends StatelessWidget {
                           textAlign: TextAlign.left,
                         ),
                         SizedBox(height: 20.v),
-                        _buildInputFeild('msg_street_address1'.tr, ''.tr,
+                        _buildInputFeild('msg_street_address1'.tr, 'Enter street address'.tr,
                             (value) {
                           if (value == null || value.trim().isEmpty) {
                             return "msg_enter_this_field".tr;
-                          }else if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+                          } else if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
                             return 'msg_enter_name'.tr;
                           }
                           return null;
-                        }, _controller.add1Controller,
-                          []
-                        ),
+                        }, _controller.add1Controller, []),
                         SizedBox(height: 14.v),
-                        _buildInputFeild('msg_street_address2'.tr, ''.tr,
+                        _buildInputFeild('msg_street_address2'.tr, 'Enter street address'.tr,
                             (value) {
                           return null;
-                        }, _controller.add2Controller,[]),
+                        }, _controller.add2Controller, []),
                         SizedBox(height: 14.v),
-                        _buildInputFeild('msg_city'.tr, ''.tr, (value) {
+                        _buildInputFeild('msg_city'.tr, 'Enter city'.tr, (value) {
                           if (value == null || value.trim().isEmpty) {
                             return "msg_enter_this_field".tr;
                           }
                           return null;
-                        }, _controller.cityController,[
+                        }, _controller.cityController, [
                           FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
                         ]),
                         SizedBox(height: 14.v),
-
-
-
-
-                        _stateDropdown(context, _controller.selectValue.value,1),
+                        _stateDropdown(
+                            context, _controller.selectValue.value, 1),
                         SizedBox(height: 8.v),
                         zipDetails(_controller.zipController),
-
                         SizedBox(height: 14.v),
                         _buildEmailAddressSection(),
-                        SizedBox(height: 20.v),
+                        SizedBox(height: 35.v),
                         Obx(() {
                           return _controller.isLoading.value
                               ? Center(
@@ -809,43 +807,38 @@ class PaymentPage extends StatelessWidget {
                                 );
                         }),
                         SizedBox(height: 20.v),
-
-
                         Container(
-                          width: 306.h,
-                          margin: EdgeInsets.only(left: 22.h, right: 21.h),
-                          child: RichText(text: TextSpan(
-                              text: "msg_by_clicking_pay".tr,
-                              style: CustomTextStyles.bodySmallPrimaryContainer10,
-                              children: [
-                                TextSpan(
-                                    text: 'Terms and Conditions.',
-                                    recognizer: TapGestureRecognizer()
-
-                                      ..onTap = ()async {
-                                        var url = 'https://clearstarttax.com/paymenttermsandconditions/';
-                                        if (await canLaunch(url)) {
-                                        await launch(url,
-                                        forceWebView: true, enableJavaScript: true);
-                                        } else {
-                                        throw 'Could not launch $url';
-                                        }
-
-                                      },
-                                    style: TextStyle(
-                                      color: theme.primaryColor,
-
-                                    )
-
-                                )
-                              ]
-                          )),
+                          width: MediaQuery.sizeOf(context).width,
+                          margin: EdgeInsets.only(left: 10.h, right: 10.h),
+                          child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                text: "msg_by_clicking_pay".tr,
+                                style: CustomTextStyles
+                                    .bodySmallPrimaryContainer10,
+                                children: [
+                                  TextSpan(
+                                      text: 'Terms and Conditions.',
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () async {
+                                          var url =
+                                              'https://clearstarttax.com/paymenttermsandconditions/';
+                                          if (await canLaunch(url)) {
+                                            await launch(url,
+                                                forceWebView: true,
+                                                enableJavaScript: true);
+                                          } else {
+                                            throw 'Could not launch $url';
+                                          }
+                                        },
+                                      style: TextStyle(
+                                          color: theme.primaryColor,
+                                          fontSize: 12))
+                                ],
+                              )),
                         ),
-
-                        SizedBox(height: 5.v),
-
-
-                       CW.termCondition("msg_billing_clearstarttax_com".tr)
+                        SizedBox(height: 30.v),
+                        CW.termCondition("msg_billing_clearstarttax_com".tr)
                       ],
                     ),
                   ),
@@ -864,7 +857,9 @@ class PaymentPage extends StatelessWidget {
                             return "msg_enter_this_field".tr;
                           }
                           return null;
-                        }, _controller.bankNameController,[   FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),]),
+                        }, _controller.bankNameController, [
+                          FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+                        ]),
                         SizedBox(height: 14.v),
                         _buildInputFeild(
                             'msg_account_name'.tr, 'msg_enter_account_name'.tr,
@@ -875,12 +870,11 @@ class PaymentPage extends StatelessWidget {
                             return "msg_enter_this_field".tr;
                           }
                           return null;
-                        },
-                            _controller.bankHolderController,[
+                        }, _controller.bankHolderController, [
                           FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
                         ]),
                         SizedBox(height: 14.v),
-                        _buildInputFeild('msg_routing'.tr, ''.tr, (value) {
+                        _buildInputFeild('msg_routing'.tr, 'Enter routing'.tr, (value) {
                           if (value == null ||
                               value == null ||
                               value.trim().isEmpty) {
@@ -891,12 +885,12 @@ class PaymentPage extends StatelessWidget {
                             return 'msg_enter_routing'.tr;
                           }
                           return null;
-                        }, _controller.routingController,[
+                        }, _controller.routingController, [
                           LengthLimitingTextInputFormatter(9),
                           FilteringTextInputFormatter.digitsOnly
                         ]),
                         SizedBox(height: 14.v),
-                        _buildInputFeild('msg_account'.tr, ''.tr, (value) {
+                        _buildInputFeild('msg_account'.tr, 'Enter account number'.tr, (value) {
                           if (value == null ||
                               value == null ||
                               value.trim().isEmpty) {
@@ -907,7 +901,13 @@ class PaymentPage extends StatelessWidget {
                             return 'msg_enter_account_number'.tr;
                           }
                           return null;
-                        }, _controller.transferAccountController,[   FilteringTextInputFormatter.digitsOnly]),
+                        },
+                            _controller.transferAccountController,
+                            [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(18)
+                            ],
+                            textInputType: TextInputType.number),
                         SizedBox(height: 20.v),
                         Text(
                           'msg_billing_address'.tr,
@@ -919,34 +919,35 @@ class PaymentPage extends StatelessWidget {
                           textAlign: TextAlign.left,
                         ),
                         SizedBox(height: 20.v),
-                        _buildInputFeild('msg_street_address1'.tr, ''.tr,
+                        _buildInputFeild('msg_street_address1'.tr, 'Enter street address'.tr,
                             (value) {
                           if (value == null || value.trim().isEmpty) {
                             return "msg_enter_this_field".tr;
                           }
                           return null;
-                        }, _controller.transferAdd1Controller,[]),
+                        }, _controller.transferAdd1Controller, []),
                         SizedBox(height: 14.v),
-                        _buildInputFeild('msg_street_address2'.tr, ''.tr,
+                        _buildInputFeild('msg_street_address2'.tr, 'Enter street address'.tr,
                             (value) {
                           return null;
-                        }, _controller.transferAdd2Controller,[]),
+                        }, _controller.transferAdd2Controller, []),
                         SizedBox(height: 14.v),
-                        _buildInputFeild('msg_city'.tr, ''.tr, (value) {
+                        _buildInputFeild('msg_city'.tr, 'Enter city'.tr, (value) {
                           if (value == null || value.trim().isEmpty) {
                             return "msg_enter_this_field".tr;
                           }
                           return null;
-                        }, _controller.transferCityController,
-                        [   FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),]),
+                        }, _controller.transferCityController, [
+                          FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+                        ]),
                         SizedBox(height: 14.v),
                         _stateDropdown(
-                            context, _controller.transferSelectValue.value,2),
+                            context, _controller.transferSelectValue.value, 2),
                         SizedBox(height: 14.v),
                         zipDetails(_controller.transferZipController),
                         SizedBox(height: 14.v),
                         _transferEmailAddressSection(),
-                        SizedBox(height: 20.v),
+                        SizedBox(height: 35.v),
                         Obx(() {
                           return _controller.isTranserLoading.value
                               ? Center(
@@ -967,44 +968,38 @@ class PaymentPage extends StatelessWidget {
                                 );
                         }),
                         SizedBox(height: 20.v),
-
                         Container(
-                          width: 306.h,
-                          margin: EdgeInsets.only(left: 22.h, right: 21.h),
-                          child: RichText(text: TextSpan(
-                              text: "msg_by_clicking_pay".tr,
-                              style: CustomTextStyles.bodySmallPrimaryContainer10,
-                              children: [
-                                TextSpan(
-                                    text: 'Terms and Conditions.',
-                                    recognizer: TapGestureRecognizer()
-
-                                      ..onTap = ()async {
-                                        var url = 'https://clearstarttax.com/paymenttermsandconditions/';
-                                        if (await canLaunch(url)) {
-                                          await launch(url,
-                                              forceWebView: true, enableJavaScript: true);
-                                        } else {
-                                          throw 'Could not launch $url';
-                                        }
-
-                                      },
-                                    style: TextStyle(
-                                      color: theme.primaryColor,
-
-                                    )
-
-                                )
-                              ]
-                          )),
+                          width: MediaQuery.sizeOf(context).width,
+                          margin: EdgeInsets.only(left: 10.h, right: 10.h),
+                          child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                text: "msg_by_clicking_pay".tr,
+                                style: CustomTextStyles
+                                    .bodySmallPrimaryContainer10,
+                                children: [
+                                  TextSpan(
+                                      text: 'Terms and Conditions.',
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () async {
+                                          var url =
+                                              'https://clearstarttax.com/paymenttermsandconditions/';
+                                          if (await canLaunch(url)) {
+                                            await launch(url,
+                                                forceWebView: true,
+                                                enableJavaScript: true);
+                                          } else {
+                                            throw 'Could not launch $url';
+                                          }
+                                        },
+                                      style: TextStyle(
+                                          color: theme.primaryColor,
+                                          fontSize: 12))
+                                ],
+                              )),
                         ),
-
-                        SizedBox(height: 5.v),
-
-
+                        SizedBox(height: 30.v),
                         CW.termCondition("msg_billing_clearstarttax_com".tr)
-
-
                       ],
                     ),
                   )
@@ -1049,28 +1044,9 @@ class PaymentPage extends StatelessWidget {
     }
   }
 
-  Widget _buildPaymentScheduleFrameTwentySix() {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: Container(
-        padding: EdgeInsets.fromLTRB(63.h, 4.v, 63.h, 3.v),
-        decoration: AppDecoration.outlinePrimary,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 4.v),
-            Text(
-              "msg_payment_schedule".tr,
-              style: CustomTextStyles.headlineSmallOnPrimaryContainer,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
-  Widget _stateDropdown(BuildContext context, String value,type) {
+
+  Widget _stateDropdown(BuildContext context, String value, type) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1078,6 +1054,7 @@ class PaymentPage extends StatelessWidget {
         Text("msg_state".tr, style: theme.textTheme.titleMedium),
         SizedBox(height: 12.v),
         Container(
+          height: 42,
           padding: EdgeInsets.only(left: 10),
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
@@ -1094,17 +1071,24 @@ class PaymentPage extends StatelessWidget {
               }
               return null;
             },
-            padding: EdgeInsets.zero,
+            alignment: Alignment.center,
+            isDense: true,
+
+
+
+
             menuMaxHeight: 500,
             dropdownColor: Colors.white,
-            decoration: InputDecoration(border: InputBorder.none),
+            decoration: InputDecoration(border: InputBorder.none,
+              contentPadding: EdgeInsets.only(bottom: 8),
+            ),
             icon: const Icon(Icons.arrow_drop_down_outlined),
             elevation: 16,
             isExpanded: true,
             hint: Text('Select'),
             style: const TextStyle(color: Colors.black),
             onChanged: (String? value) {
-              _controller.setSelectedState(value!,type);
+              _controller.setSelectedState(value!, type);
               // homePageController.selectedValue = value!;
               // print(homePageController.selectedValue);
               // homePageController.isSecurityChoosed.value =
@@ -1147,10 +1131,9 @@ class RadioButtonWidget extends StatelessWidget {
       builder: (controller) {
         return Obx(() {
           return Container(
-
+            height: MediaQuery.sizeOf(context).height*0.04,
             child: RadioListTile<String>(
               title: Row(
-
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Expanded(
@@ -1160,15 +1143,13 @@ class RadioButtonWidget extends StatelessWidget {
                       style: TextStyle(
                           color: Colors.black,
                           fontFamily: 'Poppins',
-                          fontSize: 14,
+                          fontSize:  MediaQuery.sizeOf(context).width*0.035,
                           fontWeight: FontWeight.w500
                           /* 187.5% */
                           ),
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
-                      child: widget)
+                  Expanded(flex: 1, child: widget)
                 ],
               ),
               value: value,

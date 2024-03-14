@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:preeti_s_application3/core/app_export.dart';
@@ -9,11 +10,15 @@ import 'package:preeti_s_application3/presentation/dashboard_page/controller/das
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../../api_constant/api_constant.dart';
+import '../../../core/http_methods/http_methods.dart';
 import '../../../data/API_Services/apiEndpoint.dart';
 import '../../../data/Comman/common_method.dart';
+import '../../../data/apiModal/getDashboardModal.dart';
 import '../../../data/apiModal/getSelltementOfficerModal.dart';
-import '../../../data/api_constant/api_constant.dart';
-import '../../../data/http_methods/http_methods.dart';
+
+import '../../../data/local_database/database_helper/database_helper.dart';
+import '../../HomeScreen/HomeScreen.dart';
 import '../../splash_screen_four_screen/controller/splash_screen_four_controller.dart';
 
 /// A controller class for the AppionmentScreen.
@@ -33,6 +38,7 @@ class AppionmentController extends GetxController {
   var selectedDate;
   RxString formattterSelectedDate = ''.obs;
   RxString formattterAPIdDate = ''.obs;
+  final DatabaseHelper dbHelper = DatabaseHelper();
 
   DateTime? rangeStart;
   RxBool isAppointmentAppear = true.obs;
@@ -85,6 +91,17 @@ class AppionmentController extends GetxController {
     TimeZone('(GMT+10:00) Chamorro Standard Time (ChST)', "ChST"),
   ];
 
+  RxInt statusId = 0.obs;
+  RxString storeTime = ''.obs;
+  RxBool fqNotification = false.obs;
+  RxBool toNotification = false.obs;
+  RxBool appoinmentNotification = false.obs;
+  RxList<String> statusForFQ = <String>[].obs;
+  RxList<String> statusForTO = <String>[].obs;
+  RxList<String> statusForFAppointment = <String>[].obs;
+  final statusInfo = Rxn<Statusinfo>();
+  final getDashboardData = Rxn<GetDashBoardModel>();
+
   @override
   void onReady() async {
     // TODO: implement onReady
@@ -96,9 +113,13 @@ class AppionmentController extends GetxController {
   void onInit() async {
     // TODO: implement onInit
     super.onInit();
-    getAppointment();
 
     getDate();
+    getTimeSlote();
+    getTime();
+    selectedIndex.value = 3;
+
+    db.value = await dbHelper.getUsers();
   }
 
   @override
@@ -172,17 +193,33 @@ class AppionmentController extends GetxController {
       var data = await response.stream.bytesToString();
       bookAppoinmentData = jsonDecode(data);
 
-print(bookAppoinmentData);
+      print(bookAppoinmentData);
       if (response.statusCode == 200) {
         if (bookAppoinmentData[ApiKey.status] == ApiKey.success) {
-          setAppointment(false);
           isAppointmentAppear.value = false;
-          setDate( formattterSelectedDate.value);
-          Future.delayed(const Duration(minutes: 5), () async {
-            setAppointment(true);
+          setDate(formattterSelectedDate.value);
+          setTimeSlote(str);
+          setTime(DateTime.now().toString());
 
-            isAppointmentAppear.value = true;
-          });
+          dbHelper.updateFirstUserColumn('appoinmentNotification', 'false');
+          dbHelper.updateFirstUserColumn('status', 'inactive');
+
+          print("status changed");
+
+          isAppointmentAppear.value = false;
+          // db.value = await dbHelper.getUsers();
+          // print("status is unactive ${db.value!.status}");
+          // Future.delayed(const Duration(minutes: 1), () async {
+          //   isAppointmentAppear.value = true;
+          //   dbHelper.updateFirstUserColumn('appoinmentNotification', 'true');
+          //   dbHelper.updateFirstUserColumn('status', 'active');
+          //   //db.value = await dbHelper.getUsers();
+          //   print(db.value!.status);
+          //   getDashboard();
+          //    Get.off(() => Homescreen());
+          //   // selectedIndex.value = 0;
+          //   print("---------------------------------data updatted");
+          // });
           CM.showToast("Appointment Booked Successfully ",
               backgraoundCollor: theme.primaryColor);
           Get.back();
@@ -201,49 +238,147 @@ print(bookAppoinmentData);
     }
   }
 
-  void getAppointment() async {
-    print('thi is get appointment');
-
-    final prefs = await SharedPreferences.getInstance();
-    final key = prefs.get('appointment');
-
-    var value = key;
-    if (value == false) {
-      isAppointmentAppear.value = false;
-    } else {
-      isAppointmentAppear.value = true;
-    }
-
-    print('YOUR appointment - ${isAppointmentAppear.value}');
-    print('YOUR appointment KEY - $key');
-  }
-
-  void setAppointment(bool key) async {
-    final prefs = await SharedPreferences.getInstance();
-
-    prefs.setBool('appointment', key);
-    print('set appointment $key');
-  }
-
   void getDate() async {
     print('thi is get appointment');
 
     final prefs = await SharedPreferences.getInstance();
-    final key = prefs.get('appointment');
+    final key = prefs.get('date');
 
     var value = key;
-    print(value);
+    formattterSelectedDate.value = key.toString();
 
+    print(formattterSelectedDate.value);
 
-    print('YOUR date - ${isAppointmentAppear.value}');
     print('YOUR date KEY - $key');
+  }
+  void getTimeSlote() async {
+    print('thi is get TimeSlote');
+
+    final prefs = await SharedPreferences.getInstance();
+    final key = prefs.get('timeSlote');
+
+    var value = key;
+    str = key.toString();
+
+    print(str);
+
+    print('YOUR TimeSlote KEY - $key');
+  }
+  void getTime() async {
+    print('thi is get TimeSlote');
+
+    final prefs = await SharedPreferences.getInstance();
+    final key = prefs.get('time');
+
+    var value = key;
+    print(' current time ${DateTime.now().toLocal().toString()}');
+    storeTime.value = key.toString();
+    var data = DateTime.parse(storeTime.value);
+    var currrentTime = DateTime.now();
+
+    print(currrentTime.difference(data));
+    var differentData = currrentTime.difference(data);
+    if(differentData>Duration(minutes: 5)){
+      print("big time");
+
+    }else{
+      print("short time");
+      Future.delayed( differentData, () async {
+        isAppointmentAppear.value = true;
+        dbHelper.updateFirstUserColumn('appoinmentNotification', 'true');
+        dbHelper.updateFirstUserColumn('status', 'active');
+        //db.value = await dbHelper.getUsers();
+        print(db.value!.status);
+
+        getDashboard();
+        Get.off(() => Homescreen());
+        // selectedIndex.value = 0;
+        print("---------------------------------data updatted");
+      });
+
+    }
+
+    print('YOUR time KEY - $key');
   }
 
   void setDate(key) async {
     final prefs = await SharedPreferences.getInstance();
 
-    prefs.setBool('date', key);
+    prefs.setString('date', key);
     print('set date $key');
+  }
+  void setTime(key) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    prefs.setString('time', key);
+    print('set time $key');
+  }
+  void setTimeSlote(key) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    prefs.setString('timeSlote', key);
+    print('set timeSlote $key');
+  }
+
+  Future<void> getDashboard() async {
+    isLoading.value = true;
+
+    try {
+      http.Response? response = await http.get(
+        Uri.parse(UriConstant.dashboardURL),
+        headers: {
+          ApiKey.authorization: '${ApiKey.bearer} $token',
+        },
+      );
+      isLoading.value = true;
+
+      if (response.statusCode == 200)
+        getDashboardData.value =
+            GetDashBoardModel.fromJson(jsonDecode(response!.body));
+
+      if (getDashboardData.value != null &&
+          getDashboardData.value?.data != null) {
+        statusInfo.value = getDashboardData.value!.data!.statusinfo;
+        greatinMsg.value = getDashboardData.value!.data!.greeting!;
+        statusId.value = getDashboardData.value!.data!.statusId!;
+        statusName.value = getDashboardData.value!.data!.statusName!;
+        meansStep.value =
+            getDashboardData.value!.data!.statusinfo!.whatThisMeans ?? '';
+        nextStep.value =
+            getDashboardData.value!.data!.statusinfo!.whatThisMeans ?? '';
+        getDashboardData.value!.data!.statusForFq!.forEach((element) {
+          statusForFQ.value.add(element);
+          if (element.toString() == statusId.value.toString()) {
+            fqNotification.value = true;
+            dbHelper.updateFirstUserColumn('fqNotification', 'true');
+          }
+        });
+
+        getDashboardData.value!.data!.statusForTo!.forEach((element) {
+          statusForTO.value.add(element);
+          if (element.toString() == statusId.value.toString()) {
+            toNotification.value = true;
+            dbHelper.updateFirstUserColumn('toNotification', 'true');
+          }
+        });
+        getDashboardData.value!.data!.statusForAppointment!.forEach((element) {
+          statusForFAppointment.value.add(element);
+          if (element.toString() == statusId.value.toString()) {
+            appoinmentNotification.value = true;
+            dbHelper.updateFirstUserColumn('appoinmentNotification', 'true');
+            dbHelper.updateFirstUserColumn('status', 'active');
+          }
+        });
+
+        isLoading.value = false;
+      } else {
+        print(response.reasonPhrase);
+        isLoading.value = false;
+      }
+    } catch (e) {
+      print(e);
+      isLoading.value = false;
+    }
   }
 }
 

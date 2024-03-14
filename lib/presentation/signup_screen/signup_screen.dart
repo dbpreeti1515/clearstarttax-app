@@ -43,13 +43,12 @@ class SignupScreen extends GetWidget<SignupController> {
                               padding: const EdgeInsets.only(
                                 top: 10,
                               ),
-                              child: CustomImageView(
-                                height: 25,
-                                width: 25,
-                                imagePath: ImageConstant.imgBack,
+                              child:IconButton(
+                                icon: Icon(Icons.arrow_back_ios),
                                 color: Colors.white,
-                                onTap: () {
+                                onPressed: (){
                                   Get.back();
+
                                 },
                               ),
                             ),
@@ -88,18 +87,19 @@ class SignupScreen extends GetWidget<SignupController> {
                           child: Column(
                             children: [
                               Text("msg_join_us_and_enter".tr,
-                                  style: CustomTextStyles.titleSmallBlack900),
+                                  textAlign: TextAlign.center,
+                                  style: CustomTextStyles.titleMediumPrimary),
                               SizedBox(height: 15.v),
-                              _caseIDInputBox(),
+                              _caseIDInputBox(context),
                               SizedBox(height: 10.v),
-                              _buildEmailDetails(),
+                              _buildEmailDetails(context),
                               SizedBox(height: 10.v),
-                              _buildPasswordDetails(),
+                              _buildPasswordDetails(context),
                               SizedBox(height: 10.v),
-                              _buildConfirmPasswordDetails(),
-                              SizedBox(height: 10.v),
+                              _buildConfirmPasswordDetails(context),
+                              SizedBox(height: 15.v),
                               _buildRememberMeCheckbox(),
-                              SizedBox(height: 10.v),
+                              SizedBox(height: 20.v),
                               signUpButton()
                             ],
                           ),
@@ -117,18 +117,19 @@ class SignupScreen extends GetWidget<SignupController> {
   /// Section Widget
 
   /// Section Widget
-  Widget _caseIDInputBox() {
+  Widget _caseIDInputBox(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           "lbl_case_id".tr,
-          style: CustomTextStyles.titleSmallWhite,
+          style:  CustomTextStyles.titleMedium,
           textAlign: TextAlign.left,
         ),
         SizedBox(height: 5.v),
         CW.commonTextFieldForLoginSignUP(
+          context: context,
           contentPadding: EdgeInsets.all(6),
           controller: controller.caseIDController,
           prefixIcon: CustomImageView(
@@ -146,12 +147,13 @@ class SignupScreen extends GetWidget<SignupController> {
   }
 
   /// Section Widget
-  Widget _buildEmailDetails() {
+  Widget _buildEmailDetails(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text("msg_enter_address".tr,
-          style: CustomTextStyles.titleSmallWhite),
+          style:  CustomTextStyles.titleMedium),
       SizedBox(height: 5.v),
       CW.commonTextFieldForLoginSignUP(
+        context: context,
         contentPadding: EdgeInsets.all(6),
         controller: controller.emailController,
         prefixIcon: CustomImageView(
@@ -167,11 +169,12 @@ class SignupScreen extends GetWidget<SignupController> {
   }
 
   /// Section Widget
-  Widget _buildPasswordDetails() {
+  Widget _buildPasswordDetails(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text("lbl_password".tr, style: CustomTextStyles.titleSmallWhite),
+      Text("lbl_password".tr, style:  CustomTextStyles.titleMedium),
       SizedBox(height: 5.v),
       CW.commonTextFieldForLoginSignUP(
+          context: context,
           controller: controller.passwordController,
           hintText: "lbl".tr,
           keyboardType: TextInputType.visiblePassword,
@@ -185,12 +188,13 @@ class SignupScreen extends GetWidget<SignupController> {
     ]);
   }
 
-  Widget _buildConfirmPasswordDetails() {
+  Widget _buildConfirmPasswordDetails(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text("msg_confirm_password".tr,
-          style: CustomTextStyles.titleSmallWhite),
+          style:  CustomTextStyles.titleMedium),
       SizedBox(height: 5.v),
       CW.commonTextFieldForLoginSignUP(
+          context: context,
           controller: controller.confirmpasswordController,
           hintText: "lbl".tr,
           keyboardType: TextInputType.visiblePassword,
@@ -211,16 +215,35 @@ class SignupScreen extends GetWidget<SignupController> {
   Widget _buildRememberMeCheckbox() {
     return Align(
         alignment: Alignment.centerLeft,
-        child: Obx(() => CustomCheckboxButton(
-            isExpandedText: true,
-            textAlignment: TextAlign.left,
-            alignment: Alignment.centerLeft,
-            text: "lbl_signup_remember_me".tr,
-            value: controller.rememberMeCheckbox.value,
-            textStyle: theme.textTheme.bodySmall!.copyWith(color: Colors.white),
-            onChange: (value) {
-              controller.rememberMeCheckbox.value = value;
-            })));
+        child: Obx(() => Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            CustomCheckboxButton(
+                isExpandedText: true,
+                textAlignment: TextAlign.left,
+                alignment: Alignment.centerLeft,
+                text: "lbl_signup_remember_me".tr,
+                value: controller.rememberMeCheckbox.value,
+                textStyle: theme.textTheme.bodySmall!.copyWith(color: Colors.white,fontSize: 12),
+                onChange: (value) {
+                  controller.rememberMeCheckbox.value = value;
+                  if(value)
+                    controller.tnCText.value = '';
+
+                  else
+                    controller.tnCText.value = 'msg_please_tick'.tr;
+
+
+
+                }),
+            Obx(() => Container(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: Text(controller.tnCText.value,
+                textAlign: TextAlign.right,
+                style: TextStyle(color: ColorSchemes.primaryColorScheme.error),),
+            ))
+          ],
+        )));
   }
 
   Widget signUpButton() {
@@ -241,20 +264,23 @@ class SignupScreen extends GetWidget<SignupController> {
             padding: EdgeInsets.only(left: 40.h, right: 40.h, top: 10.h),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text("msg_already_have_account".tr,
-                  style: theme.textTheme.bodyMedium!
+                  style: theme.textTheme.bodyLarge!
                       .copyWith(color: Colors.white)),
+              SizedBox(width: 5,),
               TextButton(
+                style: TextButton.styleFrom( padding: EdgeInsets.zero,
+                  minimumSize: Size(40, 30),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,),
                   onPressed: () {
                     onTapTxtSignInNow();
                   },
-                  child: Padding(
-                      padding: EdgeInsets.only(left: 10.h),
-                      child: Text("lbl_sign_in_now".tr,
-                          style: CustomTextStyles.bodyMediumPrimary
-                              .copyWith(decoration: TextDecoration.underline))))
+                  child: Text("lbl_sign_in_now".tr,
+                      style: CustomTextStyles.bodyExtraLargePrimary
+                          ))
             ])),
         SizedBox(height: 14.v),
-        CW.buildContact(),
+        CW.termCondition('msg_info_clearstarttax_com'.tr,textColor: Colors.white),
+        SizedBox(height: 20,)
       ],
     );
   }

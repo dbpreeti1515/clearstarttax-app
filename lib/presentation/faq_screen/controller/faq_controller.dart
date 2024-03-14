@@ -7,9 +7,10 @@ import 'package:preeti_s_application3/presentation/faq_screen/models/faq_model.d
 import 'package:http/http.dart' as http;
 import 'package:preeti_s_application3/presentation/login_page_screen/controller/login_page_controller.dart';
 
+import '../../../core/http_methods/http_methods.dart';
 import '../../../data/apiClient/api_client.dart';
 import '../../../data/apiModal/FAQ_Modal.dart';
-import '../../../data/http_methods/http_methods.dart';
+
 import '../../splash_screen_four_screen/controller/splash_screen_four_controller.dart';
 /// A controller class for the FaqScreen.
 ///

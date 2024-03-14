@@ -58,6 +58,7 @@ class FaqModel {
         sectionClosingHapticFeedback: SectionHapticFeedback.light,
         children: [
           AccordionSection(
+            scrollIntoViewOfItems: ScrollIntoViewOfItems.none,
             isOpen: false,
             contentBorderRadius: 10,
             headerBorderWidth: 2,

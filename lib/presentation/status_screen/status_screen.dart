@@ -1,3 +1,5 @@
+
+
 import 'package:preeti_s_application3/presentation/dashboard_page/controller/dashboard_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,8 +16,8 @@ import 'package:preeti_s_application3/widgets/custom_bottom_bar.dart';
 class StatusScreen extends GetWidget<StatusController> {
   StatusController controller = Get.put(StatusController());
 
-  GetDashBoardModel? getDashboardData;
-  StatusScreen({Key? key, this.getDashboardData}) {}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -63,28 +65,31 @@ class StatusScreen extends GetWidget<StatusController> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if(getDashboardData!=null)
+
 
               CW.statusCard(
                   text: "msg_your_case_status".tr +
-                      getDashboardData!.data!.statusName!,
+                      statusName.value,
                   height: 100.h),
+
+
               SizedBox(height: 19.v),
               Padding(
                   padding: EdgeInsets.only(left: 20.h, right: 39.h),
                   child: _buildYourNextStepsRow(
                       yourNextStepsText: "msg_what_this_means".tr,
                       detailsShownHereText:
-                          getDashboardData!.data!.statusinfo!.whatThisMeans!)),
+                          meansStep.value)),
               SizedBox(height: 20.v),
               Padding(
                   padding: EdgeInsets.only(left: 20.h, right: 39.h),
                   child: _buildYourNextStepsRow(
                       yourNextStepsText: "msg_your_next_steps".tr,
                       detailsShownHereText:
-                          getDashboardData!.data!.statusinfo!.whatHappensNext!)),
+                         nextStep.value)),
               SizedBox(height: 17.v),
               Obx(() {
+
                 return controller.password.value == ''
                     ? SizedBox()
                     : Padding(
@@ -93,7 +98,8 @@ class StatusScreen extends GetWidget<StatusController> {
                             completeOnlineText: "msg_complete_online".tr,
                             clickHereText: "lbl_click_here".tr,
                             url:
-                                'https://client.clearstarttax.com/fqs/app/${email.value}/${controller.randomText1.value}${controller.password}${controller.randomText2.value}'));
+                                'https://client.clearstarttax.com/fqs/app/${email.value}/${controller.randomText1.value}${controller.password}${controller.randomText2.value}'
+                        ));
               }),
               SizedBox(height: 20.v),
               Obx(() {
@@ -102,7 +108,9 @@ class StatusScreen extends GetWidget<StatusController> {
                     child: _buildCompleteOnlineRow(
                         completeOnlineText: "msg_complete_online2".tr,
                         clickHereText: "lbl_click_here".tr,
-                        url: 'https://client.clearstarttax.com/tos/app/${email.value}/${controller.randomText2.value}${controller.password}${controller.randomText1.value}'));
+                        url:
+                        'https://client.clearstarttax.com/tos/app/${email.value}/${controller.randomText2.value}${controller.password}${controller.randomText1.value}'
+                    ));
               })
           ,
               SizedBox(height: 35.v)
@@ -113,6 +121,7 @@ class StatusScreen extends GetWidget<StatusController> {
       {required String completeOnlineText,
       required String clickHereText,
       required String url}) {
+
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 8.v),
         decoration: AppDecoration.fillYellow
@@ -132,7 +141,7 @@ class StatusScreen extends GetWidget<StatusController> {
                   padding: EdgeInsets.only(left: 14.h, top: 10.v, bottom: 11.v),
                   child: TextButton(
                     onPressed: () async {
-                      print("button clicked");
+
 
                       if (await canLaunch(url)) {
                         await launch(url,

@@ -1,16 +1,20 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
+import 'package:get/get_rx/get_rx.dart';
 import 'package:preeti_s_application3/core/app_export.dart';
 import 'package:preeti_s_application3/presentation/signup_screen/models/signup_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../api_constant/api_constant.dart';
+import '../../../core/http_methods/http_methods.dart';
 import '../../../data/API_Services/apiEndpoint.dart';
 import '../../../data/Comman/common_method.dart';
-import '../../../data/api_constant/api_constant.dart';
-import '../../../data/http_methods/http_methods.dart';
+
+import '../../../data/local_database/database_helper/database_helper.dart';
 import '../../HomeScreen/HomeScreen.dart';
 import '../../login_page_screen/controller/login_page_controller.dart';
 import '../../splash_screen_four_screen/controller/splash_screen_four_controller.dart';
@@ -24,7 +28,8 @@ class SignupController extends GetxController {
   TextEditingController passwordController = TextEditingController();
   TextEditingController caseIDController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-
+  RxString tnCText = ''.obs;
+  final DatabaseHelper dbHelper = DatabaseHelper();
   TextEditingController confirmpasswordController = TextEditingController();
   Map<String, dynamic> bodyParamsForRegistration = {};
   Map<String, dynamic> responseMapForRegistration = {};
@@ -34,8 +39,16 @@ class SignupController extends GetxController {
 
   Rx<bool> rememberMeCheckbox = false.obs;
   Future<void> clickOnSignUpButton() async {
+
     if (formKey.currentState!.validate()) {
-      registrationApiCalling();
+      if(rememberMeCheckbox.value){
+        tnCText.value = '';
+        registrationApiCalling();
+      }
+
+      else tnCText.value = 'msg_please_tick'.tr;
+
+
       //   Get.off(()=> Homescreen(selectedIndexValue: 0.obs));
     }
   }
@@ -51,19 +64,25 @@ class SignupController extends GetxController {
     http.Response? response = await HttpMethod.instance.postRequest(
         url: UriConstant.signUpURL, bodyParams: bodyParamsForRegistration);
     isLoading.value = true;
+    responseMapForRegistration = jsonDecode(response!.body);
+    print("this is response ${response.body}");
     if (CM.responseCheckForPostMethod(response: response)) {
-      responseMapForRegistration = jsonDecode(response!.body);
+
+
       print(responseMapForRegistration);
 
 
       if (responseMapForRegistration[ApiKey.status]) {
-        CM.showToast(responseMapForRegistration[ApiKey.message]);
+        CM.showToast(responseMapForRegistration[ApiKey.message],backgraoundCollor: theme.primaryColor);
         isLoading.value = false;
-        setToken(responseMapForRegistration[ApiKey.token]);
-        Get.off(() => Homescreen(isAppoinment: appoinmentNotification.value));
+
+        Get.off(() => Homescreen());
       } else {
         isLoading.value = false;
-        CM.showToast(responseMapForRegistration[ApiKey.message]);
+        appoinmentNotification.value = true;
+        print('the value ${appoinmentNotification.value}');
+        dbHelper.updateFirstUserColumn('appoinmentNotification', 'true');
+        CM.showToast(responseMapForRegistration[ApiKey.message],backgraoundCollor: Colors.white,textColor: Colors.red);
 
       }
 
@@ -78,12 +97,7 @@ class SignupController extends GetxController {
     }
   }
 
-  void setToken(key) async {
-    final prefs = await SharedPreferences.getInstance();
 
-    prefs.setString('token', key);
-    print('set TOKEN $key');
-  }
 
   @override
   void onClose() {

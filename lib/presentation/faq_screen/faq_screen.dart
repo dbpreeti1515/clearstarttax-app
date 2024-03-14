@@ -15,11 +15,11 @@ import 'package:preeti_s_application3/widgets/custom_bottom_bar.dart';
 class FaqScreen extends GetWidget<FaqController> {
   FaqScreen({Key? key}) : super(key: key);
   static const headerStyle = TextStyle(
-      color: Color(0xff000000), fontSize: 15, fontWeight: FontWeight.w500);
+      color: Color(0xff000000), fontSize: 14, fontWeight: FontWeight.w500);
   static const contentStyleHeader = TextStyle(
-      color: Color(0xff999999), fontSize: 14, fontWeight: FontWeight.w700);
+      color: Color(0xff999999), fontSize: 12, fontWeight: FontWeight.w700);
   static const contentStyle = TextStyle(
-      color: Color(0xff000000), fontSize: 14, fontWeight: FontWeight.normal);
+      color: Color(0xff000000), fontSize: 12, fontWeight: FontWeight.normal);
 
   FaqModel faqModel = FaqModel();
   @override
@@ -30,7 +30,7 @@ class FaqScreen extends GetWidget<FaqController> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
-              Get.back();
+              Get.offAllNamed(AppRoutes.homeScreen);
             },
           ),
           leadingWidth: 80,
@@ -61,13 +61,22 @@ class FaqScreen extends GetWidget<FaqController> {
                 child: SingleChildScrollView(
                   child: Column(
                       children: [
+
                         CW.buildDashboardRow(text: "msg_answers_to_your".tr),
+                        SizedBox(height: 15.v,),
+                        CW.statusCard(
+                            text: "msg_faq_screen".tr, height: 57.v),
                         TabBar.secondary(
                           padding: EdgeInsets.only(
-                              left: 20.h, right: 20.h, bottom: 40.v),
+                              left: 10.h, right: 10.h, bottom: 40.v),
                           controller: controller.tabController,
+                          labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                          unselectedLabelStyle: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey),
                           tabs: <Widget>[
-                            Tab(text: "msg_processing_faq".tr),
+                            Tab(text: "msg_processing_faq".tr,),
                             Tab(text: 'msg_service_faq'.tr),
                   
                           ],
@@ -76,9 +85,10 @@ class FaqScreen extends GetWidget<FaqController> {
                         if(controller.faq_modal.value!=null)
                         SizedBox(
                           //   height:controller.faq_modal.value!.data!.processingFaqs!.length*100,
-                          height: mediaQueryData.size.height * 0.53,
+                          height: mediaQueryData.size.height * 0.4,
                           child: TabBarView(
                             controller: controller.tabController,
+                            physics: NeverScrollableScrollPhysics(),
                   
                             children: <Widget>[
                               ListView.separated(
@@ -94,6 +104,7 @@ class FaqScreen extends GetWidget<FaqController> {
                                       .processingFaqs!.length);
                   
                                   return FaqModel.Acordian(
+
                                       headerStyle,
                                       "msg_content_text".tr,
                                       contentStyle,

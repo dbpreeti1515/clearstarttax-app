@@ -39,6 +39,7 @@ final Map<String, String> enUs = {
 
   // Login page Screen
   "lbl_sign_in": "Sign In",
+  "msg_welcome": "Welcome to Your Exclusive Client Portal!",
   "lbl_sign_up_now": "Sign Up Now",
   "msg_don_t_have_an_account": "Don’t have an account? ",
   "msg_example_gmail_com": "example@gmail.com",
@@ -48,16 +49,19 @@ final Map<String, String> enUs = {
 
   // Signup Screen
   "lbl_sign_in_now": "Sign In Now",
-  "lbl_signup_remember_me": "By click you agree to our Terms & Conditions as well as our Privacy Policy.",
+  "lbl_signup_remember_me": "By click you agree to our Terms & Conditions",
   "lbl_sign_up": "Sign Up",
   "msg_already_have_account": "Already have account?",
   "msg_confirm_password": "Confirm Password",
   "msg_join_us_and_enter":
       "Sign Up And Access Your Exclusive Client Portal!",
   "msg_please_enter_your": "Please enter your case ID",
+  "msg_please_tick": "Please tick this box if you want to proceed",
 
   // Dashboard Screen
   "lbl_document_center": "Document Center",
+  "lbl_faq_answer": "Answers to Your Frequently Asked Questions",
+  "lbl_stay_update": "Stay Informed with the Latest Tax Updates",
   "lbl_fq_notification": "Action Required: Complete online Financial Questionnaire form",
   "lbl_to_notification": "Action Required: Complete online Tax Organizer form",
   "lbl_appoinment_notification": "Action Required: Schedule an appointment with your agent to go over your investigation results and resolution!",
@@ -76,11 +80,18 @@ final Map<String, String> enUs = {
   "msg_welcome_to_your": "Welcome to Your Clear Start Tax Client Portal!",
   "msg_notification": "Your documents are currently incomplete and require immediate review and completion. ",
 
+
+  // Home Screen
+  "lbl_fq": "Financial Questionnaire",
+  "lbl_to": "Tax Organizer",
+
+
   // Document Screen
+
   "lbl_upload_document": "Upload Document",
   "lbl_upload_pdf": "Upload PDF",
   "msg_drag_or_upload_your": "Upload Your Document Here",
-  "msg_maximum_document": "Maximum Document Size : Up to 6MB per Upload (PDF Only)",
+  "msg_maximum_document": "Maximum Document Size : Up to 6MB (PDF Only)",
 
   // Payment Screen
   "lbl2": "?",
@@ -148,6 +159,7 @@ final Map<String, String> enUs = {
   "lbl_past_due": "Past Due :",
   "lbl_pay_schedule": "Pay Schedule :",
   "lbl_payment": "Payment :",
+  "lbl_upcoming_payment": "Upcoming Payments:",
   "lbl_payment_heading": "Payment Hub",
   "lbl_total_balance": "Total Balance :  ",
   "msg_billing_summary": "Billing Summary : ",
@@ -159,6 +171,7 @@ final Map<String, String> enUs = {
   "msg_remaining_faild_transection": "!Please check card details and try again \n",
   "msg_remaining_balance_paid": "Amount Paid: ",
   "msg_remaining_balance_transition": "Transaction ID: ",
+  "msg_payment_question": "For payment questions, contact our team at ",
   "msg_remaining_balance_bottom": "For payment questions, contact our team at billing",
   "msg_card_payment_successs": "Please be aware, ACH bank payments may take 3-5 business days to clear. To avoid any issues, please have enough funds in your account. Thank you. \n \n For your convenience, we will securely store your payment information and use it for any future recurring payments should you have any remaining.",
   "msg_bank_payment_successs": "For your convenience, we will securely store your payment information and use it for any future recurring payments, should you have any remaining.",
@@ -169,7 +182,7 @@ final Map<String, String> enUs = {
 
   // Appiontment Screen
   "lbl_officer_mail": "Officer E-Mail: ",
-  "msg_30_minute_time_slot": "60-Minute Time Slot Exclusively Available",
+  "msg_30_minute_time_slot": "90-Minute Time Slot Exclusively Available",
   "msg_book_your_appointment": "Book Your Appointment",
   "msg_get_available_slots": "Get Available Slots",
   "msg_gmt_05_00_eastern": "(GMT-05:00) Eastern Standard Time (EST)",
@@ -187,8 +200,9 @@ final Map<String, String> enUs = {
   // FAQ Screen
   "msg_answers_to_your":
       "Answers to Your Questions: FAQ - Find What You Need",
-"msg_processing_faq":"Processing FAQs",
-"msg_service_faq":"Service FAQs",
+"msg_processing_faq":"Processing",
+"msg_faq_screen":"FAQ",
+"msg_service_faq":"Service",
   "msg_can_the_state_intercept":
       "Can the state intercept my federal refund and viceversa?",
   "msg_where_do_i_send": "Where do I send my documents?",
@@ -199,13 +213,15 @@ final Map<String, String> enUs = {
   "lbl_full_name": "Full Name :",
   "lbl_message": "Message :",
   "lbl_subject": "Subject :",
+  "lbl_upload_docment": "Upload document :",
   "lbl_write_message": "Write message",
   "lbl_write_heading": "Connect with Us: Reach Out and Let's Start a Conversation!",
   "lbl_write_subject": "Write subject",
   "msg_contact_hours": "Contact Hours : ",
   "msg_contact_time": "8:00 AM - 5:00 PM (PST)",
-  "msg_need_to_call_us": "Need To Call Us?:",
+  "msg_need_to_call_us": "Need To Call Us?",
   "msg_phone": "Phone :",
+  "msg_file_choose": "No file chosen",
 
   // Tax News Screen
   "msg_strategize_your":
