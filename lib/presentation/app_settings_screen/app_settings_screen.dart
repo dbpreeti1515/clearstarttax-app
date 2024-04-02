@@ -17,30 +17,20 @@ class AppSettingsScreen extends GetWidget<AppSettingsController> {
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              Get.back();
-            },
-          ),
-          leadingWidth: 80,
-          title: Container(
-              height: 70.v,
-              margin: EdgeInsets.only(left: 0.h, top: 10.v, bottom: 10.v),
-              child: Stack(alignment: Alignment.topLeft, children: [
-                Container(
-                  margin: EdgeInsets.only(left: 22.h, top: 17.v, bottom: 10.v),
-                  child: Image(
-                    image: AssetImage(
-                      ImageConstant.imgImage2,
-                    ),
-                  ),
-                ),
-                // AppbarTitleImage(
-                //     imagePath: ImageConstant.imgSantaHat1,
-                //     margin: EdgeInsets.only(right: 204.h, bottom: 33.v))
-              ])),
+        appBar: CustomAppBar(
+         // leadingWidth: mediaQueryData.size.width*.126,
+
+          leading:
+          AppbarLeadingImage(
+              imagePath: ImageConstant.imgbackButton,
+
+
+              margin: EdgeInsets.all(mediaQueryData.size.width*.05),
+              onTap: () {
+               Get.back();
+
+              }),
+
         ),
         body: SizedBox(
             width: double.maxFinite,

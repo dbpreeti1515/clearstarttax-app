@@ -114,7 +114,7 @@ static void _launchPhone() async {
             Center(
               child: Container(
                 margin: EdgeInsets.only(top: 10),
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 0),
+                padding: EdgeInsets.symmetric(horizontal: mediaQueryData.size.width*0.05, vertical: 0),
                 decoration: BoxDecoration(
                     color: theme.primaryColor,
                     borderRadius: BorderRadius.circular(8)),
@@ -126,7 +126,7 @@ static void _launchPhone() async {
                     Navigator.of(context).pop();
                   },
                   child: Text(
-                    'Close',
+                    'lbl_ok'.tr,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 15,
@@ -250,7 +250,7 @@ static void _launchPhone() async {
             Center(
               child: Container(
                 margin: EdgeInsets.only(top: 10),
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 0),
+                padding: EdgeInsets.symmetric(horizontal: mediaQueryData.size.width*0.05, vertical: 0),
                 decoration: BoxDecoration(
                     color: theme.primaryColor,
                     borderRadius: BorderRadius.circular(8)),
@@ -262,7 +262,7 @@ static void _launchPhone() async {
                     Navigator.of(context).pop();
                   },
                   child: Text(
-                    'Close',
+                    'lbl_ok'.tr,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 15,
@@ -366,7 +366,7 @@ static void _launchPhone() async {
              Center(
                child: Container(
 
-                 padding: EdgeInsets.symmetric(horizontal: 40, vertical: 0),
+                 padding: EdgeInsets.symmetric(horizontal:mediaQueryData.size.width*0.05, vertical: 0),
                  decoration: BoxDecoration(
                      color: theme.primaryColor,
                      borderRadius: BorderRadius.circular(8)),
@@ -378,7 +378,7 @@ static void _launchPhone() async {
                      Get.back();
                    },
                    child: Text(
-                     'Close',
+                     'lbl_ok'.tr,
                      style: TextStyle(
                          color: Colors.white,
                          fontSize: 15,
@@ -454,7 +454,8 @@ static void _launchPhone() async {
             Center(
               child: Container(
                 margin: EdgeInsets.only(top: 10),
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 0),
+                padding: EdgeInsets.symmetric(horizontal: mediaQueryData.size.width*0.05,
+                    vertical: 0),
                 decoration: BoxDecoration(
                     color: theme.primaryColor,
                     borderRadius: BorderRadius.circular(8)),

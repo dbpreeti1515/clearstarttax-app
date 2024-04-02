@@ -21,6 +21,7 @@ class CM{
       }) {
     Fluttertoast.showToast(
 
+
       msg: msg,
       backgroundColor:backgraoundCollor??ColorSchemes.primaryColorScheme.background ,
       textColor: textColor??Color(0xffffffff),

@@ -1,5 +1,3 @@
-
-
 import 'package:preeti_s_application3/presentation/dashboard_page/controller/dashboard_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -16,37 +14,20 @@ import 'package:preeti_s_application3/widgets/custom_bottom_bar.dart';
 class StatusScreen extends GetWidget<StatusController> {
   StatusController controller = Get.put(StatusController());
 
-
-
-
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Get.back();
-          },
-        ),
-        leadingWidth: 80,
-        title: Container(
-            height: 70.v,
-            margin: EdgeInsets.only(left: 0.h, top: 10.v, bottom: 10.v),
-            child: Stack(alignment: Alignment.topLeft, children: [
-              Container(
-                margin: EdgeInsets.only(left: 22.h, top: 17.v, bottom: 10.v),
-                child: Image(
-                  image: AssetImage(
-                    ImageConstant.imgImage2,
-                  ),
-                ),
-              ),
-              // AppbarTitleImage(
-              //     imagePath: ImageConstant.imgSantaHat1,
-              //     margin: EdgeInsets.only(right: 204.h, bottom: 33.v))
-            ])),
+      appBar: CustomAppBar(
+        // leadingWidth: mediaQueryData.size.width*.126,
+
+        leading: AppbarLeadingImage(
+            imagePath: ImageConstant.imgbackButton,
+            margin: EdgeInsets.all(mediaQueryData.size.width * .05),
+            onTap: () {
+              Get.back();
+              //  Get.offAllNamed(AppRoutes.homeScreen);
+            }),
       ),
       body: SizedBox(
           width: double.maxFinite,
@@ -65,31 +46,23 @@ class StatusScreen extends GetWidget<StatusController> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-
               CW.statusCard(
-                  text: "msg_your_case_status".tr +
-                      statusName.value,
+                  text: "msg_your_case_status".tr + statusName.value,
                   height: 100.h),
-
-
               SizedBox(height: 19.v),
               Padding(
                   padding: EdgeInsets.only(left: 20.h, right: 39.h),
                   child: _buildYourNextStepsRow(
                       yourNextStepsText: "msg_what_this_means".tr,
-                      detailsShownHereText:
-                          meansStep.value)),
+                      detailsShownHereText: meansStep.value)),
               SizedBox(height: 20.v),
               Padding(
                   padding: EdgeInsets.only(left: 20.h, right: 39.h),
                   child: _buildYourNextStepsRow(
                       yourNextStepsText: "msg_your_next_steps".tr,
-                      detailsShownHereText:
-                         nextStep.value)),
+                      detailsShownHereText: nextStep.value)),
               SizedBox(height: 17.v),
               Obx(() {
-
                 return controller.password.value == ''
                     ? SizedBox()
                     : Padding(
@@ -98,21 +71,20 @@ class StatusScreen extends GetWidget<StatusController> {
                             completeOnlineText: "msg_complete_online".tr,
                             clickHereText: "lbl_click_here".tr,
                             url:
-                                'https://client.clearstarttax.com/fqs/app/${email.value}/${controller.randomText1.value}${controller.password}${controller.randomText2.value}'
-                        ));
+                                'https://client.clearstarttax.com/fqs/app/${email.value}/${controller.randomText1.value}${controller.password}${controller.randomText2.value}'));
               }),
               SizedBox(height: 20.v),
               Obx(() {
-                return    controller.password.value == ''?SizedBox(): Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.h),
-                    child: _buildCompleteOnlineRow(
-                        completeOnlineText: "msg_complete_online2".tr,
-                        clickHereText: "lbl_click_here".tr,
-                        url:
-                        'https://client.clearstarttax.com/tos/app/${email.value}/${controller.randomText2.value}${controller.password}${controller.randomText1.value}'
-                    ));
-              })
-          ,
+                return controller.password.value == ''
+                    ? SizedBox()
+                    : Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.h),
+                        child: _buildCompleteOnlineRow(
+                            completeOnlineText: "msg_complete_online2".tr,
+                            clickHereText: "lbl_click_here".tr,
+                            url:
+                                'https://client.clearstarttax.com/tos/app/${email.value}/${controller.randomText2.value}${controller.password}${controller.randomText1.value}'));
+              }),
               SizedBox(height: 35.v)
             ]));
   }
@@ -121,7 +93,6 @@ class StatusScreen extends GetWidget<StatusController> {
       {required String completeOnlineText,
       required String clickHereText,
       required String url}) {
-
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 8.v),
         decoration: AppDecoration.fillYellow
@@ -141,8 +112,6 @@ class StatusScreen extends GetWidget<StatusController> {
                   padding: EdgeInsets.only(left: 14.h, top: 10.v, bottom: 11.v),
                   child: TextButton(
                     onPressed: () async {
-
-
                       if (await canLaunch(url)) {
                         await launch(url,
                             forceWebView: true, enableJavaScript: true);

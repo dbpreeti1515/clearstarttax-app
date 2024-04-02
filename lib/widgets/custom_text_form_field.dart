@@ -81,30 +81,39 @@ class CustomTextFormField extends StatelessWidget {
     return alignment != null
         ? Align(
             alignment: alignment ?? Alignment.center,
-            child: textFormFieldWidget,
+            child: textFormFieldWidget(context),
           )
-        : textFormFieldWidget;
+        : textFormFieldWidget(context);
   }
 
-  Widget get textFormFieldWidget => SizedBox(
-        width: width ?? double.maxFinite,
-        child: TextFormField(
-          onChanged: onChange,
+  Widget  textFormFieldWidget(BuildContext context) {
+    return  SizedBox(
+      width: width ?? double.maxFinite,
+      child: TextFormField(
+        onTapOutside: (event) {
+          FocusScope.of(context).unfocus();
+        },
 
-          enabled: enable,
-          inputFormatters: inputFormatter,
-          controller: controller,
-          focusNode: focusNode ?? FocusNode(),
-          autofocus: autofocus!,
-          style: textStyle ?? theme.textTheme.bodyMedium,
-          obscureText: obscureText!,
-          textInputAction: textInputAction,
-          keyboardType: textInputType,
-          maxLines: maxLines ?? 1,
-          decoration: decoration,
-          validator: validator,
-        ),
-      );
+        onChanged: onChange,
+
+
+        enabled: enable,
+        inputFormatters: inputFormatter,
+        controller: controller,
+        focusNode: focusNode ?? FocusNode(),
+        autofocus: autofocus!,
+        style: textStyle ?? theme.textTheme.bodyMedium,
+        obscureText: obscureText!,
+        textInputAction: textInputAction,
+        keyboardType: textInputType,
+        maxLines: maxLines ?? 1,
+        decoration: decoration,
+        validator: validator,
+      ),
+    );
+  }
+
+
   InputDecoration get decoration => InputDecoration(
         hintText: hintText ?? "",
         hintStyle: hintStyle ?? CustomTextStyles.headlineSmallGray600,

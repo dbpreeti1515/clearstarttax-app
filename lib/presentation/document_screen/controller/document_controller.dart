@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:get/get.dart';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:preeti_s_application3/core/app_export.dart';
@@ -33,27 +33,20 @@ class DocumentController extends GetxController {
   var git;
   List? multipartFiles;
 
-  RxList<File> selectedFiles=<File>[].obs;
-
-
-
-
-
-
-
+  RxList<File> selectedFiles = <File>[].obs;
 
   @override
-  void onInit()async {
+  void onInit() async {
     // TODO: implement onInit
 
     super.onInit();
     await getSettlementOfficerAPI();
     WidgetsBinding.instance.addPostFrameCallback((_) {});
-
-
   }
- // This Function collect List of all the images selected by user and convert them into multipart files
-  static Future<List<http.MultipartFile>> collectImages(List<File> files) async {
+
+  // This Function collect List of all the images selected by user and convert them into multipart files
+  static Future<List<http.MultipartFile>> collectImages(
+      List<File> files) async {
     List<http.MultipartFile> multipartFiles = [];
     for (var file in files) {
       final bytes = await file.readAsBytes();
@@ -69,20 +62,14 @@ class DocumentController extends GetxController {
   }
 
   Future<void> pickPDF() async {
-
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-
       allowMultiple: true,
       type: FileType.any,
     );
 
-    if (result != null ) {
-      selectedFiles.value =result.paths.map((path) => File(path!)).toList();
-
-
-    }
-    else{
-
+    if (result != null) {
+      selectedFiles.value = result.paths.map((path) => File(path!)).toList();
+    } else {
       CM.showToast(" Please select Document ");
       FilePicker.platform.clearTemporaryFiles();
 
@@ -92,14 +79,13 @@ class DocumentController extends GetxController {
     return null;
   }
 
-
-
-
   Future<void> uploadPDF(BuildContext context) async {
     isLoading.value = true;
-   
 
-    var request = http.MultipartRequest('POST', Uri.parse('https://clearstart.irslogics.com/publicapi/2020-02-22/documents/casedocument?apikey=f08f2b3c48ad4134b4ef62abd4aa721d&CaseID=$caseId&Comment=test'));
+    var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            'https://clearstart.irslogics.com/publicapi/2020-02-22/documents/casedocument?apikey=f08f2b3c48ad4134b4ef62abd4aa721d&CaseID=$caseId&Comment=test'));
     for (var file in selectedFiles.value) {
       request.files.add(
         await http.MultipartFile.fromPath(
@@ -111,7 +97,6 @@ class DocumentController extends GetxController {
     isLoading.value = true;
     print(4);
     try {
-
       var response = await request.send();
 
       isLoading.value = true;
@@ -120,46 +105,35 @@ class DocumentController extends GetxController {
 
       isLoading.value = true;
 
-
       if (response.statusCode == 200) {
-
         isLoading.value = false;
 
-        selectedFiles.value=[];
-        print("this is selected files ${selectedFiles.value}");
-        SuccessDialog.showCustomDialog(
-            context, "msg_congratulations".tr, 'msg_document_sent_your'.tr, true);
+        selectedFiles.value = [];
+
+        SuccessDialog.showCustomDialog(context, "lbl_done".tr,
+            'msg_document_sent_your'.tr);
         // for(var file in selectedFiles.value){
         //   selectedFiles.value.remove(file);
         //
         // }
 
-
-
-
-       pdfFile = null;
+        pdfFile = null;
 
         print('File uploaded successfully');
       }
-      if(response.statusCode == 403){
+      if (response.statusCode == 403) {
         CM.showToast(map['message']);
-        selectedFiles.value=[];
+        selectedFiles.value = [];
         isLoading.value = false;
-      }else if(response.statusCode == 500){
+      } else if (response.statusCode == 500) {
         CM.showToast('Try again after some time');
         isLoading.value = false;
-        selectedFiles.value=[];
-
-      }
-      
-      else {
+        selectedFiles.value = [];
+      } else {
         isLoading.value = false;
         print('File upload failed with status: ${response.statusCode}');
       }
-    }
-    catch (e) {
-
-
+    } catch (e) {
       isLoading.value = false;
       print('Error during file upload: $e');
     }
@@ -175,7 +149,8 @@ class DocumentController extends GetxController {
     };
 
     print("sat api 1");
-    var uri = Uri.parse('https://clearstart.irslogics.com/publicapi/Appointment/GetSetOfficerEmail?apikey=f08f2b3c48ad4134b4ef62abd4aa721d&CaseID=18259');
+    var uri = Uri.parse(
+        'https://clearstart.irslogics.com/publicapi/Appointment/GetSetOfficerEmail?apikey=f08f2b3c48ad4134b4ef62abd4aa721d&CaseID=18259');
 
     http.Response response = await http.get(uri);
     print("sat api 2");
@@ -196,7 +171,4 @@ class DocumentController extends GetxController {
       print('Error: $e');
     }
   }
-
-
-
 }

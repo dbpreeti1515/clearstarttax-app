@@ -89,6 +89,9 @@ final Map<String, String> enUs = {
   // Document Screen
 
   "lbl_upload_document": "Upload Document",
+  "lbl_done": "Done",
+  "lbl_ok": "OK",
+
   "lbl_upload_pdf": "Upload PDF",
   "msg_drag_or_upload_your": "Upload Your Document Here",
   "msg_maximum_document": "Maximum Document Size : Up to 6MB (PDF Only)",
@@ -118,9 +121,11 @@ final Map<String, String> enUs = {
   "msg_enter_account_name": "Enter account holder name",
   "msg_routing": "Routing#",
   "msg_account": "Account#",
+  "msg_enter_address1": "Enter street address 1",
+  "msg_enter_address2": "Enter street address 2",
   "msg_billing_address": "Billing Address :",
   "msg_street_address1": "Street Address 1 :",
-  "msg_street_address2": "Street Address 2(#,Apt,Unit,Suite) : ",
+  "msg_street_address2": "Street Address 2 (#,Apt,Unit,Suite) : ",
   "msg_city": "City : ",
   "msg_state": "State : ",
   "msg_zip": "Zip :",
@@ -132,8 +137,8 @@ final Map<String, String> enUs = {
   "msg_enter_this_field": "Please fill in this field ",
   "msg_enter_month": "Please enter valid month ",
   "msg_enter_year": "Please enter valid year ",
-  "msg_enter_cvv": "Please enter valid cvv ",
-  "msg_enter_zip": "Please enter valid zip ",
+  "msg_enter_cvv": "Please enter valid cvv number ",
+  "msg_enter_zip": "Please enter valid zip code",
   "msg_enter_name": "Please enter valid name ",
   "msg_enter_routing": "Please enter valid routing number ",
   "msg_enter_account_number": "Please enter valid account number ",
@@ -232,6 +237,7 @@ final Map<String, String> enUs = {
       "Unraveling the Mysteries of Tax Relief: Tax Credits vs. Tax Deductions",
   "msg_heading":
       "Tax News : Stay Informed, Stay Ahead of Tax Updates!",
+  "msg_read_more":"Read More",
 
   // Settings Screen
   "lbl_857881": " 857881",
@@ -297,9 +303,9 @@ final Map<String, String> enUs = {
       "Well done!\nThank you for your payment. Your transaction has been successfully processed.",
 
   // Message sent Screen
-  "lbl_message_sent": "Message Sent!\n",
+  "lbl_message_sent": "Message Sent!",
   "msg_document_sent_your":
-      "Your document has been successfully uploaded.",
+      "Your document has been successfully uploaded. Thanks for uploading",
   "msg_your_message_has": "Your message has been successfully sent.",
 
   // Common String

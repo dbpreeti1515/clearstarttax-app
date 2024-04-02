@@ -38,40 +38,17 @@ class DashboardPage extends GetWidget<DashboardController> {
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
     return Scaffold(
-        appBar: AppBar(
-          elevation: 6,
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: AppbarLeadingImage(
-                imagePath: ImageConstant.imgSolarHamburgerMenuBroken,
-                margin: EdgeInsets.only(
-                  left: 0.h,
-                ),
-                onTap: () {
-                  Scaffold.of(context).openDrawer();
-                  //onTapImage();
-                }),
-            onPressed: () {
-              // Scaffold.of(context).openDrawer();
-            },
-          ),
-          leadingWidth: 80,
-          title: Container(
-              height: 70.v,
-              margin: EdgeInsets.only(left: 0.h, top: 10.v, bottom: 10.v),
-              child: Stack(alignment: Alignment.topLeft, children: [
-                Container(
-                  margin: EdgeInsets.only(left: 22.h, top: 17.v, bottom: 10.v),
-                  child: Image(
-                    image: AssetImage(
-                      ImageConstant.imgImage2,
-                    ),
-                  ),
-                ),
-                // AppbarTitleImage(
-                //     imagePath: ImageConstant.imgSantaHat1,
-                //     margin: EdgeInsets.only(right: 204.h, bottom: 33.v))
-              ])),
+        appBar:
+        CustomAppBar(
+          leading:
+         AppbarLeadingImage(
+              imagePath: ImageConstant.imgSolarHamburgerMenuBroken,
+              margin: EdgeInsets.all(mediaQueryData.size.width*.035),
+              onTap: () {
+                Scaffold.of(context).openDrawer();
+                //onTapImage();
+              }),
+
         ),
         body: Obx(() {
           return controller.getDashboardData.value == null ||
@@ -162,8 +139,12 @@ class DashboardPage extends GetWidget<DashboardController> {
                                 ImageConstant.imgSolarDocumentAddOutline,
                                 "lbl_document_center".tr,
                                 "msg_view_and_upload".tr,
-                                AppRoutes.homeScreen,
-                                index: 1.obs,
+                                (){
+                                  Get.offAllNamed(  AppRoutes.homeScreen,);
+
+                                  selectedIndex.value= 1;
+                                }
+
                               ),
                               SizedBox(
                                 height: 15.v,
@@ -173,8 +154,12 @@ class DashboardPage extends GetWidget<DashboardController> {
                                   ImageConstant.imgSettings,
                                   "lbl_payment_heading".tr,
                                   "msg_make_a_payment".tr,
-                                  AppRoutes.homeScreen,
-                                  index: 2.obs),
+                                      (){
+                                    Get.offAllNamed(  AppRoutes.homeScreen,);
+
+                                    selectedIndex.value= 2;
+                                  }
+                              ),
                               SizedBox(
                                 height: 15.v,
                               ),
@@ -184,8 +169,12 @@ class DashboardPage extends GetWidget<DashboardController> {
                                     ImageConstant.imgCalendar,
                                     "msg_schedule_an_appointment".tr,
                                     "msg_set_up_your_appointment".tr,
-                                    AppRoutes.homeScreen,
-                                    index: 3.obs),
+                                        (){
+                                      Get.offAllNamed(  AppRoutes.homeScreen,);
+
+                                      selectedIndex.value= 3;
+                                    }
+                                ),
                               if (controller.appoinmentNotification.value)
                                 SizedBox(
                                   height: 15.v,
@@ -195,25 +184,41 @@ class DashboardPage extends GetWidget<DashboardController> {
                                   ImageConstant.imgSolarChatDotsBroken,
                                   "lbl_get_in_touch".tr,
                                   "msg_connect_with_your".tr,
-                                  AppRoutes.getInTouchScreen),
+                                      (){
+                                    Get.toNamed(  AppRoutes.getInTouchScreen,);
+
+
+                                  }
+                              ),
                               SizedBox(
                                 height: 15.v,
                               ),
                               _buildPageNavigation(
                                   context,
-                                  ImageConstant.imgSolarChatDotsBroken,
+                                  ImageConstant.imgProfile,
                                   "msg_faq_screen".tr,
                                   "lbl_faq_answer".tr,
-                                  AppRoutes.faqScreen),
+                                      (){
+                                    Get.toNamed(  AppRoutes.faqScreen,);
+
+
+                                  }
+                              ),
                               SizedBox(
                                 height: 15.v,
                               ),
                               _buildPageNavigation(
                                   context,
-                                  ImageConstant.imgSolarChatDotsBroken,
+                                  ImageConstant.imgSettingsBlack900,
+
                                   "lbl_tax_news".tr,
                                   "lbl_stay_update".tr,
-                                  AppRoutes.taxNewsScreen),
+                                      (){
+                                    Get.toNamed(  AppRoutes.taxNewsScreen,);
+
+
+                                  }
+                              ),
                               SizedBox(height: 20.v),
                               _buildFrameColumn(),
                               SizedBox(height: 20.v),
@@ -383,15 +388,17 @@ class DashboardPage extends GetWidget<DashboardController> {
   }
 
   Widget _buildPageNavigation(
-      BuildContext context, String image, String heading, String text, name,
+      BuildContext context, String image, String heading, String text, GestureTapCallback name,
       {RxInt? index}) {
     return GestureDetector(
-      onTap: () {
-        print("button pressed");
-
-        selectedIndex.value = index?.value ?? 0;
-        Get.offAllNamed(name);
-      },
+      onTap: name,
+      // onTap: () {
+      //
+      //
+      //   selectedIndex.value = index?.value ?? 0;
+      //   Get.toNamed(name);
+      //  // Get.offNamed(name);
+      // },
       child: Container(
         decoration: AppDecoration.outlineBlack900.copyWith(
           borderRadius: BorderRadiusStyle.roundedBorder10,
@@ -426,6 +433,7 @@ class DashboardPage extends GetWidget<DashboardController> {
                 height: 50.adaptSize,
                 width: 50.adaptSize,
                 alignment: Alignment.center,
+                color: Colors.white,
               ),
             ),
             Padding(
@@ -478,9 +486,10 @@ class DashboardPage extends GetWidget<DashboardController> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        Get.off(() => NewsPageScreen(
-                              id: controller.testMonialData.value[index]['ID'],
-                            ));
+                        Get.toNamed(AppRoutes.newsPageScreen);
+                        // Get.off(() => NewsPageScreen(
+                        //       id: controller.testMonialData.value[index]['ID'],
+                        //     ));
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 1.v),
@@ -541,7 +550,7 @@ class DashboardPage extends GetWidget<DashboardController> {
                                     child: Row(
                                       children: [
                                         Text(
-                                          "more data",
+                                          "msg_read_more".tr,
                                           style:
                                               CustomTextStyles.bodySmallOnError,
                                         ),
@@ -568,7 +577,7 @@ class DashboardPage extends GetWidget<DashboardController> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
-                      Get.offNamed(AppRoutes.taxNewsScreen);
+                      Get.toNamed(AppRoutes.taxNewsScreen);
                     },
                     child: Text("lbl_view_more".tr,
                         style: CustomTextStyles.titleSmallPrimary),
@@ -643,7 +652,7 @@ class DashboardPage extends GetWidget<DashboardController> {
   }
 
   final List<Widget> imageSliders = imgList.map((item) {
-    print(value++);
+
     return SizedBox(
       //  width: double.maxFinite,
       //height: 500.v,

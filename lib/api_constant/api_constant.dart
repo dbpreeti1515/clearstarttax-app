@@ -64,6 +64,7 @@ class ApiKey {
   static const TimeZone = "TimeZone";
   static const Date = "Date";
   static const AgentEmail = "AgentEmail";
+  static const TimeSlot = "TimeSlot";
 
 
 

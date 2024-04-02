@@ -63,7 +63,7 @@ class NewsPageController extends GetxController {
           ..setNavigationDelegate(
             NavigationDelegate(
               onProgress: (int progress) {
-                // Update loading bar.
+
               },
 
 

@@ -16,7 +16,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../core/utils/image_constant.dart';
 import '../../data/apiModal/getDashboardModal.dart';
 import '../../widgets/app_bar/appbar_title_image.dart';
-import '../splash_screen_four_screen/controller/splash_screen_four_controller.dart';
+import '../splash_screen/controller/splash_screen_four_controller.dart';
 import 'controller/HomeScreenController.dart';
 import 'controller/HomeScreenController.dart';
 
@@ -63,16 +63,17 @@ class Homescreen extends GetWidget {
             width: 30,
           )),
       PersistentBottomNavBarItem(
-          icon: SvgPicture.asset(ImageConstant.imgDocument,
-              height: 25, width: 25, color: theme.primaryColor),
+          icon: SvgPicture.asset(ImageConstant.imgDocumentNew,
+              height: 20, width: 20, color: theme.primaryColor),
           title: ("Document"),
           activeColorPrimary: theme.secondaryHeaderColor,
           activeColorSecondary: theme.primaryColor,
           inactiveColorPrimary: Colors.black,
           inactiveIcon: SvgPicture.asset(
-            ImageConstant.imgDocument,
-            height: 30,
-            width: 30,
+            ImageConstant.imgDocumentNew,
+            height: 20,
+            width: 20,
+            color: Colors.black,
           )),
       PersistentBottomNavBarItem(
           icon: SvgPicture.asset(ImageConstant.imgCamera,
@@ -118,7 +119,8 @@ class Homescreen extends GetWidget {
 
 
             body:  Obx(() {
-              return db.value==null?Center(child: CircularProgressIndicator(),):PersistentTabView(
+              return db.value==null?Center(child: CircularProgressIndicator(),)
+                  :PersistentTabView(
 
 
                 context,
@@ -183,7 +185,7 @@ class Homescreen extends GetWidget {
               //   children: _pages,
               // ),
 
-            drawer: Drawer(
+            drawer: Obx(() => Drawer(
               backgroundColor: Colors.white,
               shadowColor: Colors.transparent,
               child: Container(
@@ -205,50 +207,45 @@ class Homescreen extends GetWidget {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          // AppbarTitleImage(
-                          //     imagePath: ImageConstant.imgSantaHat1,
-                          //     margin:
-                          //         EdgeInsets.only(right: 182.h, bottom: 33.v))
+
                         ])),
                     Container(
                         decoration: AppDecoration.outlineBlack900.copyWith(
                             borderRadius: BorderRadiusStyle.roundedBorder10),
                         child: Row(children: [
-                          // Container(
-                          //     height: 100.adaptSize,
-                          //     width: 100.adaptSize,
-                          //     padding: EdgeInsets.symmetric(
-                          //         horizontal: 9.h, vertical: 10.v),
-                          //     decoration: AppDecoration.fillPrimary,
-                          //     child: CustomImageView(
-                          //         imagePath: ImageConstant.imgEllipse1,
-                          //         height: 80.adaptSize,
-                          //         width: 80.adaptSize,
-                          //         radius: BorderRadius.circular(40.h),
-                          //         alignment: Alignment.center)),
+
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 15.h, top: 15.v, bottom: 15.v),
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                                  children: [SizedBox(
+                                    width: mediaQueryData.size.width*0.65,
+                                    child:
                                     Obx(() =>
-                                    Text(name.value,
-                                        style:
-                                            CustomTextStyles.titleMediumBold)),
+                                        Text(name.value,
+                                          style:
+                                          theme.textTheme.titleMedium!.copyWith(
+                                              fontWeight: FontWeight.w700,
+                                              overflow: TextOverflow.ellipsis
+
+                                          ),
+                                          maxLines: 1,
+                                        ),
+                                    ),),
                                     SizedBox(height: 5.v),
                                     Obx(() =>
-                                    RichText(
-                                        text: TextSpan(children: [
-                                          TextSpan(
-                                              text: "lbl_case_id2".tr,
-                                              style:
+                                        RichText(
+                                            text: TextSpan(children: [
+                                              TextSpan(
+                                                  text: "lbl_case_id2".tr,
+                                                  style:
                                                   theme.textTheme.labelLarge),
-                                          TextSpan(
-                                              text: " "+caseId.value,
-                                              style: theme.textTheme.bodySmall)
-                                        ]),
-                                        textAlign: TextAlign.left)),
+                                              TextSpan(
+                                                  text: " "+caseId.value,
+                                                  style: theme.textTheme.bodySmall)
+                                            ]),
+                                            textAlign: TextAlign.left)),
                                     SizedBox(height: 4.v),
                                     GestureDetector(
                                         onTap: () {
@@ -275,7 +272,7 @@ class Homescreen extends GetWidget {
                                               textAlign: TextAlign.left),
                                           CustomImageView(
                                               imagePath:
-                                                  ImageConstant.imgEpInfoFilled,
+                                              ImageConstant.imgEpInfoFilled,
                                               height: 10.adaptSize,
                                               width: 10.adaptSize,
                                               margin: EdgeInsets.only(
@@ -285,47 +282,49 @@ class Homescreen extends GetWidget {
                                         ]))
                                   ]))
                         ])),
-                    if(db.value!.fqNotification=='true')
-                    SizedBox(height: 30.v),
-                  if(db.value!.fqNotification=='true')
+            
+                      if(db.value!.fqNotification=='true')
+                        SizedBox(height: 30.v),
 
-                    _buildFrameRow(
-                      textColor: Colors.white,
-                      backgroundColor: Color(0XffF28C28),
-                        userImage: ImageConstant.imgGroup18Black900,
-                        appSettingsText: "lbl_fq".tr,
-                        onTapFrameRow: ()async {
-                          var url = 'https://client.clearstarttax.com/fqs/app/${email.value}/${randomText1.value}${password}${randomText2.value}';
+                     if(db.value!.fqNotification=='true')
 
-                          if (await canLaunch(url)) {
-                          await launch(url,
-                          forceWebView: true, enableJavaScript: true);
-                          } else {
-                          throw 'Could not launch $url';
-                          }
-                        }
+                        _buildFrameRow(
+                            textColor: Colors.white,
+                            backgroundColor: Color(0XffF28C28),
+                            userImage: ImageConstant.imgGroup18Black900,
+                            appSettingsText: "lbl_fq".tr,
+                            onTapFrameRow: ()async {
+                              var url = 'https://client.clearstarttax.com/fqs/app/${email.value}/${randomText1.value}${password}${randomText2.value}';
+
+                              if (await canLaunch(url)) {
+                                await launch(url,
+                                    forceWebView: true, enableJavaScript: true);
+                              } else {
+                                throw 'Could not launch $url';
+                              }
+                            }
                         ),
                     if(db.value!.toNotification=='true')
-                    SizedBox(height: 15.v),
+                      SizedBox(height: 15.v),
                     if(db.value!.toNotification=='true')
-                    _buildFrameRow(
-                        textColor: Colors.white,
-                        backgroundColor: Color(0XffF28C28),
-                        userImage: ImageConstant.imgGroup18Black900,
-                        appSettingsText: "lbl_to".tr,
-                        onTapFrameRow: ()async {
-                          var url =
-                              'https://client.clearstarttax.com/tos/app/${email.value}/${randomText2.value}${password}${randomText1.value}'
-                          ;
+                      _buildFrameRow(
+                          textColor: Colors.white,
+                          backgroundColor: Color(0XffF28C28),
+                          userImage: ImageConstant.imgGroup18Black900,
+                          appSettingsText: "lbl_to".tr,
+                          onTapFrameRow: ()async {
+                            var url =
+                                'https://client.clearstarttax.com/tos/app/${email.value}/${randomText2.value}${password}${randomText1.value}'
+                            ;
 
-                          if (await canLaunch(url)) {
-                          await launch(url,
-                          forceWebView: true, enableJavaScript: true);
-                          } else {
-                          throw 'Could not launch $url';
+                            if (await canLaunch(url)) {
+                              await launch(url,
+                                  forceWebView: true, enableJavaScript: true);
+                            } else {
+                              throw 'Could not launch $url';
+                            }
                           }
-                        }
-                        ),
+                      ),
                     SizedBox(height: 15.v),
                     _buildFrameRow(
                         userImage: ImageConstant.imgSettingsBlack900,
@@ -349,8 +348,10 @@ class Homescreen extends GetWidget {
                         }),
                     SizedBox(height: 15.v),
                     _buildFrameRow(
-                        userImage: ImageConstant.imgGroup18Black900,
+                      textColor: Colors.black,
+                        userImage: ImageConstant.imgSolarChatDotsBroken,
                         appSettingsText: "lbl_get_in_touch".tr,
+
                         onTapFrameRow: () {
                           _controller.onGetInTouch();
                         }),
@@ -358,20 +359,20 @@ class Homescreen extends GetWidget {
                     Obx(() {
                       return _controller.isLoading.value
                           ? Center(
-                              child: CircularProgressIndicator(),
-                            )
+                        child: CircularProgressIndicator(),
+                      )
                           : _buildFrameRow(
-                              userImage: ImageConstant.imgArrowdown,
-                              appSettingsText: "lbl_sign_out".tr,
-                              onTapFrameRow: () async{
+                          userImage: ImageConstant.imgArrowdown,
+                          appSettingsText: "lbl_sign_out".tr,
+                          onTapFrameRow: () async{
 
-                                _controller.onLogout();
-                              });
+                            _controller.onLogout();
+                          });
                     })
                   ],
                 ),
               ),
-            ),
+            )),
           );
         });
   }
@@ -394,6 +395,7 @@ class Homescreen extends GetWidget {
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               CustomImageView(
                   imagePath: userImage,
+
                   color: textColor,
                   height: 30.adaptSize,
                   width: 30.adaptSize),

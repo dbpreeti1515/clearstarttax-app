@@ -25,38 +25,16 @@ class DocumentScreen extends GetWidget<DocumentController> {
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: AppbarLeadingImage(
-              imagePath: ImageConstant.imgSolarHamburgerMenuBroken,
-              margin: EdgeInsets.only(
-                left: 0.h,
-              ),
-              onTap: () {
-                Scaffold.of(context).openDrawer();
-                //onTapImage();
-              }),
-          onPressed: () {
-            // Scaffold.of(context).openDrawer();
-          },
-        ),
-        leadingWidth: 80,
-        title: Container(
-            height: 70.v,
-            margin: EdgeInsets.only(left: 0.h, top: 10.v, bottom: 10.v),
-            child: Stack(alignment: Alignment.topLeft, children: [
-              Container(
-                margin: EdgeInsets.only(left: 22.h, top: 17.v, bottom: 10.v),
-                child: Image(
-                  image: AssetImage(
-                    ImageConstant.imgImage2,
-                  ),
-                ),
-              ),
-              // AppbarTitleImage(
-              //     imagePath: ImageConstant.imgSantaHat1,
-              //     margin: EdgeInsets.only(right: 204.h, bottom: 33.v))
-            ])),
+      appBar: CustomAppBar(
+        leading:
+        AppbarLeadingImage(
+            imagePath: ImageConstant.imgSolarHamburgerMenuBroken,
+            margin: EdgeInsets.all(mediaQueryData.size.width*.035),
+            onTap: () {
+              Scaffold.of(context).openDrawer();
+              //onTapImage();
+            }),
+
       ),
       body: Obx(() {
         return SizedBox(

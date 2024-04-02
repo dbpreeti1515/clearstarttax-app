@@ -5,8 +5,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/Comman/common_method.dart';
 import '../../data/models/SuccessDialogBox/SuccessBox.dart';
+import '../../widgets/app_bar/custom_app_bar.dart';
 import '../../widgets/comman_widget.dart';
-import '../splash_screen_four_screen/controller/splash_screen_four_controller.dart';
+import '../splash_screen/controller/splash_screen_four_controller.dart';
 import 'controller/appionment_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:preeti_s_application3/core/app_export.dart';
@@ -24,35 +25,16 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
 
     return SafeArea(
         child: Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: AppbarLeadingImage(
-              imagePath: ImageConstant.imgSolarHamburgerMenuBroken,
-              margin: EdgeInsets.only(
-                left: 0.h,
-              ),
-              onTap: () {
-                Scaffold.of(context).openDrawer();
-                //onTapImage();
-              }),
-          onPressed: () {
-            // Scaffold.of(context).openDrawer();
-          },
-        ),
-        leadingWidth: 80,
-        title: Container(
-            height: 70.v,
-            margin: EdgeInsets.only(left: 0.h, top: 10.v, bottom: 10.v),
-            child: Stack(alignment: Alignment.topLeft, children: [
-              Container(
-                margin: EdgeInsets.only(left: 22.h, top: 17.v, bottom: 10.v),
-                child: Image(
-                  image: AssetImage(
-                    ImageConstant.imgImage2,
-                  ),
-                ),
-              ),
-            ])),
+      appBar: CustomAppBar(
+        leading:
+        AppbarLeadingImage(
+            imagePath: ImageConstant.imgSolarHamburgerMenuBroken,
+            margin: EdgeInsets.all(mediaQueryData.size.width*.035),
+            onTap: () {
+              Scaffold.of(context).openDrawer();
+              //onTapImage();
+            }),
+
       ),
       body: Container(
           margin: EdgeInsets.only(bottom: 20),
@@ -86,13 +68,12 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                       Obx(() {
                                         print("${_controller
                                             .isAppointmentAppear.value ==
-                                            true} and ${db.value!.status=="active"}");
-                                        return
+                                            true} and i ${db.value!.status=="active"}");
+                                        return db.value!.status=="active"
+                                            ?  Obx(() =>
 
-                                          db.value!.status=="active"
-                                            ?  _controller
-                                              .isAppointmentAppear.value ==
-                                              true
+                                          _controller
+                                              .isAppointmentAppear.value == true
                                               ?Container(
                                                 padding:
                                                     EdgeInsets.only(left: 15),
@@ -134,9 +115,10 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                                       ),
 
                                                       if (_controller
-                                                              .formattterSelectedDate
-                                                              .value !=
-                                                          '') ...{
+                                                          .formattterSelectedDate
+                                                        .value!='null'&& _controller
+                                                          .formattterSelectedDate
+                                                          .value!='') ...{
                                                         Container(
                                                           margin:
                                                               EdgeInsets.only(
@@ -203,13 +185,14 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                                           context),
                                                       SizedBox(height: 30.v),
                                                     ]),
-                                              ):appoinmentTime(
+                                              )
+                                              :appoinmentTime(
                                               _controller.str,
                                               _controller
                                                   .formattterSelectedDate
                                                   .value,
                                               _controller
-                                                  .selectedTimeZone.name)
+                                                  .selectedTimeZone.name))
                                             : appoinmentTime(
                                                 _controller.str,
                                                 _controller
@@ -297,7 +280,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
               text: "msg_get_available_slots".tr,
               onPressed: () async {
                 if (_controller.formattterSelectedDate.value == '' ||
-                    _controller.formattterSelectedDate.value.isEmpty) {
+                    _controller.formattterSelectedDate.value=='null') {
                   CM.showToast('msg_date_selection'.tr);
                 } else {
                   if (_controller.formattterAPIdDate.value.isNotEmpty &&
@@ -335,16 +318,14 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
               CW.statusCard(height: 57, text: "Available Time Slots"),
               Align(
                 alignment: Alignment.topRight,
-                child: Container(
-                    padding: EdgeInsets.only(top: 0, right: 0),
-                    child: IconButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        icon: Icon(
-                          Icons.close,
-                          color: Colors.white,
-                        ))),
+                child: IconButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: Icon(
+                      Icons.close,
+                      color: Colors.white,
+                    )),
               )
             ],
           ),
@@ -461,6 +442,11 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                             child: ListView.separated(
                                 itemBuilder: (context, index) {
                                   print(_controller.getAvailableSlot.value[1]);
+                                  print(' color is ${
+                                      index ==
+                                          _controller
+                                              .selectedIndex.value
+                                  }');
                                   return _controller.getAvailableSlot.value[1]
                                               .toString() ==
                                           'All slots are booked for this date'
@@ -471,8 +457,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                                 _controller.selectedIndex.value =
                                                     index;
                                                 {
-                                                  _controller.str = _controller
-                                                      .getAvailableSlot
+                                                  _controller.str = _controller.getAvailableSlot
                                                       .value[index];
                                                   List<String> strarray =
                                                       _controller.str.split("-");
@@ -488,11 +473,11 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                                       .selectedTimeSlot.value);
                                                 }
                                               }, child: Obx(() {
+
                                                 return Container(
                                                   padding: EdgeInsets.all(8),
                                                   decoration: BoxDecoration(
-                                                      color: index ==
-                                                              _controller
+                                                      color: index == _controller
                                                                   .selectedIndex
                                                                   .value
                                                           ? theme
@@ -514,7 +499,8 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                             ],
                                           ),
                                         )
-                                      : GestureDetector(onTap: () {
+                                      : GestureDetector(
+                                      onTap: () {
                                           _controller.selectedIndex.value = index;
                                           {
                                             _controller.str = _controller
@@ -626,8 +612,12 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
 
   Widget appoinmentTime(String TimeSlot, String Date, String TimeZone) {
     print("This is date $Date");
+    String formattedDate= '';
+    if(Date.isNotEmpty||Date!=''){
       DateTime inputDate = DateFormat('dd/MM/yyyy').parse(Date);
-    String formattedDate = DateFormat('EEEE, MMMM d yyyy').format(inputDate);
+      formattedDate = DateFormat('EEEE, MMMM d yyyy').format(inputDate);
+    }
+
 
     return Container(
       margin: EdgeInsets.only(left: 15, right: 15, bottom: 20),

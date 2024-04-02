@@ -15,7 +15,7 @@ import 'package:preeti_s_application3/widgets/custom_bottom_bar.dart';
 class FaqScreen extends GetWidget<FaqController> {
   FaqScreen({Key? key}) : super(key: key);
   static const headerStyle = TextStyle(
-      color: Color(0xff000000), fontSize: 14, fontWeight: FontWeight.w500);
+      color: Color(0xff000000), fontSize: 13.5, fontWeight: FontWeight.w500);
   static const contentStyleHeader = TextStyle(
       color: Color(0xff999999), fontSize: 12, fontWeight: FontWeight.w700);
   static const contentStyle = TextStyle(
@@ -26,31 +26,22 @@ class FaqScreen extends GetWidget<FaqController> {
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              Get.offAllNamed(AppRoutes.homeScreen);
-            },
-          ),
-          leadingWidth: 80,
-          title: Container(
-              height: 70.v,
-              margin: EdgeInsets.only(left: 0.h, top: 10.v, bottom: 10.v),
-              child: Stack(alignment: Alignment.topLeft, children: [
-                Container(
-                  margin: EdgeInsets.only(left: 22.h, top: 17.v, bottom: 10.v),
-                  child: Image(
-                    image: AssetImage(
-                      ImageConstant.imgImage2,
-                    ),
-                  ),
-                ),
-                // AppbarTitleImage(
-                //     imagePath: ImageConstant.imgSantaHat1,
-                //     margin: EdgeInsets.only(right: 204.h, bottom: 33.v))
-              ])),
+        appBar: CustomAppBar(
+          // leadingWidth: mediaQueryData.size.width*.126,
+
+          leading:
+          AppbarLeadingImage(
+              imagePath: ImageConstant.imgbackButton,
+
+
+              margin: EdgeInsets.all(mediaQueryData.size.width*.05),
+              onTap: () {
+                Get.back();
+              //  Get.offAllNamed(AppRoutes.homeScreen);
+              }),
+
         ),
+
         body: Obx(() {
           return controller.isLoading.value
               ? Center(
@@ -68,7 +59,7 @@ class FaqScreen extends GetWidget<FaqController> {
                             text: "msg_faq_screen".tr, height: 57.v),
                         TabBar.secondary(
                           padding: EdgeInsets.only(
-                              left: 10.h, right: 10.h, bottom: 40.v),
+                              left: 10.h, right: 10.h, bottom: 25.v),
                           controller: controller.tabController,
                           labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                           unselectedLabelStyle: TextStyle(

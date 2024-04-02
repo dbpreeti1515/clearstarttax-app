@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/response/response.dart';
-import 'package:get/get_connect/http/src/response/response.dart';
+
 import 'package:get/get_rx/get_rx.dart';
 import 'package:preeti_s_application3/core/app_export.dart';
 import 'package:preeti_s_application3/presentation/signup_screen/models/signup_model.dart';
@@ -17,14 +16,14 @@ import '../../../data/Comman/common_method.dart';
 import '../../../data/local_database/database_helper/database_helper.dart';
 import '../../HomeScreen/HomeScreen.dart';
 import '../../login_page_screen/controller/login_page_controller.dart';
-import '../../splash_screen_four_screen/controller/splash_screen_four_controller.dart';
+import '../../splash_screen/controller/splash_screen_four_controller.dart';
 
 /// A controller class for the SignupScreen.
 ///
 /// This class manages the state of the SignupScreen, including the
 /// current signupModelObj
 class SignupController extends GetxController {
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   TextEditingController passwordController = TextEditingController();
   TextEditingController caseIDController = TextEditingController();
   TextEditingController emailController = TextEditingController();

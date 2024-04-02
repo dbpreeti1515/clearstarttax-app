@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
 
 
+
       builder: DevicePreview.appBuilder,
 
       debugShowCheckedModeBanner: false,

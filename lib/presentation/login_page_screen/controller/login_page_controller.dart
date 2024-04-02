@@ -18,7 +18,7 @@ import '../../../data/apiModal/getUserModal.dart';
 import '../../../data/local_database/database_helper/database_helper.dart';
 import '../../HomeScreen/HomeScreen.dart';
 import '../../dashboard_page/controller/dashboard_controller.dart';
-import '../../splash_screen_four_screen/controller/splash_screen_four_controller.dart';
+import '../../splash_screen/controller/splash_screen_four_controller.dart';
 
 /// A controller class for the LoginPageScreen.
 ///
@@ -28,7 +28,7 @@ import '../../splash_screen_four_screen/controller/splash_screen_four_controller
 class LoginPageController extends GetxController {
   TextEditingController passwordController = TextEditingController();
   final DatabaseHelper dbHelper = DatabaseHelper();
-  GlobalKey<FormState> form_Key = GlobalKey<FormState>();
+  final form_Key = GlobalKey<FormState>();
   Map<String, dynamic> bodyParamsForLogin = {};
   Map<String, dynamic> responseMapForLogin = {};
   final emailController = TextEditingController();

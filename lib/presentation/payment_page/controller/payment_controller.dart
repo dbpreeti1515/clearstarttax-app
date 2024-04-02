@@ -30,6 +30,7 @@ class PaymentController extends GetxController
   //PaymentController(this.paymentModelObj);
 
   TextEditingController nameController = TextEditingController();
+
   TextEditingController monthController = TextEditingController();
   TextEditingController yearController = TextEditingController();
   TextEditingController zipController = TextEditingController();
@@ -64,8 +65,8 @@ class PaymentController extends GetxController
   RxBool isValidCardNumber = false.obs;
 
   TabController? tabController;
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  GlobalKey<FormState> transerFormKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
+  final transerFormKey = GlobalKey<FormState>();
   Map<String, dynamic> bodyParamsForCredit = {};
   Map<String, dynamic> responseMapForCard = {};
   Map<String, dynamic> bodyParamsForTransfer = {};
@@ -83,6 +84,32 @@ class PaymentController extends GetxController
   RxString transferSelectValue = "saab".obs;
   RxString? selectedItem;
   final getPaymentData = Rxn<GetPaymentModal>();
+
+  final List<FocusNode> focusNodes = [
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+
+  ];
 
   void setSelectedValue(String value) {
     selectedAmount.value = value;
@@ -176,6 +203,8 @@ class PaymentController extends GetxController
     nameController.clear();
     cardinformationvalueController.clear();
     cvvController..clear();
+    paymentController.value.clear();
+
     emailController..clear();
     nameController..clear();
     monthController..clear();
@@ -184,14 +213,17 @@ class PaymentController extends GetxController
     add1Controller..clear();
     add2Controller..clear();
     cityController..clear();
+    selectValue.value = "saab";
 
     cardinformationvalueController.clear();
     cvvController.clear();
-    emailController.clear();
+   // emailController.clear();
   }
 
   void bankClear() {
+ transferSelectValue.value = "saab";
     bankNameController.clear();
+    paymentController.value.clear();
     bankHolderController.clear();
     routingController.clear();
     accountController.clear();
@@ -199,39 +231,15 @@ class PaymentController extends GetxController
     transferZipController.clear();
     transferAdd1Controller.clear();
     transferAdd2Controller.clear();
-    transferEmailController.clear();
+  //  transferEmailController.clear();
     transferCityController.clear();
   }
 
   @override
   void dispose() {
     super.dispose();
-    // Dispose of the TabController when the widget is disposed.
-    tabController!.dispose();
-    nameController.dispose();
-    cardinformationvalueController.dispose();
-    cvvController.dispose();
-    emailController.dispose();
-    nameController.dispose();
-    monthController.dispose();
-    yearController.dispose();
-    zipController.dispose();
-    add1Controller.dispose();
-    add2Controller.dispose();
-    cityController.dispose();
-    bankNameController.dispose();
-    bankHolderController.dispose();
-    routingController.dispose();
-    accountController.dispose();
-    cardinformationvalueController.dispose();
-    cvvController.dispose();
-    emailController.dispose();
-    paymentController.value.dispose();
-    transferZipController.dispose();
-    transferAdd1Controller.dispose();
-    transferAdd2Controller.dispose();
-    transferEmailController.dispose();
-    transferCityController.dispose();
+
+
   }
 
   @override
@@ -242,9 +250,13 @@ class PaymentController extends GetxController
   Future<void> clickOnPayButton(BuildContext context) async {
     //validateCreditCardInfo(cardinformationvalueController.text,monthController.text+yearController.text, cvvController.text);
     if (formKey.currentState!.validate()) {
-      if (selectedAmount.value.isEmpty || selectedAmount.value == null) {
-        CM.showToast("Please select amount");
+
+      if (selectedAmount.value.isEmpty && paymentController.value.text.isEmpty) {
+        CM.showToast("Please enter amount");
       } else {
+        if(selectedAmount.value.isEmpty){
+          selectedAmount.value = paymentController.value.text;
+        }
         creditCardAPI(context);
       }
     }
@@ -252,7 +264,16 @@ class PaymentController extends GetxController
 
   Future<void> clickOnTransferPayButton(BuildContext context) async {
     if (transerFormKey.currentState!.validate()) {
-      BankTransfer(context);
+
+      if (selectedAmount.value.isEmpty && paymentController.value.text.isEmpty) {
+        CM.showToast("Please enter amount");
+      } else {
+        if(selectedAmount.value.isEmpty){
+          selectedAmount.value = paymentController.value.text;
+        }
+        BankTransfer(context);
+      }
+
       // SuccessDialog.showCustomDialog(
       //     context, "msg_congratulations".tr, 'msg_well_done_thank'.tr, true);
     }
@@ -332,6 +353,8 @@ class PaymentController extends GetxController
           PaymentModel.showTransactionFailedDialog(
               context, cardStatusMsg.value);
         }
+        selectedAmount.value =
+            getPaymentData.value!.data!.data!.pastDue.toString();
         cardClear();
         //CM.showToast(responseMapForCard['data']['status']);
       } else {
@@ -360,7 +383,7 @@ class PaymentController extends GetxController
       ApiKey.bankrouteingno: routingController.text,
       ApiKey.case_id: caseId.value,
       ApiKey.accountno: transferAccountController.text,
-      ApiKey.amount: transferAccountController.text,
+      ApiKey.amount: selectedAmount.value,
       ApiKey.State: transferSelectValue.value,
       ApiKey.City: transferCityController.text,
       ApiKey.Zip: transferZipController.text,
@@ -390,9 +413,12 @@ class PaymentController extends GetxController
             selectedAmount.value,
           );
         } else {
+          isTranserLoading.value = false;
           PaymentModel.showTransactionFailedDialog(
               context, bankStatusMsg.value);
         }
+        selectedAmount.value =
+            getPaymentData.value!.data!.data!.pastDue.toString();
         bankClear();
 
         //  CM.showToast(responseMapForTransfer['data']['status']);

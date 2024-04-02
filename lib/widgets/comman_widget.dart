@@ -12,8 +12,8 @@ import '../presentation/dashboard_page/controller/dashboard_controller.dart';
 
 class CW {
 
-  static void _launchEmail() async {
-    const String email = 'mailto:billing@clearstarttax.com';
+  static void _launchEmail(String mail) async {
+     String email = 'mailto:${mail}';
     if (await canLaunch(email)) {
       await launch(email);
     } else {
@@ -253,7 +253,7 @@ class CW {
                   alignment: Alignment.centerLeft,
                 ),
                 onPressed: () {
-                  _launchEmail();
+                  _launchEmail(email);
                 },
                 child: Text(email,
                     style: CustomTextStyles.bodyLargePrimary))

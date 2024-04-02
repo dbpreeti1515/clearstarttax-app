@@ -182,6 +182,8 @@ class ImageConstant {
 
   static String imgSolarHamburgerMenuBroken =
       '$imagePath/img_solar_hamburger_menu_broken.svg';
+  static String imgbackButton =
+      '$imagePath/fluent_ios-arrow-24-filled.svg';
 
   static String imgFloridWebWall = '$imagePath/Tax.gif';
 
@@ -213,6 +215,7 @@ class ImageConstant {
       '$imagePath/img_solarcodescanlinear.svg';
 
   static String imgDocument = '$imagePath/img_document.svg';
+  static String imgDocumentNew = '$imagePath/document.svg';
 
   static String imgCamera = '$imagePath/img_camera.svg';
 

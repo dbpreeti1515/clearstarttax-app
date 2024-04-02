@@ -6,7 +6,6 @@ import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:preeti_s_application3/core/app_export.dart';
 import 'package:preeti_s_application3/presentation/HomeScreen/HomeScreen.dart';
-import 'package:preeti_s_application3/presentation/splash_screen_four_screen/models/splash_screen_four_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../api_constant/api_constant.dart';
@@ -16,6 +15,7 @@ import '../../../data/apiModal/getSelltementOfficerModal.dart';
 
 import '../../../data/local_database/database_helper/database_helper.dart';
 import '../../dashboard_page/controller/dashboard_controller.dart';
+import '../models/splash_screen_four_model.dart';
 
 /// A controller class for the SplashScreenFourScreen.
 ///
@@ -120,7 +120,7 @@ class SplashScreenFourController extends GetxController {
         meansStep.value =
             getDashboardData.value!.data!.statusinfo!.whatThisMeans ?? '';
         nextStep.value =
-            getDashboardData.value!.data!.statusinfo!.whatThisMeans ?? '';
+            getDashboardData.value!.data!.statusinfo!.whatHappensNext ?? '';
         getDashboardData.value!.data!.statusForFq!.forEach((element) {
           statusForFQ.value.add(element);
           if (element.toString() == statusId.value.toString()) {
@@ -175,8 +175,7 @@ class SplashScreenFourController extends GetxController {
     final prefs = await SharedPreferences.getInstance();
     final key = prefs.get('isLogin');
    isUserLogin.value = bool.parse(key.toString());
-   print("is user login ${isUserLogin.value}");
-   print("get user $key}");
+
 
 
 

@@ -6,9 +6,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../api_constant/api_constant.dart';
 import '../../core/validator/validator.dart';
+import '../../data/Comman/common_method.dart';
 import '../../data/models/SuccessDialogBox/SuccessBox.dart';
 import '../../widgets/app_bar/appbar_leading_image.dart';
 import '../../widgets/app_bar/appbar_title_image.dart';
+import '../../widgets/app_bar/custom_app_bar.dart';
 import '../../widgets/comman_widget.dart';
 import 'controller/payment_controller.dart';
 import 'models/payment_model.dart';
@@ -32,38 +34,16 @@ class PaymentPage extends StatelessWidget {
     mediaQueryData = MediaQuery.of(context);
     var subtitleFontSize = mediaQueryData.size.width*0.033;
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: AppbarLeadingImage(
-                imagePath: ImageConstant.imgSolarHamburgerMenuBroken,
-                margin: EdgeInsets.only(
-                  left: 0.h,
-                ),
-                onTap: () {
-                  Scaffold.of(context).openDrawer();
-                  //onTapImage();
-                }),
-            onPressed: () {
-              // Scaffold.of(context).openDrawer();
-            },
-          ),
-          leadingWidth: 80,
-          title: Container(
-              height: 70.v,
-              margin: EdgeInsets.only(left: 0.h, top: 10.v, bottom: 10.v),
-              child: Stack(alignment: Alignment.topLeft, children: [
-                Container(
-                  margin: EdgeInsets.only(left: 22.h, top: 17.v, bottom: 10.v),
-                  child: Image(
-                    image: AssetImage(
-                      ImageConstant.imgImage2,
-                    ),
-                  ),
-                ),
-                // AppbarTitleImage(
-                //     imagePath: ImageConstant.imgSantaHat1,
-                //     margin: EdgeInsets.only(right: 204.h, bottom: 33.v))
-              ])),
+        appBar:   CustomAppBar(
+          leading:
+          AppbarLeadingImage(
+              imagePath: ImageConstant.imgSolarHamburgerMenuBroken,
+              margin: EdgeInsets.all(mediaQueryData.size.width*.035),
+              onTap: () {
+                Scaffold.of(context).openDrawer();
+                //onTapImage();
+              }),
+
         ),
         resizeToAvoidBottomInset: false,
         body: Obx(() {
@@ -158,31 +138,39 @@ class PaymentPage extends StatelessWidget {
                                                     ),
                                                   ),
                                                 ),
-                                                child: CW
-                                                    .commonTextFieldForLoginSignUP(
-                                                  style: TextStyle(fontSize: subtitleFontSize),
-                                                  context: context,
-                                                        wantBorder: true,
-                                                        initialBorderColor:
-                                                            Colors.transparent,
-                                                        cursorHeight: 12,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        contentPadding:
-                                                            EdgeInsets.only(
-                                                                left: 5,
-                                                                right: 5,
-                                                                top: 2),
-                                                        readOnly: false,
-                                                        controller: _controller
-                                                            .paymentController
-                                                            .value,
-                                                        onChanged: (value) {},
-                                                        inputFormatters: [
-                                                      FilteringTextInputFormatter
-                                                          .digitsOnly,
+                                                child:Obx(() => CustomTextFormField(
+
+
+                                                    onChange: (value){
+
+
+                                                     // _controller.selectedAmount.value = value ;
+                                                     // _controller.paymentController.value.text = value;
+
+                                                    },
+                                                    focusNode: _controller.focusNodes[0],
+
+                                                    textStyle:
+                                                    TextStyle(fontSize: subtitleFontSize),
+                                                    textInputType: TextInputType.numberWithOptions(decimal: true),
+                                                    borderDecoration: InputBorder.none,
+
+                                                    contentPadding:
+                                                    EdgeInsets.only(
+                                                        left: 5,
+                                                        right: 5,
+                                                        top: 2),
+
+
+                                                    controller: _controller
+                                                        .paymentController
+                                                        .value,
+                                                    inputFormatter: [
+                                                      FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))
+
                                                     ]))
+                                                
+                                            )
                                           ],
                                         ),
                                       ),
@@ -352,11 +340,11 @@ class PaymentPage extends StatelessWidget {
                                               ),
                                             ),
                                             Expanded(
-                                              flex: 1,
+                                              flex: 2,
                                               child: Padding(
                                                 padding: EdgeInsets.only(
-                                                    right: mediaQueryData
-                                                            .size.width * 0.058),
+                                                    left: mediaQueryData
+                                                            .size.width * 0.06),
                                                 child: TextButton(
                                                   style: TextButton.styleFrom(
                                                     padding: EdgeInsets.zero,
@@ -448,18 +436,20 @@ class PaymentPage extends StatelessWidget {
       Text("lbl_name_on_card".tr, style: theme.textTheme.titleMedium),
       SizedBox(height: 11.v),
       CustomTextFormField(
-          textInputType: TextInputType.text,
+        focusNode: _controller.focusNodes[1],
+          textInputType: TextInputType.name,
           autofocus: false,
           controller: _controller.nameController,
           inputFormatter: [
-            FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+            FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z\s]*$')),
+
           ],
           hintText: "msg_enter_card_holder".tr,
           hintStyle: CustomTextStyles.bodyLargeGray60001,
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
               return "msg_enter_this_field".tr;
-            } else if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+            } else if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
               return 'msg_enter_name'.tr;
             }
 
@@ -469,12 +459,16 @@ class PaymentPage extends StatelessWidget {
   }
 
   Widget _buildInputFeild(String heading, String hintText, validator,
-      TextEditingController controller, List<TextInputFormatter> inputformatter,
+
+      TextEditingController controller, List<TextInputFormatter> inputformatter,FocusNode focusNode,
       {TextInputType? textInputType}) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text(heading, style: theme.textTheme.titleMedium),
       SizedBox(height: 11.v),
+
       CustomTextFormField(
+        focusNode: focusNode,
+
           autofocus: false,
           controller: controller,
           inputFormatter: inputformatter,
@@ -485,11 +479,12 @@ class PaymentPage extends StatelessWidget {
     ]);
   }
 
-  Widget zipDetails(TextEditingController controller) {
+  Widget zipDetails(TextEditingController controller,FocusNode focusNode) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text('msg_zip'.tr, style: theme.textTheme.titleMedium),
       SizedBox(height: 11.v),
       CustomTextFormField(
+        focusNode: focusNode,
           textInputType: TextInputType.number,
           autofocus: false,
           controller: controller,
@@ -516,6 +511,7 @@ class PaymentPage extends StatelessWidget {
       Text("msg_card_information".tr, style: theme.textTheme.titleMedium),
       SizedBox(height: 12.v),
       CustomTextFormField(
+          focusNode: _controller.focusNodes[2],
           inputFormatter: [
             FilteringTextInputFormatter.digitsOnly,
             LengthLimitingTextInputFormatter(16),
@@ -551,6 +547,7 @@ class PaymentPage extends StatelessWidget {
             width: MediaQuery.of(context).size.width / 2.48,
             padding: EdgeInsets.symmetric(vertical: 1.v, horizontal: 0.h),
             child: CustomTextFormField(
+              focusNode: _controller.focusNodes[3],
               textInputType: TextInputType.number,
               controller: _controller.monthController,
               hintText: "lbl_mm".tr,
@@ -581,14 +578,15 @@ class PaymentPage extends StatelessWidget {
                       color: _controller.expirydateValidation.value == '' ||
                               _controller.isMonthField.value == true
                           ? Colors.grey
-                          : Color.fromARGB(500, 170, 15, 9),
+                          : Color.fromRGBO(255, 0, 0, 1.0),
                       width: 1),
                   borderRadius: BorderRadius.circular(5)),
             )),
         Container(
             width: MediaQuery.of(context).size.width / 2.48,
             padding: EdgeInsets.symmetric(vertical: 1.v, horizontal: 0.h),
-            child: CustomTextFormField(
+            child: CustomTextFormField(    focusNode: _controller.focusNodes[4],
+
               enable: _controller.isMonthField.value ? true : false,
               controller: _controller.yearController,
               textInputType: TextInputType.number,
@@ -617,7 +615,7 @@ class PaymentPage extends StatelessWidget {
                               _controller.expirydateValidation.isEmpty &&
                                   _controller.isMonthField.value == true
                           ? Colors.grey
-                          : Color.fromARGB(500, 170, 15, 9),
+                          :Color.fromRGBO(255, 0, 0, 1.0),
                       width: 1)),
               inputFormatter: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -631,7 +629,7 @@ class PaymentPage extends StatelessWidget {
               padding: const EdgeInsets.only(left: 10,bottom: 10),
               child: Text(
                 _controller.expirydateValidation.value,
-                style: TextStyle(color: Color.fromARGB(500, 170, 15, 9)),
+                style: TextStyle(color: Color.fromRGBO(255, 0, 0, 1.0)),
               ),
             ))
     ]);
@@ -647,7 +645,8 @@ class PaymentPage extends StatelessWidget {
           ]),
           textAlign: TextAlign.left),
       SizedBox(height: 11.v),
-      CustomTextFormField(
+      CustomTextFormField(focusNode: _controller.focusNodes[5],
+
         autofocus: false,
         textInputType: TextInputType.number,
         controller: _controller.cvvController,
@@ -676,6 +675,7 @@ class PaymentPage extends StatelessWidget {
       Text("lbl_email_address2".tr, style: theme.textTheme.titleMedium),
       SizedBox(height: 12.v),
       CustomTextFormField(
+        focusNode: _controller.focusNodes[18],
         autofocus: false,
         controller: _controller.emailController,
 
@@ -692,6 +692,7 @@ class PaymentPage extends StatelessWidget {
       Text("lbl_email_address2".tr, style: theme.textTheme.titleMedium),
       SizedBox(height: 12.v),
       CustomTextFormField(
+        focusNode: _controller.focusNodes[19],
         autofocus: false,
         controller: _controller.transferEmailController,
 
@@ -715,7 +716,7 @@ class PaymentPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 0.h),
           child: Column(children: [
             TabBar.secondary(
-              padding: EdgeInsets.only(left: 20.h, right: 20.h, bottom: 20.v),
+              padding: EdgeInsets.only(left: 20.h, right: 20.h, bottom: 25.v),
               controller: _controller.tabController,
               labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               unselectedLabelStyle: TextStyle(
@@ -756,7 +757,7 @@ class PaymentPage extends StatelessWidget {
                           textAlign: TextAlign.left,
                         ),
                         SizedBox(height: 20.v),
-                        _buildInputFeild('msg_street_address1'.tr, 'Enter street address'.tr,
+                        _buildInputFeild('msg_street_address1'.tr, 'msg_enter_address1'.tr,
                             (value) {
                           if (value == null || value.trim().isEmpty) {
                             return "msg_enter_this_field".tr;
@@ -764,12 +765,12 @@ class PaymentPage extends StatelessWidget {
                             return 'msg_enter_name'.tr;
                           }
                           return null;
-                        }, _controller.add1Controller, []),
+                        }, _controller.add1Controller, [],_controller.focusNodes[6],),
                         SizedBox(height: 14.v),
-                        _buildInputFeild('msg_street_address2'.tr, 'Enter street address'.tr,
+                        _buildInputFeild('msg_street_address2'.tr, 'msg_enter_address2'.tr,
                             (value) {
                           return null;
-                        }, _controller.add2Controller, []),
+                        }, _controller.add2Controller, [],_controller.focusNodes[7],),
                         SizedBox(height: 14.v),
                         _buildInputFeild('msg_city'.tr, 'Enter city'.tr, (value) {
                           if (value == null || value.trim().isEmpty) {
@@ -778,12 +779,13 @@ class PaymentPage extends StatelessWidget {
                           return null;
                         }, _controller.cityController, [
                           FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
-                        ]),
+                        ]
+                          ,_controller.focusNodes[8],),
                         SizedBox(height: 14.v),
                         _stateDropdown(
                             context, _controller.selectValue.value, 1),
                         SizedBox(height: 8.v),
-                        zipDetails(_controller.zipController),
+                        zipDetails(_controller.zipController,_controller.focusNodes[16],),
                         SizedBox(height: 14.v),
                         _buildEmailAddressSection(),
                         SizedBox(height: 35.v),
@@ -802,6 +804,8 @@ class PaymentPage extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(5),
                                       ),
                                       onPressed: () {
+                                        print(_controller.selectedAmount.value);
+
                                         _controller.clickOnPayButton(context);
                                       }),
                                 );
@@ -857,9 +861,12 @@ class PaymentPage extends StatelessWidget {
                             return "msg_enter_this_field".tr;
                           }
                           return null;
-                        }, _controller.bankNameController, [
-                          FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
-                        ]),
+                        },
+                          _controller.bankNameController,
+                          [
+                          FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z\s]*$')),
+                        ],_controller.focusNodes[9],
+                        textInputType: TextInputType.name),
                         SizedBox(height: 14.v),
                         _buildInputFeild(
                             'msg_account_name'.tr, 'msg_enter_account_name'.tr,
@@ -871,8 +878,11 @@ class PaymentPage extends StatelessWidget {
                           }
                           return null;
                         }, _controller.bankHolderController, [
-                          FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
-                        ]),
+                          FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z\s]*$')),
+                        ],_controller.focusNodes[10],
+                            textInputType: TextInputType.name
+                        ),
+
                         SizedBox(height: 14.v),
                         _buildInputFeild('msg_routing'.tr, 'Enter routing'.tr, (value) {
                           if (value == null ||
@@ -888,8 +898,11 @@ class PaymentPage extends StatelessWidget {
                         }, _controller.routingController, [
                           LengthLimitingTextInputFormatter(9),
                           FilteringTextInputFormatter.digitsOnly
-                        ]),
+                        ],_controller.focusNodes[11],textInputType: TextInputType.number),
+
+
                         SizedBox(height: 14.v),
+
                         _buildInputFeild('msg_account'.tr, 'Enter account number'.tr, (value) {
                           if (value == null ||
                               value == null ||
@@ -906,9 +919,11 @@ class PaymentPage extends StatelessWidget {
                             [
                               FilteringTextInputFormatter.digitsOnly,
                               LengthLimitingTextInputFormatter(18)
-                            ],
+                            ],_controller.focusNodes[12],
                             textInputType: TextInputType.number),
+
                         SizedBox(height: 20.v),
+
                         Text(
                           'msg_billing_address'.tr,
                           style: TextStyle(
@@ -919,19 +934,22 @@ class PaymentPage extends StatelessWidget {
                           textAlign: TextAlign.left,
                         ),
                         SizedBox(height: 20.v),
-                        _buildInputFeild('msg_street_address1'.tr, 'Enter street address'.tr,
+
+                        _buildInputFeild('msg_street_address1'.tr, 'msg_enter_address1'.tr,
                             (value) {
                           if (value == null || value.trim().isEmpty) {
                             return "msg_enter_this_field".tr;
                           }
                           return null;
-                        }, _controller.transferAdd1Controller, []),
+                        }, _controller.transferAdd1Controller, [],_controller.focusNodes[13],),
                         SizedBox(height: 14.v),
-                        _buildInputFeild('msg_street_address2'.tr, 'Enter street address'.tr,
+
+                        _buildInputFeild('msg_street_address2'.tr, 'msg_enter_address2'.tr,
                             (value) {
                           return null;
-                        }, _controller.transferAdd2Controller, []),
+                        }, _controller.transferAdd2Controller, [],_controller.focusNodes[14],),
                         SizedBox(height: 14.v),
+
                         _buildInputFeild('msg_city'.tr, 'Enter city'.tr, (value) {
                           if (value == null || value.trim().isEmpty) {
                             return "msg_enter_this_field".tr;
@@ -939,13 +957,17 @@ class PaymentPage extends StatelessWidget {
                           return null;
                         }, _controller.transferCityController, [
                           FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
-                        ]),
+                        ],_controller.focusNodes[15],),
                         SizedBox(height: 14.v),
+
                         _stateDropdown(
                             context, _controller.transferSelectValue.value, 2),
+
                         SizedBox(height: 14.v),
-                        zipDetails(_controller.transferZipController),
+
+                        zipDetails(_controller.transferZipController,_controller.focusNodes[17],),
                         SizedBox(height: 14.v),
+
                         _transferEmailAddressSection(),
                         SizedBox(height: 35.v),
                         Obx(() {
@@ -1054,9 +1076,9 @@ class PaymentPage extends StatelessWidget {
         Text("msg_state".tr, style: theme.textTheme.titleMedium),
         SizedBox(height: 12.v),
         Container(
-          height: 42,
+          height: mediaQueryData.size.height*0.048,
           padding: EdgeInsets.only(left: 10),
-          width: MediaQuery.of(context).size.width,
+          width: MediaQuery.sizeOf(context).width,
           decoration: BoxDecoration(
               border: Border.all(
                 width: 1,
@@ -1065,6 +1087,7 @@ class PaymentPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               color: Colors.white),
           child: DropdownButtonFormField<String>(
+
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
                 return "msg_enter_this_field".tr;
@@ -1078,9 +1101,10 @@ class PaymentPage extends StatelessWidget {
 
 
             menuMaxHeight: 500,
+
             dropdownColor: Colors.white,
             decoration: InputDecoration(border: InputBorder.none,
-              contentPadding: EdgeInsets.only(bottom: 8),
+              contentPadding: EdgeInsets.only(bottom: mediaQueryData.size.height*0.015),
             ),
             icon: const Icon(Icons.arrow_drop_down_outlined),
             elevation: 16,
@@ -1149,6 +1173,7 @@ class RadioButtonWidget extends StatelessWidget {
                           ),
                     ),
                   ),
+
                   Expanded(flex: 1, child: widget)
                 ],
               ),
@@ -1156,10 +1181,12 @@ class RadioButtonWidget extends StatelessWidget {
               groupValue: controller.selectedAmount.value,
               onChanged: (String? newValue) {
                 if (newValue!.isEmpty || newValue == null) {
-                  newValue = controller.paymentController.value.text.toString();
-                }
 
-                controller.setSelectedValue(newValue!);
+
+                }
+                print(newValue);
+
+                controller.setSelectedValue(newValue);
               },
             ),
           );

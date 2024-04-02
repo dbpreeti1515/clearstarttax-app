@@ -43,12 +43,11 @@ class SignupScreen extends GetWidget<SignupController> {
                               padding: const EdgeInsets.only(
                                 top: 10,
                               ),
-                              child:IconButton(
+                              child: IconButton(
                                 icon: Icon(Icons.arrow_back_ios),
                                 color: Colors.white,
-                                onPressed: (){
+                                onPressed: () {
                                   Get.back();
-
                                 },
                               ),
                             ),
@@ -124,7 +123,7 @@ class SignupScreen extends GetWidget<SignupController> {
       children: [
         Text(
           "lbl_case_id".tr,
-          style:  CustomTextStyles.titleMedium,
+          style: CustomTextStyles.titleMedium,
           textAlign: TextAlign.left,
         ),
         SizedBox(height: 5.v),
@@ -149,8 +148,7 @@ class SignupScreen extends GetWidget<SignupController> {
   /// Section Widget
   Widget _buildEmailDetails(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text("msg_enter_address".tr,
-          style:  CustomTextStyles.titleMedium),
+      Text("msg_enter_address".tr, style: CustomTextStyles.titleMedium),
       SizedBox(height: 5.v),
       CW.commonTextFieldForLoginSignUP(
         context: context,
@@ -171,7 +169,7 @@ class SignupScreen extends GetWidget<SignupController> {
   /// Section Widget
   Widget _buildPasswordDetails(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text("lbl_password".tr, style:  CustomTextStyles.titleMedium),
+      Text("lbl_password".tr, style: CustomTextStyles.titleMedium),
       SizedBox(height: 5.v),
       CW.commonTextFieldForLoginSignUP(
           context: context,
@@ -190,8 +188,7 @@ class SignupScreen extends GetWidget<SignupController> {
 
   Widget _buildConfirmPasswordDetails(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text("msg_confirm_password".tr,
-          style:  CustomTextStyles.titleMedium),
+      Text("msg_confirm_password".tr, style: CustomTextStyles.titleMedium),
       SizedBox(height: 5.v),
       CW.commonTextFieldForLoginSignUP(
           context: context,
@@ -199,7 +196,8 @@ class SignupScreen extends GetWidget<SignupController> {
           hintText: "lbl".tr,
           keyboardType: TextInputType.visiblePassword,
           prefixIcon: CustomImageView(
-              imagePath: ImageConstant.imgSolarlockpasswordbroken,
+              imagePath: ImageConstant.imgSolarpasswordbroken,
+              color: Color(0xff858585),
               height: 20.adaptSize,
               width: 20.adaptSize,
               margin: EdgeInsets.symmetric(vertical: 11.v, horizontal: 10)),
@@ -216,71 +214,80 @@ class SignupScreen extends GetWidget<SignupController> {
     return Align(
         alignment: Alignment.centerLeft,
         child: Obx(() => Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            CustomCheckboxButton(
-                isExpandedText: true,
-                textAlignment: TextAlign.left,
-                alignment: Alignment.centerLeft,
-                text: "lbl_signup_remember_me".tr,
-                value: controller.rememberMeCheckbox.value,
-                textStyle: theme.textTheme.bodySmall!.copyWith(color: Colors.white,fontSize: 12),
-                onChange: (value) {
-                  controller.rememberMeCheckbox.value = value;
-                  if(value)
-                    controller.tnCText.value = '';
-
-                  else
-                    controller.tnCText.value = 'msg_please_tick'.tr;
-
-
-
-                }),
-            Obx(() => Container(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              child: Text(controller.tnCText.value,
-                textAlign: TextAlign.right,
-                style: TextStyle(color: ColorSchemes.primaryColorScheme.error),),
-            ))
-          ],
-        )));
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                CustomCheckboxButton(
+                    isExpandedText: true,
+                    textAlignment: TextAlign.left,
+                    alignment: Alignment.centerLeft,
+                    text: "lbl_signup_remember_me".tr,
+                    value: controller.rememberMeCheckbox.value,
+                    textStyle: theme.textTheme.bodySmall!
+                        .copyWith(color: Colors.white, fontSize: 11),
+                    onChange: (value) {
+                      controller.rememberMeCheckbox.value = value;
+                      if (value)
+                        controller.tnCText.value = '';
+                      else
+                        controller.tnCText.value = 'msg_please_tick'.tr;
+                    }),
+                Obx(() => Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: Text(
+                        controller.tnCText.value,
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                            color: ColorSchemes.primaryColorScheme.error),
+                      ),
+                    ))
+              ],
+            )));
   }
 
   Widget signUpButton() {
     return Column(
       children: [
         Obx(() {
-          return   controller.isLoading.value?Center(child: CircularProgressIndicator(),):CustomOutlinedButton(
-            text: "lbl_sign_up".tr,
-            decoration: BoxDecoration(
-                color: ColorSchemes.primaryColorScheme.primary,
-                borderRadius: BorderRadius.circular(5)),
-            onPressed: () => controller.clickOnSignUpButton(),
-          );
-        })
-      ,
+          return controller.isLoading.value
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : CustomOutlinedButton(
+                  text: "lbl_sign_up".tr,
+                  decoration: BoxDecoration(
+                      color: ColorSchemes.primaryColorScheme.primary,
+                      borderRadius: BorderRadius.circular(5)),
+                  onPressed: () => controller.clickOnSignUpButton(),
+                );
+        }),
         Container(
             height: 40,
             padding: EdgeInsets.only(left: 40.h, right: 40.h, top: 10.h),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text("msg_already_have_account".tr,
-                  style: theme.textTheme.bodyLarge!
-                      .copyWith(color: Colors.white)),
-              SizedBox(width: 5,),
+                  style:
+                      theme.textTheme.bodyLarge!.copyWith(color: Colors.white)),
+              SizedBox(
+                width: 5,
+              ),
               TextButton(
-                style: TextButton.styleFrom( padding: EdgeInsets.zero,
-                  minimumSize: Size(40, 30),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size(40, 30),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
                   onPressed: () {
                     onTapTxtSignInNow();
                   },
                   child: Text("lbl_sign_in_now".tr,
-                      style: CustomTextStyles.bodyExtraLargePrimary
-                          ))
+                      style: CustomTextStyles.bodyExtraLargePrimary))
             ])),
         SizedBox(height: 14.v),
-        CW.termCondition('msg_info_clearstarttax_com'.tr,textColor: Colors.white),
-        SizedBox(height: 20,)
+        CW.termCondition('msg_info_clearstarttax_com'.tr,
+            textColor: Colors.white),
+        SizedBox(
+          height: 20,
+        )
       ],
     );
   }

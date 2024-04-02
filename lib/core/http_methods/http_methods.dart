@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../../api_constant/api_constant.dart';
 import '../../data/Comman/common_method.dart';
-import '../../presentation/splash_screen_four_screen/controller/splash_screen_four_controller.dart';
+import '../../presentation/splash_screen/controller/splash_screen_four_controller.dart';
 
 
 

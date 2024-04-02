@@ -5,7 +5,6 @@ import 'package:preeti_s_application3/presentation/news_page_screen/news_page_sc
 import '../../widgets/comman_widget.dart';
 import '../HomeScreen/HomeScreen.dart';
 import '../dashboard_page/controller/dashboard_controller.dart';
-import '../splash_screen_four_screen/controller/splash_screen_four_controller.dart';
 import '../tax_news_screen/widgets/newsarticle_item_widget.dart';
 import 'controller/tax_news_controller.dart';
 import 'models/newsarticle_item_model.dart';
@@ -23,31 +22,20 @@ class TaxNewsScreen extends GetWidget<TaxNewsController> {
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
     return Scaffold(
-              appBar: AppBar(
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    Get.off(()=> Homescreen());
-                  },
-                ),
-                leadingWidth: 80,
-                title: Container(
-                    height: 70.v,
-                    margin: EdgeInsets.only(left: 0.h, top: 10.v, bottom: 10.v),
-                    child: Stack(alignment: Alignment.topLeft, children: [
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: 22.h, top: 17.v, bottom: 10.v),
-                        child: Image(
-                          image: AssetImage(
-                            ImageConstant.imgImage2,
-                          ),
-                        ),
-                      ),
-                      // AppbarTitleImage(
-                      //     imagePath: ImageConstant.imgSantaHat1,
-                      //     margin: EdgeInsets.only(right: 204.h, bottom: 33.v))
-                    ])),
+              appBar:  CustomAppBar(
+                // leadingWidth: mediaQueryData.size.width*.126,
+
+                leading:
+                AppbarLeadingImage(
+                    imagePath: ImageConstant.imgbackButton,
+
+
+                    margin: EdgeInsets.all(mediaQueryData.size.width*.05),
+                    onTap: () {
+                      Get.back();
+                      //  Get.offAllNamed(AppRoutes.homeScreen);
+                    }),
+
               ),
               body: Obx(() {
                 return controller.isLoading.value
@@ -80,6 +68,7 @@ class TaxNewsScreen extends GetWidget<TaxNewsController> {
       );
 
   }
+
   final PagingController _pagingController =
   PagingController(firstPageKey: 0);
   Widget pageniation(){
@@ -168,7 +157,7 @@ class TaxNewsScreen extends GetWidget<TaxNewsController> {
                             child: Row(
                               children: [
                                 Text(
-                                  "more data",
+                                  "msg_read_more".tr,
                                   style: CustomTextStyles.bodySmallOnError,
                                 ),
                                 CustomImageView(

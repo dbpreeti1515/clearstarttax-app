@@ -22,67 +22,65 @@ class LoginPageScreen extends GetWidget<LoginPageController> {
     return Scaffold(
 
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SafeArea(
-        child: Container(
+      body: Container(
 
-          height: mediaQueryData.size.height,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(ImageConstant.imgbackground),
-                  fit: BoxFit.cover
-              )
-          ),
-          child: ScrollConfiguration(
-            behavior: ListScrollBehaviour(),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+        height: mediaQueryData.size.height,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(ImageConstant.imgbackground),
+                fit: BoxFit.cover
+            )
+        ),
+        child: ScrollConfiguration(
+          behavior: ListScrollBehaviour(),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
 
-                children: [
-                  Container(
-                      height: 70.v,
-                      margin: EdgeInsets.only(left: 0.h, top: 75.v, bottom: 60.v),
-                      child: Stack(alignment: Alignment.topLeft, children: [
-                        Container(
-                          margin:
-                          EdgeInsets.only( top: 17.v, bottom: 10.v),
-                          child: Image(
-                            image: AssetImage(
-                              ImageConstant.imgImage2,
-                            ),
+              children: [
+                Container(
+                    height: 70.v,
+                    margin: EdgeInsets.only(left: 0.h, top: 75.v, bottom: 60.v),
+                    child: Stack(alignment: Alignment.topLeft, children: [
+                      Container(
+                        margin:
+                        EdgeInsets.only( top: 17.v, bottom: 10.v),
+                        child: Image(
+                          image: AssetImage(
+                            ImageConstant.imgImage2,
                           ),
                         ),
-                        // AppbarTitleImage(
-                        //     imagePath: ImageConstant.imgSantaHat1,
-                        //     margin: EdgeInsets.only(right: 204.h, bottom: 33.v))
-                      ])),
-                  Container(
-                    margin: EdgeInsets.only(left: 18,right: 18),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color:ColorSchemes.primaryColorScheme.background ),
-                    
+                      ),
+                      // AppbarTitleImage(
+                      //     imagePath: ImageConstant.imgSantaHat1,
+                      //     margin: EdgeInsets.only(right: 204.h, bottom: 33.v))
+                    ])),
+                Container(
+                  margin: EdgeInsets.only(left: 18,right: 18),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color:ColorSchemes.primaryColorScheme.background ),
 
-                    child: Form(
-                      key: controller.form_Key,
-                        child: Column(
-                      children: [
-                        _buildWelcomeBackTo(),
-                        SizedBox(height: 25.v),
-                        emailInputBox(context),
-                        SizedBox(height: 15.v),
-                        passwordInputBox(context),
 
-                        signInButtton(),
-                        SizedBox(height: 20.v),
-                      ],
-                    )),
-                  ),
+                  child: Form(
+                    key: controller.form_Key,
+                      child: Column(
+                    children: [
+                      _buildWelcomeBackTo(),
+                      SizedBox(height: 25.v),
+                      emailInputBox(context),
+                      SizedBox(height: 15.v),
+                      passwordInputBox(context),
 
-                  SizedBox(height: 5.v),
-                ],
-              ),
+                      signInButtton(),
+                      SizedBox(height: 20.v),
+                    ],
+                  )),
+                ),
+
+                SizedBox(height: 5.v),
+              ],
             ),
           ),
         ),
@@ -140,6 +138,7 @@ class LoginPageScreen extends GetWidget<LoginPageController> {
             prefixIcon: Container(
                 margin: EdgeInsets.symmetric(horizontal: 10.h, vertical: 0.v),
                 child: CustomImageView(
+                    color: Color(0xff858585),
                     imagePath: ImageConstant.imgSolarpasswordbroken,
                     height: 16.adaptSize,
                     width: 16.adaptSize)),

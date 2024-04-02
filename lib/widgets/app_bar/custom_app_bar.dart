@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:preeti_s_application3/core/app_export.dart';
 
+import 'appbar_leading_image.dart';
+
 // ignore: must_be_immutable
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   CustomAppBar({
@@ -36,11 +38,26 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       toolbarHeight: height ?? 75.v,
       automaticallyImplyLeading: false,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       flexibleSpace: _getStyle(),
-      leadingWidth: leadingWidth ?? 0,
-      leading: leading,
-      title: title,
+
+      leadingWidth: leadingWidth ??  mediaQueryData.size.width*0.19,
+      leading: leading
+          ,
+      title: title?? Container(
+          height: 70.v,
+          margin: EdgeInsets.only(left: 0.h, top: 10.v, bottom: 10.v),
+          child: Stack(alignment: Alignment.topLeft, children: [
+            Container(
+              margin: EdgeInsets.only(left:mediaQueryData.size.width*0.093, top: 17.v, bottom: 10.v),
+              child: Image(
+                image: AssetImage(
+                  ImageConstant.imgImage2,
+                ),
+              ),
+            ),
+
+          ])),
       titleSpacing: 0,
       centerTitle: centerTitle ?? false,
       actions: actions,

@@ -12,7 +12,6 @@ import 'package:preeti_s_application3/data/API_Services/apiEndpoint.dart';
 import 'package:preeti_s_application3/presentation/dashboard_page/models/dashboard_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
-import 'package:preeti_s_application3/presentation/splash_screen_four_screen/controller/splash_screen_four_controller.dart';
 
 import '../../../api_constant/api_constant.dart';
 import '../../../data/Comman/common_method.dart';
@@ -21,6 +20,7 @@ import '../../../data/apiModal/getSelltementOfficerModal.dart';
 import '../../../data/apiModal/getUserModal.dart';
 
 import '../../../data/local_database/database_helper/database_helper.dart';
+import '../../splash_screen/controller/splash_screen_four_controller.dart';
 import '../../tax_news_screen/models/tax_news_model.dart';
 import '../models/userprofile_item_model.dart';
 
@@ -116,7 +116,7 @@ class DashboardController extends GetxController {
         meansStep.value =
             getDashboardData.value!.data!.statusinfo!.whatThisMeans ?? '';
         nextStep.value =
-            getDashboardData.value!.data!.statusinfo!.whatThisMeans ?? '';
+            getDashboardData.value!.data!.statusinfo!.whatHappensNext ?? '';
         getDashboardData.value!.data!.statusForFq!.forEach((element) {
           statusForFQ.value.add(element);
           if (element.toString() == statusId.value.toString()) {
@@ -139,7 +139,7 @@ class DashboardController extends GetxController {
           if (element.toString() == statusId.value.toString()) {
             appoinmentNotification.value = true;
             dbHelper.updateFirstUserColumn('appoinmentNotification', 'true');
-            dbHelper.updateFirstUserColumn('status', 'active');
+           // dbHelper.updateFirstUserColumn('status', 'active');
 
           }
         });

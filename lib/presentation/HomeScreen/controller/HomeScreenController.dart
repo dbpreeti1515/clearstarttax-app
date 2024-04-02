@@ -20,7 +20,7 @@ import '../../../data/apiModal/getSelltementOfficerModal.dart';
 import '../../../routes/app_routes.dart';
 import '../../../theme/theme_helper.dart';
 import '../../dashboard_page/controller/dashboard_controller.dart';
-import '../../splash_screen_four_screen/controller/splash_screen_four_controller.dart';
+import '../../splash_screen/controller/splash_screen_four_controller.dart';
 import '../../status_screen/status_screen.dart';
 
 RxInt selectedIndex = 0.obs;

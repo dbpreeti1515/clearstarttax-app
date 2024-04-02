@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'dart:io';
 
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:file_picker/file_picker.dart';
@@ -11,7 +12,6 @@ import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:preeti_s_application3/core/app_export.dart';
 import 'package:preeti_s_application3/presentation/get_in_touch_screen/models/get_in_touch_model.dart';
 import 'package:flutter/material.dart';
-import 'package:preeti_s_application3/presentation/splash_screen_four_screen/controller/splash_screen_four_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../api_constant/api_constant.dart';
@@ -21,7 +21,9 @@ import '../../../data/Comman/common_method.dart';
 import '../../../data/apiModal/getUserModal.dart';
 
 import '../../../data/models/SuccessDialogBox/SuccessBox.dart';
+import '../../../widgets/custom_outlined_button.dart';
 import '../../dashboard_page/controller/dashboard_controller.dart';
+import '../../splash_screen/controller/splash_screen_four_controller.dart';
 
 /// A controller class for the GetInTouchScreen.
 ///
@@ -38,6 +40,8 @@ class GetInTouchController extends GetxController {
 
   Rx<GetInTouchModel> getInTouchModelObj = GetInTouchModel().obs;
 
+
+
   Map<String, dynamic> bodyParamsForGetInTouch = {};
   Map<String, dynamic> responseMapForGetInTouch = {};
   RxBool isLoading = false.obs;
@@ -47,11 +51,17 @@ class GetInTouchController extends GetxController {
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  final List<FocusNode> focusNodes = [
+    FocusNode(),
+    FocusNode(),
+
+  ];
+
   clickOnSubmitButton(BuildContext context) async {
-    print("Button clicked");
+
 
     if (formKey.currentState!.validate()) {
-      await getInTouchAPI();
+      await getInTouchAPI(context);
     }
   }
 
@@ -98,17 +108,8 @@ class GetInTouchController extends GetxController {
 
       uploadUrl.value = path.basename(
           file.toString()); // Replace with your server upload endpoint
-      print(uploadUrl);
 
-      // var request = http.MultipartRequest('POST', Uri.parse(uploadUrl));
-      // request.files.add(
-      //   http.MultipartFile(
-      //     'file',
-      //     file.readAsBytes().asStream(),
-      //     file.lengthSync(),
-      //     filename: file.path.split('/').last,
-      //   ),
-      // );
+
     } else {
       CM.showToast("Please select file");
     }
@@ -155,11 +156,11 @@ class GetInTouchController extends GetxController {
   //     return false;
   //   }
   // }
-  Future<void> getInTouchAPI() async {
+  Future<void> getInTouchAPI(BuildContext context) async {
     isLoading..value = true;
     try {
       var headers = {
-        'Authorization': 'Bearer Bearer $token',
+        'Authorization': 'Bearer $token',
       };
       var request =
           http.MultipartRequest('POST', Uri.parse(UriConstant.getInTouchURL));
@@ -180,19 +181,32 @@ class GetInTouchController extends GetxController {
       if (response.statusCode == 200) {
         isLoading..value = false;
         responseMapForGetInTouch = jsonDecode(data);
-        print(responseMapForGetInTouch);
+
         if (responseMapForGetInTouch[ApiKey.status]) {
           uploadUrl.value = "msg_file_choose".tr;
-          CM.showToast(responseMapForGetInTouch[ApiKey.message]);
+          SuccessDialog.showCustomDialog(context, "lbl_message_sent".tr,
+              responseMapForGetInTouch[ApiKey.message]);
+        //  showDateListDialog(context,responseMapForGetInTouch[ApiKey.message]);
+         // CM.showToast(responseMapForGetInTouch[ApiKey.message]);
           isLoading.value = false;
 
           messageController.clear();
           subjectPlaceholderController.clear();
         } else {
           isLoading.value = false;
+
           CM.showToast(responseMapForGetInTouch[ApiKey.message]);
         }
-      } else {
+      }
+      if(response.statusCode==500){
+        messageController.clear();
+        subjectPlaceholderController.clear();
+        CM.showToast("server Error! Try again later ");
+
+
+      }
+
+      else {
         isLoading.value = false;
         print(response.reasonPhrase);
         uploadUrl.value = "msg_file_choose".tr;
@@ -202,5 +216,48 @@ class GetInTouchController extends GetxController {
       uploadUrl.value = "msg_file_choose".tr;
       print(e);
     }
+  }
+  void showDateListDialog(
+      BuildContext context,text
+      ) {
+    showDialog(
+      useSafeArea: true,
+
+
+      context: context,
+      builder: (BuildContext context) {
+        RxBool isColor = false.obs;
+        return AlertDialog(
+          insetPadding: EdgeInsets.all(25),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+          shadowColor: Colors.transparent,
+          backgroundColor: Colors.white,
+
+          title: Center(child: Text("Message sent!")),
+          content: Container(
+            child: Text(text,textAlign: TextAlign.center,),
+          ),
+
+          actions: [
+            Center(
+              child: CustomOutlinedButton(
+                 margin: EdgeInsets.symmetric(horizontal: 20),
+                  buttonStyle: ElevatedButton.styleFrom(
+                      backgroundColor:theme.primaryColor
+                  ),
+                  width: 100.h,
+                  text: "lbl_close".tr,
+                  onPressed:(){
+                    Get.back();
+                  }
+              
+              
+              
+              ),
+            )
+          ],
+        );
+      },
+    );
   }
 }

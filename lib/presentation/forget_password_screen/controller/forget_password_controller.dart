@@ -9,7 +9,7 @@ import '../../../data/models/SuccessDialogBox/SuccessBox.dart';
 /// This class manages the state of the ForgetPasswordScreen, including the
 /// current forgetPasswordModelObj
 class ForgetPasswordController extends GetxController {
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   Rx<ForgetPasswordModel> forgetPasswordModelObj = ForgetPasswordModel().obs;
   final emailController = TextEditingController();
   Future<void> clickOnForgetPasswordButton(BuildContext context) async {
@@ -20,7 +20,7 @@ class ForgetPasswordController extends GetxController {
     if (formKey.currentState!.validate()) {
 
 
-      SuccessDialog.showCustomDialog(context,"msg_forget_password".tr,"msg_reset_password".tr,true);
+      SuccessDialog.showCustomDialog(context,"msg_forget_password".tr,"msg_reset_password".tr);
 
 
 

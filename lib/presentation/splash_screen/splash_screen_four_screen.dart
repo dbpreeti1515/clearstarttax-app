@@ -32,13 +32,10 @@ class SplashScreenFourScreen extends GetWidget<SplashScreenFourController> {
                 // ),
                 CustomImageView(
                   imagePath: ImageConstant.imgCleartaxBrandLogo68x300,
-                  height: 74.v,
-                  width: 310.h,
+                  height: mediaQueryData.size.height*.075,
+                  width: mediaQueryData.size.width,
                   alignment: Alignment.center,
-                  margin: EdgeInsets.only(
-                    left: 17.h,
-                    top: 21.v,
-                  ),
+                  margin: EdgeInsets.symmetric(horizontal: mediaQueryData.size.width*.145,vertical: 20),
                 ),
               ],
             ),

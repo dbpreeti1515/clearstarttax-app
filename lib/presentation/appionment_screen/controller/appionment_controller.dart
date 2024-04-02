@@ -19,7 +19,7 @@ import '../../../data/apiModal/getSelltementOfficerModal.dart';
 
 import '../../../data/local_database/database_helper/database_helper.dart';
 import '../../HomeScreen/HomeScreen.dart';
-import '../../splash_screen_four_screen/controller/splash_screen_four_controller.dart';
+import '../../splash_screen/controller/splash_screen_four_controller.dart';
 
 /// A controller class for the AppionmentScreen.
 ///
@@ -63,7 +63,7 @@ class AppionmentController extends GetxController {
     selectedDate = value;
 
     formattterSelectedDate.value =
-        DateFormat('dd/MM/yyyy').format(value).toString();
+        DateFormat('MM/dd/yyyy').format(value).toString();
     ;
     formattterAPIdDate.value =
         DateFormat('MM/dd/yyyy').format(value).toString();
@@ -180,6 +180,7 @@ class AppionmentController extends GetxController {
               'https://clearstart.irslogics.com/publicapi/Appointment/BookAppointment?apikey=f08f2b3c48ad4134b4ef62abd4aa721d'));
       request.body = json.encode({
         ApiKey.AgentEmail: satOfficerEmail.value,
+        ApiKey.TimeSlot: "90",
         ApiKey.Date: selectedTimeSlot.value,
         ApiKey.CaseID: caseId.toString(),
         if (messsageController.text != null)
@@ -251,6 +252,7 @@ class AppionmentController extends GetxController {
 
     print('YOUR date KEY - $key');
   }
+
   void getTimeSlote() async {
     print('thi is get TimeSlote');
 
@@ -264,38 +266,39 @@ class AppionmentController extends GetxController {
 
     print('YOUR TimeSlote KEY - $key');
   }
-  void getTime() async {
-    print('thi is get TimeSlote');
 
+  void getTime() async {
     final prefs = await SharedPreferences.getInstance();
     final key = prefs.get('time');
+    if (key != null) {
+      storeTime.value = key.toString();
+      print(
+          ' current time ${DateTime.now().toLocal().toString()}  and  ${storeTime.value}');
 
-    var value = key;
-    print(' current time ${DateTime.now().toLocal().toString()}');
-    storeTime.value = key.toString();
-    var data = DateTime.parse(storeTime.value);
-    var currrentTime = DateTime.now();
+      var data = DateTime.parse(storeTime.value);
+      var currrentTime = DateTime.now();
 
-    print(currrentTime.difference(data));
-    var differentData = currrentTime.difference(data);
-    if(differentData>Duration(minutes: 5)){
-      print("big time");
+      print(currrentTime.difference(data));
+      var differentData = currrentTime.difference(data);
+      if (differentData > Duration(minutes: 5)) {
+        print("big time");
+        setDate('');
+      } else {
+        print("short time");
+        Future.delayed(differentData, () async {
+          isAppointmentAppear.value = true;
+          dbHelper.updateFirstUserColumn('appoinmentNotification', 'true');
+          dbHelper.updateFirstUserColumn('status', 'active');
 
-    }else{
-      print("short time");
-      Future.delayed( differentData, () async {
-        isAppointmentAppear.value = true;
-        dbHelper.updateFirstUserColumn('appoinmentNotification', 'true');
-        dbHelper.updateFirstUserColumn('status', 'active');
-        //db.value = await dbHelper.getUsers();
-        print(db.value!.status);
+          isAppointmentAppear.value == true;
+          //db.value = await dbHelper.getUsers();
+          print(db.value!.status);
 
-        getDashboard();
-        Get.off(() => Homescreen());
-        // selectedIndex.value = 0;
-        print("---------------------------------data updatted");
-      });
-
+          getDashboard();
+          Get.off(() => Homescreen());
+          // selectedIndex.value = 0;
+        });
+      }
     }
 
     print('YOUR time KEY - $key');
@@ -307,12 +310,14 @@ class AppionmentController extends GetxController {
     prefs.setString('date', key);
     print('set date $key');
   }
+
   void setTime(key) async {
     final prefs = await SharedPreferences.getInstance();
 
     prefs.setString('time', key);
     print('set time $key');
   }
+
   void setTimeSlote(key) async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -345,7 +350,7 @@ class AppionmentController extends GetxController {
         meansStep.value =
             getDashboardData.value!.data!.statusinfo!.whatThisMeans ?? '';
         nextStep.value =
-            getDashboardData.value!.data!.statusinfo!.whatThisMeans ?? '';
+            getDashboardData.value!.data!.statusinfo!.whatHappensNext ?? '';
         getDashboardData.value!.data!.statusForFq!.forEach((element) {
           statusForFQ.value.add(element);
           if (element.toString() == statusId.value.toString()) {
@@ -366,7 +371,7 @@ class AppionmentController extends GetxController {
           if (element.toString() == statusId.value.toString()) {
             appoinmentNotification.value = true;
             dbHelper.updateFirstUserColumn('appoinmentNotification', 'true');
-            dbHelper.updateFirstUserColumn('status', 'active');
+            //dbHelper.updateFirstUserColumn('status', 'active');
           }
         });
 

@@ -44,7 +44,17 @@ class ThemeHelper {
     return ThemeData(
       visualDensity: VisualDensity.standard,
       colorScheme: colorScheme,
+
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.white,
+
+        surfaceTintColor: Colors.white
+        //color: Colors.white,
+
+
+      ),
       textTheme: TextThemes.textTheme(colorScheme),
+
       scaffoldBackgroundColor: colorScheme.onPrimaryContainer,
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
@@ -127,6 +137,7 @@ class TextThemes {
           fontSize: 14.fSize,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w400,
+
         ),
         bodySmall: TextStyle(
           color: appTheme.black900,
@@ -175,9 +186,12 @@ class TextThemes {
 
 /// Class containing the supported color schemes.
 class ColorSchemes {
+
   static final primaryColorScheme = ColorScheme.light(
+
     // Primary colors
     primary: Color(0XFF00AAD8),
+
     secondary:Color(0Xff007899) ,
     primaryContainer: Color(0XFF333333),
     secondaryContainer: Color(0XFF989692),

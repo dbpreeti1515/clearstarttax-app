@@ -10,8 +10,8 @@ import 'package:preeti_s_application3/presentation/login_page_screen/controller/
 import '../../../core/http_methods/http_methods.dart';
 import '../../../data/apiClient/api_client.dart';
 import '../../../data/apiModal/FAQ_Modal.dart';
+import '../../splash_screen/controller/splash_screen_four_controller.dart';
 
-import '../../splash_screen_four_screen/controller/splash_screen_four_controller.dart';
 /// A controller class for the FaqScreen.
 ///
 /// This class manages the state of the FaqScreen, including the
