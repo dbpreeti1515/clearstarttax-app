@@ -21,8 +21,8 @@ class CW {
     }
   }
 
-  static void _launchPhone() async {
-    const String phone = 'tel:+18882350004';
+  static void launchPhone() async {
+    const String phone = 'tel:8882350004';
     if (await canLaunch(phone)) {
       await launch(phone);
     } else {
@@ -230,7 +230,7 @@ class CW {
                 alignment: Alignment.centerLeft,
               ),
               onPressed: () {
-                _launchPhone();
+                launchPhone();
               },
               child: Text("lbl_888_235_0004".tr,
                   style: theme.textTheme.bodyLarge!.copyWith(

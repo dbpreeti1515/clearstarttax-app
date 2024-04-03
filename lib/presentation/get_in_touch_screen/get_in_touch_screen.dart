@@ -232,7 +232,7 @@ class GetInTouchScreen extends GetWidget<GetInTouchController> {
                 alignment: Alignment.centerLeft,
               ),
               onPressed: () {
-                _controller.launchPhone();
+                CW.launchPhone();
               },
               child: Text("lbl_888_235_0004".tr,
                   style: TextStyle(

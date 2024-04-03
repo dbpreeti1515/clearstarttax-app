@@ -227,6 +227,10 @@ final Map<String, String> enUs = {
   "msg_need_to_call_us": "Need To Call Us?",
   "msg_phone": "Phone :",
   "msg_file_choose": "No file chosen",
+  "msg_success1": "Your message has been successfully sent. Our team is dedicated to providing you with a prompt and helpful response. You can expect to hear back from us shortly. If you require immediate assistance, please don't hesitate to call us at  ",
+  "msg_success2":" M-F 8AM - 5PM PST.",
+
+
 
   // Tax News Screen
   "msg_strategize_your":

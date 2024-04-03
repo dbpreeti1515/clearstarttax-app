@@ -7,7 +7,7 @@ import '../../../widgets/custom_outlined_button.dart';
 
 class SuccessDialog {
   static void showCustomDialog(
-      BuildContext context, String heading, String text) {
+      BuildContext context, String heading, Widget widget) {
     showDialog(
       context: context,
 
@@ -20,7 +20,7 @@ class SuccessDialog {
 
           title: Center(child: Text(heading)),
           content: Container(
-            child: Text(text,textAlign: TextAlign.center,),
+            child: widget,
           ),
 
           actions: [

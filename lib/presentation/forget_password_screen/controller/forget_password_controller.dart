@@ -20,7 +20,8 @@ class ForgetPasswordController extends GetxController {
     if (formKey.currentState!.validate()) {
 
 
-      SuccessDialog.showCustomDialog(context,"msg_forget_password".tr,"msg_reset_password".tr);
+      SuccessDialog.showCustomDialog(context,"msg_forget_password".tr,Text(
+          "msg_reset_password".tr,textAlign: TextAlign.center,));
 
 
 

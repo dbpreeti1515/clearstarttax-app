@@ -111,7 +111,8 @@ class DocumentController extends GetxController {
         selectedFiles.value = [];
 
         SuccessDialog.showCustomDialog(context, "lbl_done".tr,
-            'msg_document_sent_your'.tr);
+            Text('msg_document_sent_your'.tr,textAlign: TextAlign.center,));
+
         // for(var file in selectedFiles.value){
         //   selectedFiles.value.remove(file);
         //

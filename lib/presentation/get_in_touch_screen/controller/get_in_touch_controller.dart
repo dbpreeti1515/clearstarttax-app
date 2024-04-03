@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'dart:io';
 
+import 'package:flutter/gestures.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
@@ -21,6 +22,7 @@ import '../../../data/Comman/common_method.dart';
 import '../../../data/apiModal/getUserModal.dart';
 
 import '../../../data/models/SuccessDialogBox/SuccessBox.dart';
+import '../../../widgets/comman_widget.dart';
 import '../../../widgets/custom_outlined_button.dart';
 import '../../dashboard_page/controller/dashboard_controller.dart';
 import '../../splash_screen/controller/splash_screen_four_controller.dart';
@@ -185,7 +187,33 @@ class GetInTouchController extends GetxController {
         if (responseMapForGetInTouch[ApiKey.status]) {
           uploadUrl.value = "msg_file_choose".tr;
           SuccessDialog.showCustomDialog(context, "lbl_message_sent".tr,
-              responseMapForGetInTouch[ApiKey.message]);
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'msg_success1'.tr,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    TextSpan(
+                      text: 'lbl_888_235_0004'.tr,
+                      style: TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                        CW.launchPhone();
+
+                        },
+                    ),
+                    TextSpan(
+                      text: 'msg_success2'.tr,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
+              )
+          );
         //  showDateListDialog(context,responseMapForGetInTouch[ApiKey.message]);
          // CM.showToast(responseMapForGetInTouch[ApiKey.message]);
           isLoading.value = false;
@@ -260,4 +288,5 @@ class GetInTouchController extends GetxController {
       },
     );
   }
+
 }
