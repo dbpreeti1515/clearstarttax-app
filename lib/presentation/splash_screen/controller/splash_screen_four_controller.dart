@@ -109,10 +109,12 @@ class SplashScreenFourController extends GetxController {
 
       if (response.statusCode == 200)
         getDashboardData.value =
-            GetDashBoardModel.fromJson(jsonDecode(response!.body));
+            GetDashBoardModel.fromJson(jsonDecode(response.body));
 
       if (getDashboardData.value != null &&
           getDashboardData.value?.data != null) {
+        print("data is coming ${getDashboardData.value!.data!.statusForFq}");
+
         statusInfo.value = getDashboardData.value!.data!.statusinfo;
         greatinMsg.value = getDashboardData.value!.data!.greeting!;
         statusId.value = getDashboardData.value!.data!.statusId!;
@@ -122,13 +124,14 @@ class SplashScreenFourController extends GetxController {
         nextStep.value =
             getDashboardData.value!.data!.statusinfo!.whatHappensNext ?? '';
         getDashboardData.value!.data!.statusForFq!.forEach((element) {
-          statusForFQ.value.add(element);
+          statusForFQ.add(element);
           if (element.toString() == statusId.value.toString()) {
+            print("this is the status id ${statusId.value.toString()}   ${element.toString()}");
             fqNotification.value = true;
             dbHelper.updateFirstUserColumn('fqNotification', 'true');
 
           }else{
-            dbHelper.updateFirstUserColumn('fqNotification', 'false');
+           // dbHelper.updateFirstUserColumn('fqNotification', 'false');
           }
         });
 
@@ -139,7 +142,7 @@ class SplashScreenFourController extends GetxController {
             dbHelper.updateFirstUserColumn('toNotification', 'true');
 
           }else{
-            dbHelper.updateFirstUserColumn('toNotification', 'false');
+           // dbHelper.updateFirstUserColumn('toNotification', 'false');
           }
         });
         getDashboardData.value!.data!.statusForAppointment!.forEach((element) {
@@ -154,7 +157,7 @@ class SplashScreenFourController extends GetxController {
 
 
           }else{
-            dbHelper.updateFirstUserColumn('appoinmentNotification', 'false');
+            //dbHelper.updateFirstUserColumn('appoinmentNotification', 'false');
 
           }
         });

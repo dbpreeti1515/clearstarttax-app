@@ -85,7 +85,7 @@ class DatabaseHelper {
   }
   Future<int> updateFirstUserColumn(String columnName, String newValue) async {
 
-    print("data updated $newValue");
+    print("data updated $newValue and $columnName");
     final db = await database;
 
     // Get the first user

@@ -68,16 +68,26 @@ class DocumentController extends GetxController {
     );
 
     if (result != null) {
-      selectedFiles.value = result.paths.map((path) => File(path!)).toList();
-    } else {
-      CM.showToast(" Please select Document ");
-      FilePicker.platform.clearTemporaryFiles();
+      // Filter out duplicate paths before adding to selectedFiles
+      Set<String?> newPaths = result.paths.toSet();
+      newPaths.removeWhere((path) => selectedFiles.any((file) => file.path == path));
 
-      return null;
+      // Add the new unique files to selectedFiles
+      selectedFiles.addAll(newPaths.map((path) => File(path!)));
+
+      // Show toast if all selected files were duplicates
+      if (newPaths.isEmpty) {
+        CM.showToast("All selected documents are duplicates.");
+      }
+    } else {
+      CM.showToast("Please select a document.");
+      FilePicker.platform.clearTemporaryFiles();
+      return;
     }
 
-    return null;
+    return;
   }
+
 
   Future<void> uploadPDF(BuildContext context) async {
     isLoading.value = true;

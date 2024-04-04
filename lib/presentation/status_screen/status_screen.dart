@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/apiModal/getDashboardModal.dart';
 import '../../widgets/comman_widget.dart';
+import '../splash_screen/controller/splash_screen_four_controller.dart';
 import 'controller/status_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:preeti_s_application3/core/app_export.dart';
@@ -62,6 +63,7 @@ class StatusScreen extends GetWidget<StatusController> {
                       yourNextStepsText: "msg_your_next_steps".tr,
                       detailsShownHereText: nextStep.value)),
               SizedBox(height: 17.v),
+              if(db.value!.fqNotification=='true')
               Obx(() {
                 return controller.password.value == ''
                     ? SizedBox()
@@ -74,6 +76,7 @@ class StatusScreen extends GetWidget<StatusController> {
                                 'https://client.clearstarttax.com/fqs/app/${email.value}/${controller.randomText1.value}${controller.password}${controller.randomText2.value}'));
               }),
               SizedBox(height: 20.v),
+              if(db.value!.toNotification=='true')
               Obx(() {
                 return controller.password.value == ''
                     ? SizedBox()
@@ -85,6 +88,7 @@ class StatusScreen extends GetWidget<StatusController> {
                             url:
                                 'https://client.clearstarttax.com/tos/app/${email.value}/${controller.randomText2.value}${controller.password}${controller.randomText1.value}'));
               }),
+              if(db.value!.toNotification=='true')
               SizedBox(height: 35.v)
             ]));
   }

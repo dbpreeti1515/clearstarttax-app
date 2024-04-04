@@ -92,9 +92,9 @@ final Map<String, String> enUs = {
   "lbl_done": "Done",
   "lbl_ok": "OK",
 
-  "lbl_upload_pdf": "Upload PDF",
+  "lbl_upload_pdf": "Upload",
   "msg_drag_or_upload_your": "Upload Your Document Here",
-  "msg_maximum_document": "Maximum Document Size : Up to 6MB (PDF Only)",
+  "msg_maximum_document": "Maximum Document Size : Up to 6MB per upload",
 
   // Payment Screen
   "lbl2": "?",
