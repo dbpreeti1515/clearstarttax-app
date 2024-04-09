@@ -14,6 +14,7 @@ import '../HomeScreen/controller/HomeScreenController.dart';
 import '../dashboard_page/widgets/article_item_widget.dart';
 import '../dashboard_page/widgets/documentcenterlist_item_widget.dart';
 import '../dashboard_page/widgets/userprofile_item_widget.dart';
+import '../splash_screen/controller/splash_screen_four_controller.dart';
 import 'controller/dashboard_controller.dart';
 import 'models/article_item_model.dart';
 import 'models/dashboard_model.dart';
@@ -149,6 +150,7 @@ class DashboardPage extends GetWidget<DashboardController> {
                               SizedBox(
                                 height: 15.v,
                               ),
+                              if(!paymentStatus.value == true)
                               _buildPageNavigation(
                                   context,
                                   ImageConstant.imgSettings,
@@ -160,6 +162,7 @@ class DashboardPage extends GetWidget<DashboardController> {
                                     selectedIndex.value= 2;
                                   }
                               ),
+                              if(!paymentStatus.value == true)
                               SizedBox(
                                 height: 15.v,
                               ),

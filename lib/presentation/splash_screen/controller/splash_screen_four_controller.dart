@@ -24,6 +24,8 @@ import '../models/splash_screen_four_model.dart';
 ///
 var token;
 RxBool appoinmentNotification = false.obs;
+RxBool paymentStatus= false.obs;
+
 final db = Rxn<UserModel>();
 
 class SplashScreenFourController extends GetxController {
@@ -91,7 +93,7 @@ class SplashScreenFourController extends GetxController {
       await Get.offAllNamed(AppRoutes.onboardingScreenOneScreen);
     } else {
 
-      Get.off(() => Homescreen());
+      Get.offAllNamed(AppRoutes.homeScreen);
     }
   }
 
@@ -113,7 +115,7 @@ class SplashScreenFourController extends GetxController {
 
       if (getDashboardData.value != null &&
           getDashboardData.value?.data != null) {
-        print("data is coming ${getDashboardData.value!.data!.statusForFq}");
+
 
         statusInfo.value = getDashboardData.value!.data!.statusinfo;
         greatinMsg.value = getDashboardData.value!.data!.greeting!;
@@ -131,7 +133,7 @@ class SplashScreenFourController extends GetxController {
             dbHelper.updateFirstUserColumn('fqNotification', 'true');
 
           }else{
-           // dbHelper.updateFirstUserColumn('fqNotification', 'false');
+            dbHelper.updateFirstUserColumn('fqNotification', 'false');
           }
         });
 
@@ -142,7 +144,17 @@ class SplashScreenFourController extends GetxController {
             dbHelper.updateFirstUserColumn('toNotification', 'true');
 
           }else{
-           // dbHelper.updateFirstUserColumn('toNotification', 'false');
+            dbHelper.updateFirstUserColumn('toNotification', 'false');
+          }
+        });
+        getDashboardData.value!.data!.statusForPayment!.forEach((element) {
+          statusForTO.value.add(element);
+          if (element.toString() == statusId.value.toString()) {
+           print("payment status ${element.toString()} and ${statusId.value.toString()}");
+           paymentStatus.value = true;
+
+          }else{
+            dbHelper.updateFirstUserColumn('toNotification', 'false');
           }
         });
         getDashboardData.value!.data!.statusForAppointment!.forEach((element) {

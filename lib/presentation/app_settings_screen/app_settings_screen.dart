@@ -37,7 +37,7 @@ class AppSettingsScreen extends GetWidget<AppSettingsController> {
             child: Column(children: [
               SizedBox(height: 29.v),
               Expanded(
-                  child: SingleChildScrollView(child: _buildAppSettings()))
+                  child: _buildAppSettings())
             ])),
 
     );

@@ -112,80 +112,108 @@ class DocumentScreen extends GetWidget<DocumentController> {
                 child: Text("msg_maximum_document".tr,
                     style: theme.textTheme.bodySmall!
                         .copyWith(fontSize: 11, color: Colors.black))),
-            SizedBox(height: 30.v),
+            SizedBox(height: 20.v),
     if (_controller.selectedFiles.value.isNotEmpty)
 
             SizedBox(
               height:
-              mediaQueryData.size.height * 0.12,
-              child:Obx(() =>  ListView.separated(
-                  itemBuilder: (context, index) {
-                    return Obx(() => Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            borderRadius:
-                            BorderRadius.circular(
-                                4),
-                            border: Border.all(
-                                color: Colors.black,
-                                width: 1)),
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment
-                                .spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: mediaQueryData
-                                    .size.width *
-                                    0.6,
-                                child: Text(
-                                  controller
-                                      .selectedFiles
-                                      .value[index]
-                                      .path
-                                      .split('/')
-                                      .last,
-                                  overflow:
-                                  TextOverflow
-                                      .ellipsis,
-                                  maxLines: 1,
-                                ),
+              mediaQueryData.size.height * 0.15,
+              child:Obx(() =>  ScrollConfiguration(
+                behavior: ListScrollBehaviour(
+
+                ),
+
+                child: Scrollbar(
+                  radius: Radius
+                      .circular(5),
+
+                  thumbVisibility: true,
+                  controller:
+                 controller.scrollController,
+                  scrollbarOrientation:   ScrollbarOrientation.right,
+                  thickness: 5,
+
+
+
+
+
+
+                  child: ListView.separated(
+                      physics:
+                      const AlwaysScrollableScrollPhysics(),
+                     padding: EdgeInsets.only(left: 10.h, right: 20.h),
+                      shrinkWrap: true,
+                    controller: controller.scrollController,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        return Obx(() => Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.circular(
+                                    4),
+                                border: Border.all(
+                                    color: Colors.black,
+                                    width: 1)),
+                            child: Center(
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment
+                                    .spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    width: mediaQueryData
+                                        .size.width *
+                                        0.6,
+                                    child: Text(
+                                      controller
+                                          .selectedFiles
+                                          .value[index]
+                                          .path
+                                          .split('/')
+                                          .last,
+                                      overflow:
+                                      TextOverflow
+                                          .ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      _controller
+                                          .selectedFiles
+                                          .removeAt(
+                                          index);
+                                    },
+                                    style: IconButton.styleFrom(
+                                        minimumSize:
+                                        Size(30, 20),
+                                        tapTargetSize:
+                                        MaterialTapTargetSize
+                                            .shrinkWrap,
+                                        padding:
+                                        EdgeInsets
+                                            .zero),
+                                    icon:
+                                    SvgPicture.asset(
+                                      ImageConstant
+                                          .imgDashboardCross,
+                                      color: Colors.red,
+                                      height: 15,
+                                      width: 15,
+                                    ),
+                                  )
+                                ],
                               ),
-                              IconButton(
-                                onPressed: () {
-                                  _controller
-                                      .selectedFiles
-                                      .removeAt(
-                                      index);
-                                },
-                                style: IconButton.styleFrom(
-                                    minimumSize:
-                                    Size(30, 20),
-                                    tapTargetSize:
-                                    MaterialTapTargetSize
-                                        .shrinkWrap,
-                                    padding:
-                                    EdgeInsets
-                                        .zero),
-                                icon:
-                                SvgPicture.asset(
-                                  ImageConstant
-                                      .imgDashboardCross,
-                                  color: Colors.red,
-                                  height: 15,
-                                  width: 15,
-                                ),
-                              )
-                            ],
-                          ),
-                        )));
-                  },
-                  separatorBuilder: (context, index) {
-                    return SizedBox(height: 8);
-                  },
-                  itemCount: _controller
-                      .selectedFiles.value.length)),
+                            )));
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(height: 8);
+                      },
+                      itemCount: _controller
+                          .selectedFiles.value.length),
+                ),
+              )),
             ),
 
             Obx(() {
@@ -194,6 +222,8 @@ class DocumentScreen extends GetWidget<DocumentController> {
                       child: CircularProgressIndicator(),
                     )
                   : CustomOutlinedButton(
+                margin: EdgeInsets.only(top: 20.v),
+
                       width: 216.h,
                       text: "lbl_upload_pdf".tr,
                       decoration: BoxDecoration(
@@ -202,6 +232,7 @@ class DocumentScreen extends GetWidget<DocumentController> {
                       ),
                       onPressed: () async {
                         if (_controller.selectedFiles.value.isNotEmpty) {
+
                           await _controller.uploadPDF(context);
                         } else {
                           CM.showToast("Please select document");

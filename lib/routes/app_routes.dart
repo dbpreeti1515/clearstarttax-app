@@ -1,6 +1,7 @@
 
 import 'package:preeti_s_application3/presentation/HomeScreen/Binding/HomeBinding.dart';
 import 'package:preeti_s_application3/presentation/HomeScreen/HomeScreen.dart';
+import 'package:preeti_s_application3/presentation/dashboard_page/dashboard_page.dart';
 
 
 import 'package:preeti_s_application3/presentation/onboarding_screen_one_screen/onboarding_screen_one_screen.dart';
@@ -39,6 +40,9 @@ import 'package:preeti_s_application3/presentation/reset_password_screen/reset_p
 import 'package:preeti_s_application3/presentation/reset_password_screen/binding/reset_password_binding.dart';
 import 'package:get/get.dart';
 
+import '../presentation/dashboard_page/binding/dashboard_binding.dart';
+import '../presentation/payment_page/binding/payment_binding.dart';
+import '../presentation/payment_page/payment_page.dart';
 import '../presentation/splash_screen/binding/splash_screen_four_binding.dart';
 import '../presentation/splash_screen/splash_screen_four_screen.dart';
 
@@ -81,6 +85,7 @@ class AppRoutes {
 
   static const String appionmentScreen = '/appionment_screen';
 
+
   static const String faqScreen = '/faq_screen';
 
   static const String getInTouchScreen = '/get_in_touch_screen';
@@ -92,6 +97,7 @@ class AppRoutes {
   static const String settingsScreen = '/settings_screen';
 
   static const String newsPageScreen = '/news_page_screen';
+  static const String paymentScreen = '/payment_page';
 
   static const String appSettingsScreen = '/app_settings_screen';
 
@@ -153,8 +159,13 @@ class AppRoutes {
     ),  GetPage(
       name: homeScreen,
       page: () => Homescreen(),
+      binding:   HomeScreenBinding(),
       bindings: [
-        HomeScreenBinding(),
+        AppionmentBinding(),
+        DashboardBinding(),
+        PaymentBinding(),
+        DocumentBinding(),
+
       ],
     ),
     GetPage(
@@ -179,6 +190,12 @@ class AppRoutes {
       bindings: [
         AppionmentBinding(),
       ],
+    ),
+    GetPage(
+      name: dashboardPage,
+      page: () => DashboardPage(),
+      binding: DashboardBinding(),
+
     ),
     GetPage(
       name: faqScreen,
@@ -221,13 +238,18 @@ class AppRoutes {
       bindings: [
         NewsPageBinding(),
       ],
+    ), GetPage(
+      name: paymentPage,
+      page: () => PaymentPage(),
+      bindings: [
+        PaymentBinding(),
+      ],
     ),
     GetPage(
       name: appSettingsScreen,
       page: () => AppSettingsScreen(),
-      bindings: [
-        AppSettingsBinding(),
-      ],
+      binding:  AppSettingsBinding(),
+
     ),
     GetPage(
       name: forgetPasswordScreen,

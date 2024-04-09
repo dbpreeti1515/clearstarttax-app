@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 
+import 'package:flutter/material.dart';
 import 'package:preeti_s_application3/core/app_export.dart';
 import 'package:preeti_s_application3/presentation/tax_news_screen/models/tax_news_model.dart';
 import 'package:http/http.dart' as http;
@@ -12,6 +13,7 @@ import '../../../data/apiModal/testimonialModal.dart';
 /// This class manages the state of the TaxNewsScreen, including the
 /// current taxNewsModelObj
 class TaxNewsController extends GetxController {
+  final ScrollController scrollController = ScrollController();
   final testimonial_modal = Rxn<testimonial_Modal>();
   RxBool isLoading = true.obs;
   RxList testMonialData = [].obs;

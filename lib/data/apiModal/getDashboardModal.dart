@@ -29,6 +29,7 @@ class Data {
   Statusinfo? statusinfo;
   List<String>? statusForFq;
   List<String>? statusForTo;
+  List<String>? statusForPayment;
   List<String>? statusForAppointment;
 
   Data(
@@ -38,6 +39,7 @@ class Data {
         this.statusinfo,
         this.statusForFq,
         this.statusForTo,
+        this.statusForPayment,
         this.statusForAppointment});
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -49,6 +51,7 @@ class Data {
         : null;
     statusForFq = json['status_for_fq'].cast<String>();
     statusForTo = json['status_for_to'].cast<String>();
+    statusForPayment = json['status_for_payment'].cast<String>();
     statusForAppointment = json['status_for_appointment'].cast<String>();
   }
 
@@ -62,6 +65,7 @@ class Data {
     }
     data['status_for_fq'] = this.statusForFq;
     data['status_for_to'] = this.statusForTo;
+    data['status_for_payment'] = this.statusForPayment;
     data['status_for_appointment'] = this.statusForAppointment;
     return data;
   }

@@ -112,7 +112,8 @@ class LoginPageController extends GetxController {
   }
 
   onTapSignIn() {
-    Get.off(() => Homescreen());
+    Get.offAllNamed(AppRoutes.homeScreen);
+   // Get.off(() => Homescreen());
   }
 
   onTapTxtForgotYourPassword() {
@@ -191,7 +192,8 @@ class LoginPageController extends GetxController {
 
            await dbHelper.insertUser(newUser);
 
-          Get.off(() => Homescreen());
+
+          Get.offAllNamed(AppRoutes.homeScreen);
         }
         isLoading.value = false;
       } else {

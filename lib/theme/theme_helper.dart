@@ -45,6 +45,16 @@ class ThemeHelper {
       visualDensity: VisualDensity.standard,
       colorScheme: colorScheme,
 
+      scrollbarTheme: ScrollbarThemeData(
+        thumbColor: MaterialStateProperty.all(colorScheme.primary,),
+
+
+
+      ),
+      primaryColor: colorScheme.primary,
+      backgroundColor:
+      colorScheme.background,
+
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.white,
 

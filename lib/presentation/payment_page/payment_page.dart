@@ -21,13 +21,10 @@ import 'package:preeti_s_application3/widgets/custom_outlined_button.dart';
 import 'package:preeti_s_application3/widgets/custom_text_form_field.dart';
 
 // ignore_for_file: must_be_immutable
-class PaymentPage extends StatelessWidget {
+class PaymentPage extends GetView<PaymentController> {
   PaymentPage({Key? key}) : super(key: key);
-  final PaymentController _controller = Get.put(PaymentController());
 
-  //GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  // PaymentController controller = Get.put(PaymentController(PaymentModel().obs));
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +44,7 @@ class PaymentPage extends StatelessWidget {
         ),
         resizeToAvoidBottomInset: false,
         body: Obx(() {
-          return _controller.getPaymentData.value == null
+          return controller.getPaymentData.value == null
               ? Center(
                   child: CircularProgressIndicator(),
                 )
@@ -73,12 +70,12 @@ class PaymentPage extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       RadioButtonWidget(
-                                        value: _controller.getPaymentData.value!
+                                        value: controller.getPaymentData.value!
                                             .data!.data!.pastDue!,
                                         label: "msg_past_due_balance".tr,
                                         widget: Text(
                                           "\$" +
-                                              _controller.getPaymentData.value!
+                                              controller.getPaymentData.value!
                                                   .data!.data!.pastDue
                                                   .toString(),
                                           style: TextStyle(
@@ -91,12 +88,12 @@ class PaymentPage extends StatelessWidget {
                                         ),
                                       ),
                                       RadioButtonWidget(
-                                        value: _controller.getPaymentData.value!
+                                        value: controller.getPaymentData.value!
                                             .data!.data!.balance!,
                                         label: "msg_remaining_balance".tr,
                                         widget: Text(
                                           "\$" +
-                                              _controller.getPaymentData.value!
+                                              controller.getPaymentData.value!
                                                   .data!.data!.balance
                                                   .toString(),
                                           style: TextStyle(
@@ -109,7 +106,7 @@ class PaymentPage extends StatelessWidget {
                                         ),
                                       ),
                                       RadioButtonWidget(
-                                        value: _controller
+                                        value: controller
                                                 .paymentController.value.text ??
                                             0.toString(),
                                         label: "lbl_other_amount".tr,
@@ -141,14 +138,16 @@ class PaymentPage extends StatelessWidget {
                                                 child:Obx(() => CustomTextFormField(
 
 
+
+
                                                     onChange: (value){
 
 
-                                                     // _controller.selectedAmount.value = value ;
-                                                     // _controller.paymentController.value.text = value;
+                                                     // controller.selectedAmount.value = value ;
+                                                     // controller.paymentController.value.text = value;
 
                                                     },
-                                                    focusNode: _controller.focusNodes[0],
+                                                    focusNode: controller.focusNodes[0],
 
                                                     textStyle:
                                                     TextStyle(fontSize: subtitleFontSize),
@@ -162,7 +161,7 @@ class PaymentPage extends StatelessWidget {
                                                         top: 2),
 
 
-                                                    controller: _controller
+                                                    controller: controller
                                                         .paymentController
                                                         .value,
                                                     inputFormatter: [
@@ -202,7 +201,7 @@ class PaymentPage extends StatelessWidget {
                                         billingDetails(
                                             "lbl_total_balance".tr,
                                             "\$" +
-                                                double.parse(_controller
+                                                double.parse(controller
                                                         .getPaymentData
                                                         .value!
                                                         .data!
@@ -219,7 +218,7 @@ class PaymentPage extends StatelessWidget {
                                         billingDetails(
                                             "lbl_paid".tr,
                                             "\$" +
-                                                double.parse(_controller
+                                                double.parse(controller
                                                         .getPaymentData
                                                         .value!
                                                         .data!
@@ -235,7 +234,7 @@ class PaymentPage extends StatelessWidget {
                                         ),
                                         billingDetails(
                                             "lbl_paid2".tr,
-                                            _controller
+                                            controller
                                                 .getPaymentData
                                                 .value!
                                                 .data!
@@ -250,7 +249,7 @@ class PaymentPage extends StatelessWidget {
                                         billingDetails(
                                             "msg_remaining_balance".tr,
                                             "\$" +
-                                                double.parse(_controller
+                                                double.parse(controller
                                                         .getPaymentData
                                                         .value!
                                                         .data!
@@ -267,7 +266,7 @@ class PaymentPage extends StatelessWidget {
                                         billingDetails(
                                             "lbl_amount_due".tr,
                                             "\$" +
-                                                double.parse(_controller
+                                                double.parse(controller
                                                         .getPaymentData
                                                         .value!
                                                         .data!
@@ -283,7 +282,7 @@ class PaymentPage extends StatelessWidget {
                                         ),
                                         billingDetails(
                                             "lbl_next_due_date".tr,
-                                            _controller
+                                            controller
                                                 .getPaymentData
                                                 .value!
                                                 .data!
@@ -298,7 +297,7 @@ class PaymentPage extends StatelessWidget {
                                         ),
                                         billingDetails(
                                             "lbl_past_due".tr,
-                                            _controller
+                                            controller
                                                         .getPaymentData
                                                         .value!
                                                         .data!
@@ -308,7 +307,7 @@ class PaymentPage extends StatelessWidget {
                                                     0
                                                 ? "N/A"
                                                 : "\$" +
-                                                    double.parse(_controller
+                                                    double.parse(controller
                                                             .getPaymentData
                                                             .value!
                                                             .data!
@@ -356,7 +355,7 @@ class PaymentPage extends StatelessWidget {
                                                   onPressed: () {
                                                     PaymentModel.showDateListDialog(
                                                         context,
-                                                        _controller
+                                                        controller
                                                             .getPaymentData
                                                             .value!
                                                             .data!
@@ -436,10 +435,11 @@ class PaymentPage extends StatelessWidget {
       Text("lbl_name_on_card".tr, style: theme.textTheme.titleMedium),
       SizedBox(height: 11.v),
       CustomTextFormField(
-        focusNode: _controller.focusNodes[1],
+
+        focusNode: controller.focusNodes[1],
           textInputType: TextInputType.name,
-          autofocus: false,
-          controller: _controller.nameController,
+
+          controller: controller.nameController,
           inputFormatter: [
             FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z\s]*$')),
 
@@ -511,7 +511,7 @@ class PaymentPage extends StatelessWidget {
       Text("msg_card_information".tr, style: theme.textTheme.titleMedium),
       SizedBox(height: 12.v),
       CustomTextFormField(
-          focusNode: _controller.focusNodes[2],
+          focusNode: controller.focusNodes[2],
           inputFormatter: [
             FilteringTextInputFormatter.digitsOnly,
             LengthLimitingTextInputFormatter(16),
@@ -529,7 +529,7 @@ class PaymentPage extends StatelessWidget {
           },
           autofocus: false,
           textInputType: TextInputType.number,
-          controller: _controller.cardinformationvalueController,
+          controller: controller.cardinformationvalueController,
           hintText: "msg_enter_card_information".tr,
           hintStyle: CustomTextStyles.bodyLargeGray60001)
     ]);
@@ -547,12 +547,12 @@ class PaymentPage extends StatelessWidget {
             width: MediaQuery.of(context).size.width / 2.48,
             padding: EdgeInsets.symmetric(vertical: 1.v, horizontal: 0.h),
             child: CustomTextFormField(
-              focusNode: _controller.focusNodes[3],
+              focusNode: controller.focusNodes[3],
               textInputType: TextInputType.number,
-              controller: _controller.monthController,
+              controller: controller.monthController,
               hintText: "lbl_mm".tr,
               onChange: (value) {
-                _controller.isMonthField.value = true;
+                controller.isMonthField.value = true;
               },
               hintStyle: CustomTextStyles.bodyLargeGray60001,
               inputFormatter: [
@@ -561,22 +561,22 @@ class PaymentPage extends StatelessWidget {
               ],
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  _controller.isMonthField.value = false;
-                  _controller.expirydateValidation.value =
+                  controller.isMonthField.value = false;
+                  controller.expirydateValidation.value =
                       "msg_enter_this_field".tr;
                 } else if (int.parse(value) >= 13 || int.parse(value) <= 0) {
-                  _controller.isMonthField.value = false;
-                  _controller.expirydateValidation.value = "msg_enter_month".tr;
+                  controller.isMonthField.value = false;
+                  controller.expirydateValidation.value = "msg_enter_month".tr;
                 } else {
-                  _controller.isMonthField.value = true;
+                  controller.isMonthField.value = true;
                 }
 
                 return null;
               },
               borderDecoration: OutlineInputBorder(
                   borderSide: BorderSide(
-                      color: _controller.expirydateValidation.value == '' ||
-                              _controller.isMonthField.value == true
+                      color: controller.expirydateValidation.value == '' ||
+                              controller.isMonthField.value == true
                           ? Colors.grey
                           : Color.fromRGBO(255, 0, 0, 1.0),
                       width: 1),
@@ -585,25 +585,25 @@ class PaymentPage extends StatelessWidget {
         Container(
             width: MediaQuery.of(context).size.width / 2.48,
             padding: EdgeInsets.symmetric(vertical: 1.v, horizontal: 0.h),
-            child: CustomTextFormField(    focusNode: _controller.focusNodes[4],
+            child: CustomTextFormField(    focusNode: controller.focusNodes[4],
 
-              enable: _controller.isMonthField.value ? true : false,
-              controller: _controller.yearController,
+              enable: controller.isMonthField.value ? true : false,
+              controller: controller.yearController,
               textInputType: TextInputType.number,
               hintText: "lbl_yyyy".tr,
               hintStyle: CustomTextStyles.bodyLargeGray60001,
               validator: (value) {
-                if (_controller.isMonthField.value == true) {
+                if (controller.isMonthField.value == true) {
                   if (value == null || value.trim().isEmpty) {
-                    _controller.expirydateValidation.value =
+                    controller.expirydateValidation.value =
                         "msg_enter_this_field".tr;
-                    print(_controller.expirydateValidation.value);
+                    print(controller.expirydateValidation.value);
                   } else if (int.parse(value) < DateTime.now().year ||
                       int.parse(value) > 2060) {
-                    _controller.expirydateValidation.value =
+                    controller.expirydateValidation.value =
                         "msg_enter_year".tr;
                   } else {
-                    _controller.expirydateValidation.value = '';
+                    controller.expirydateValidation.value = '';
                   }
                 }
                 return null;
@@ -611,9 +611,9 @@ class PaymentPage extends StatelessWidget {
               borderDecoration: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
                   borderSide: BorderSide(
-                      color: _controller.expirydateValidation.value == '' ||
-                              _controller.expirydateValidation.isEmpty &&
-                                  _controller.isMonthField.value == true
+                      color: controller.expirydateValidation.value == '' ||
+                              controller.expirydateValidation.isEmpty &&
+                                  controller.isMonthField.value == true
                           ? Colors.grey
                           :Color.fromRGBO(255, 0, 0, 1.0),
                       width: 1)),
@@ -624,11 +624,11 @@ class PaymentPage extends StatelessWidget {
             )),
       ])),
       SizedBox(height: 8.v),
-      if (_controller.expirydateValidation.value.isNotEmpty)
+      if (controller.expirydateValidation.value.isNotEmpty)
         Obx(() => Padding(
               padding: const EdgeInsets.only(left: 10,bottom: 10),
               child: Text(
-                _controller.expirydateValidation.value,
+                controller.expirydateValidation.value,
                 style: TextStyle(color: Color.fromRGBO(255, 0, 0, 1.0)),
               ),
             ))
@@ -645,11 +645,11 @@ class PaymentPage extends StatelessWidget {
           ]),
           textAlign: TextAlign.left),
       SizedBox(height: 11.v),
-      CustomTextFormField(focusNode: _controller.focusNodes[5],
+      CustomTextFormField(focusNode: controller.focusNodes[5],
 
         autofocus: false,
         textInputType: TextInputType.number,
-        controller: _controller.cvvController,
+        controller: controller.cvvController,
         hintText: "msg_enter_your_card".tr,
         hintStyle: CustomTextStyles.bodyLargeGray60001,
         inputFormatter: [
@@ -675,9 +675,9 @@ class PaymentPage extends StatelessWidget {
       Text("lbl_email_address2".tr, style: theme.textTheme.titleMedium),
       SizedBox(height: 12.v),
       CustomTextFormField(
-        focusNode: _controller.focusNodes[18],
+        focusNode: controller.focusNodes[18],
         autofocus: false,
-        controller: _controller.emailController,
+        controller: controller.emailController,
 
         hintStyle: CustomTextStyles.bodyLargeGray60001,
         // textInputAction: TextInputAction.done,
@@ -692,9 +692,9 @@ class PaymentPage extends StatelessWidget {
       Text("lbl_email_address2".tr, style: theme.textTheme.titleMedium),
       SizedBox(height: 12.v),
       CustomTextFormField(
-        focusNode: _controller.focusNodes[19],
+        focusNode: controller.focusNodes[19],
         autofocus: false,
-        controller: _controller.transferEmailController,
+        controller: controller.transferEmailController,
 
         hintStyle: CustomTextStyles.bodyLargeGray60001,
         // textInputAction: TextInputAction.done,
@@ -706,359 +706,360 @@ class PaymentPage extends StatelessWidget {
 
   /// Section Widget
   Widget _buildScrollViewSection(BuildContext context) {
-    return SingleChildScrollView(
-        child: Column(children: [
-      SizedBox(height: 22.v),
-          CW.statusCard(
-              text: "msg_payment_schedule".tr, height: 57.v),
+    return Column(children: [
+          SizedBox(height: 22.v),
+      CW.statusCard(
+          text: "msg_payment_schedule".tr, height: 57.v),
 
-      Padding(
-          padding: EdgeInsets.symmetric(horizontal: 0.h),
-          child: Column(children: [
-            TabBar.secondary(
-              padding: EdgeInsets.only(left: 20.h, right: 20.h, bottom: 25.v),
-              controller: _controller.tabController,
-              labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              unselectedLabelStyle: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.grey),
-              tabs: <Widget>[
-                Tab(
-                  text: "msg_credit_card".tr,
+          Padding(
+      padding: EdgeInsets.symmetric(horizontal: 0.h),
+      child: Column(children: [
+        TabBar.secondary(
+          padding: EdgeInsets.only(left: 20.h, right: 20.h, bottom: 25.v),
+          controller: controller.tabController,
+          labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          unselectedLabelStyle: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: Colors.grey),
+          tabs: <Widget>[
+            Tab(
+              text: "msg_credit_card".tr,
+            ),
+            Tab(text: 'msg_bank_transfer'.tr),
+          ],
+        ),
+        Container(
+          height: mediaQueryData.size.height * 1.5,
+          child: Obx(() => TabBarView(
+            controller: controller.tabController,
+            children: <Widget>[
+              Form(
+                key: controller.formKey,
+
+               //       autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildNameOnCardSection(),
+                    SizedBox(height: 12.v),
+                    _buildCardInformationSection(),
+                    SizedBox(height: 14.v),
+                    _buildExpirationSection(context),
+                    _buildCvvSection(),
+                    SizedBox(height: 20.v),
+                    Text(
+                      'msg_billing_address'.tr,
+                      style: TextStyle(
+                        color: theme.primaryColor,
+                        fontFamily: 'Poppins',
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(height: 20.v),
+                    _buildInputFeild('msg_street_address1'.tr, 'msg_enter_address1'.tr,
+                          (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return "msg_enter_this_field".tr;
+                        } else if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+                          return 'msg_enter_name'.tr;
+                        }
+                        return null;
+                      }, controller.add1Controller, [],controller.focusNodes[6],),
+                    SizedBox(height: 14.v),
+                    _buildInputFeild('msg_street_address2'.tr, 'msg_enter_address2'.tr,
+                          (value) {
+                        return null;
+                      }, controller.add2Controller, [],controller.focusNodes[7],),
+                    SizedBox(height: 14.v),
+                    _buildInputFeild('msg_city'.tr, 'Enter city'.tr, (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return "msg_enter_this_field".tr;
+                      }
+                      return null;
+                    }, controller.cityController, [
+                      FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+                    ]
+                      ,controller.focusNodes[8],),
+                    SizedBox(height: 14.v),
+                    _stateDropdown(
+                        context, controller.selectValue.value, 1),
+                    SizedBox(height: 8.v),
+                    zipDetails(controller.zipController,controller.focusNodes[16],),
+                    SizedBox(height: 14.v),
+                    _buildEmailAddressSection(),
+                    SizedBox(height: 35.v),
+                    Obx(() {
+                      return controller.isLoading.value
+                          ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                          : Center(
+                        child: CustomOutlinedButton(
+                            width: 150.h,
+                            text: "lbl_pay".tr,
+                            buttonStyle: ElevatedButton.styleFrom(),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.primary,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            onPressed: () {
+
+
+                              controller.clickOnPayButton(context);
+                            }),
+                      );
+                    }),
+                    SizedBox(height: 20.v),
+                    Container(
+                      width: MediaQuery.sizeOf(context).width,
+                      margin: EdgeInsets.only(left: 10.h, right: 10.h),
+                      child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            text: "msg_by_clicking_pay".tr,
+                            style: CustomTextStyles
+                                .bodySmallPrimaryContainer10,
+                            children: [
+                              TextSpan(
+                                  text: 'Terms and Conditions.',
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () async {
+                                      var url =
+                                          'https://clearstarttax.com/paymenttermsandconditions/';
+                                      if (await canLaunch(url)) {
+                                        await launch(url,
+                                            forceWebView: true,
+                                            enableJavaScript: true);
+                                      } else {
+                                        throw 'Could not launch $url';
+                                      }
+                                    },
+                                  style: TextStyle(
+                                      color: theme.primaryColor,
+                                      fontSize: 12))
+                            ],
+                          )),
+                    ),
+                    SizedBox(height: 30.v),
+                    CW.termCondition("msg_billing_clearstarttax_com".tr)
+                  ],
                 ),
-                Tab(text: 'msg_bank_transfer'.tr),
-              ],
-            ),
-            Container(
-              height: mediaQueryData.size.height * 1.5,
-              child: TabBarView(
-                controller: _controller.tabController,
-                children: <Widget>[
-                  Form(
-                    key: _controller.formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildNameOnCardSection(),
-                        SizedBox(height: 12.v),
-                        _buildCardInformationSection(),
-                        SizedBox(height: 14.v),
-                        _buildExpirationSection(context),
-                        _buildCvvSection(),
-                        SizedBox(height: 20.v),
-                        Text(
-                          'msg_billing_address'.tr,
-                          style: TextStyle(
-                            color: theme.primaryColor,
-                            fontFamily: 'Poppins',
-                            fontSize: 16,
-                          ),
-                          textAlign: TextAlign.left,
-                        ),
-                        SizedBox(height: 20.v),
-                        _buildInputFeild('msg_street_address1'.tr, 'msg_enter_address1'.tr,
-                            (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return "msg_enter_this_field".tr;
-                          } else if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
-                            return 'msg_enter_name'.tr;
-                          }
-                          return null;
-                        }, _controller.add1Controller, [],_controller.focusNodes[6],),
-                        SizedBox(height: 14.v),
-                        _buildInputFeild('msg_street_address2'.tr, 'msg_enter_address2'.tr,
-                            (value) {
-                          return null;
-                        }, _controller.add2Controller, [],_controller.focusNodes[7],),
-                        SizedBox(height: 14.v),
-                        _buildInputFeild('msg_city'.tr, 'Enter city'.tr, (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return "msg_enter_this_field".tr;
-                          }
-                          return null;
-                        }, _controller.cityController, [
-                          FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
-                        ]
-                          ,_controller.focusNodes[8],),
-                        SizedBox(height: 14.v),
-                        _stateDropdown(
-                            context, _controller.selectValue.value, 1),
-                        SizedBox(height: 8.v),
-                        zipDetails(_controller.zipController,_controller.focusNodes[16],),
-                        SizedBox(height: 14.v),
-                        _buildEmailAddressSection(),
-                        SizedBox(height: 35.v),
-                        Obx(() {
-                          return _controller.isLoading.value
-                              ? Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                              : Center(
-                                  child: CustomOutlinedButton(
-                                      width: 150.h,
-                                      text: "lbl_pay".tr,
-                                      buttonStyle: ElevatedButton.styleFrom(),
-                                      decoration: BoxDecoration(
-                                        color: theme.colorScheme.primary,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      onPressed: () {
-                                        print(_controller.selectedAmount.value);
-
-                                        _controller.clickOnPayButton(context);
-                                      }),
-                                );
-                        }),
-                        SizedBox(height: 20.v),
-                        Container(
-                          width: MediaQuery.sizeOf(context).width,
-                          margin: EdgeInsets.only(left: 10.h, right: 10.h),
-                          child: RichText(
-                              textAlign: TextAlign.center,
-                              text: TextSpan(
-                                text: "msg_by_clicking_pay".tr,
-                                style: CustomTextStyles
-                                    .bodySmallPrimaryContainer10,
-                                children: [
-                                  TextSpan(
-                                      text: 'Terms and Conditions.',
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () async {
-                                          var url =
-                                              'https://clearstarttax.com/paymenttermsandconditions/';
-                                          if (await canLaunch(url)) {
-                                            await launch(url,
-                                                forceWebView: true,
-                                                enableJavaScript: true);
-                                          } else {
-                                            throw 'Could not launch $url';
-                                          }
-                                        },
-                                      style: TextStyle(
-                                          color: theme.primaryColor,
-                                          fontSize: 12))
-                                ],
-                              )),
-                        ),
-                        SizedBox(height: 30.v),
-                        CW.termCondition("msg_billing_clearstarttax_com".tr)
-                      ],
-                    ),
-                  ),
-                  Form(
-                    key: _controller.transerFormKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildInputFeild(
-                            'msg_bank_name'.tr, 'msg_enter_bank_name'.tr,
-                            (value) {
-                          if (value == null ||
-                              value == null ||
-                              value.trim().isEmpty) {
-                            return "msg_enter_this_field".tr;
-                          }
-                          return null;
-                        },
-                          _controller.bankNameController,
-                          [
-                          FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z\s]*$')),
-                        ],_controller.focusNodes[9],
-                        textInputType: TextInputType.name),
-                        SizedBox(height: 14.v),
-                        _buildInputFeild(
-                            'msg_account_name'.tr, 'msg_enter_account_name'.tr,
-                            (value) {
-                          if (value == null ||
-                              value == null ||
-                              value.trim().isEmpty) {
-                            return "msg_enter_this_field".tr;
-                          }
-                          return null;
-                        }, _controller.bankHolderController, [
-                          FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z\s]*$')),
-                        ],_controller.focusNodes[10],
-                            textInputType: TextInputType.name
-                        ),
-
-                        SizedBox(height: 14.v),
-                        _buildInputFeild('msg_routing'.tr, 'Enter routing'.tr, (value) {
-                          if (value == null ||
-                              value == null ||
-                              value.trim().isEmpty) {
-                            return "msg_enter_this_field".tr;
-                          } else if (value.length != 9) {
-                            return 'msg_enter_routing'.tr;
-                          } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                            return 'msg_enter_routing'.tr;
-                          }
-                          return null;
-                        }, _controller.routingController, [
-                          LengthLimitingTextInputFormatter(9),
-                          FilteringTextInputFormatter.digitsOnly
-                        ],_controller.focusNodes[11],textInputType: TextInputType.number),
-
-
-                        SizedBox(height: 14.v),
-
-                        _buildInputFeild('msg_account'.tr, 'Enter account number'.tr, (value) {
-                          if (value == null ||
-                              value == null ||
-                              value.trim().isEmpty) {
-                            return "msg_enter_this_field".tr;
-                          } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                            return 'msg_enter_account_number'.tr;
-                          } else if (value.length < 8 || value.length > 20) {
-                            return 'msg_enter_account_number'.tr;
-                          }
-                          return null;
-                        },
-                            _controller.transferAccountController,
-                            [
-                              FilteringTextInputFormatter.digitsOnly,
-                              LengthLimitingTextInputFormatter(18)
-                            ],_controller.focusNodes[12],
-                            textInputType: TextInputType.number),
-
-                        SizedBox(height: 20.v),
-
-                        Text(
-                          'msg_billing_address'.tr,
-                          style: TextStyle(
-                            color: theme.primaryColor,
-                            fontFamily: 'Poppins',
-                            fontSize: 16,
-                          ),
-                          textAlign: TextAlign.left,
-                        ),
-                        SizedBox(height: 20.v),
-
-                        _buildInputFeild('msg_street_address1'.tr, 'msg_enter_address1'.tr,
-                            (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return "msg_enter_this_field".tr;
-                          }
-                          return null;
-                        }, _controller.transferAdd1Controller, [],_controller.focusNodes[13],),
-                        SizedBox(height: 14.v),
-
-                        _buildInputFeild('msg_street_address2'.tr, 'msg_enter_address2'.tr,
-                            (value) {
-                          return null;
-                        }, _controller.transferAdd2Controller, [],_controller.focusNodes[14],),
-                        SizedBox(height: 14.v),
-
-                        _buildInputFeild('msg_city'.tr, 'Enter city'.tr, (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return "msg_enter_this_field".tr;
-                          }
-                          return null;
-                        }, _controller.transferCityController, [
-                          FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
-                        ],_controller.focusNodes[15],),
-                        SizedBox(height: 14.v),
-
-                        _stateDropdown(
-                            context, _controller.transferSelectValue.value, 2),
-
-                        SizedBox(height: 14.v),
-
-                        zipDetails(_controller.transferZipController,_controller.focusNodes[17],),
-                        SizedBox(height: 14.v),
-
-                        _transferEmailAddressSection(),
-                        SizedBox(height: 35.v),
-                        Obx(() {
-                          return _controller.isTranserLoading.value
-                              ? Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                              : Center(
-                                  child: CustomOutlinedButton(
-                                    width: 150.h,
-                                    text: "lbl_pay".tr,
-                                    buttonStyle: ElevatedButton.styleFrom(),
-                                    decoration: BoxDecoration(
-                                      color: theme.colorScheme.primary,
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    onPressed: () => _controller
-                                        .clickOnTransferPayButton(context),
-                                  ),
-                                );
-                        }),
-                        SizedBox(height: 20.v),
-                        Container(
-                          width: MediaQuery.sizeOf(context).width,
-                          margin: EdgeInsets.only(left: 10.h, right: 10.h),
-                          child: RichText(
-                              textAlign: TextAlign.center,
-                              text: TextSpan(
-                                text: "msg_by_clicking_pay".tr,
-                                style: CustomTextStyles
-                                    .bodySmallPrimaryContainer10,
-                                children: [
-                                  TextSpan(
-                                      text: 'Terms and Conditions.',
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () async {
-                                          var url =
-                                              'https://clearstarttax.com/paymenttermsandconditions/';
-                                          if (await canLaunch(url)) {
-                                            await launch(url,
-                                                forceWebView: true,
-                                                enableJavaScript: true);
-                                          } else {
-                                            throw 'Could not launch $url';
-                                          }
-                                        },
-                                      style: TextStyle(
-                                          color: theme.primaryColor,
-                                          fontSize: 12))
-                                ],
-                              )),
-                        ),
-                        SizedBox(height: 30.v),
-                        CW.termCondition("msg_billing_clearstarttax_com".tr)
-                      ],
-                    ),
-                  )
-                ],
               ),
-            ),
-          ]))
-    ]));
+              Form(
+                key: controller.transerFormKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildInputFeild(
+                        'msg_bank_name'.tr, 'msg_enter_bank_name'.tr,
+                            (value) {
+                          if (value == null ||
+                              value == null ||
+                              value.trim().isEmpty) {
+                            return "msg_enter_this_field".tr;
+                          }
+                          return null;
+                        },
+                        controller.bankNameController,
+                        [
+                          FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z\s]*$')),
+                        ],controller.focusNodes[9],
+                        textInputType: TextInputType.name),
+                    SizedBox(height: 14.v),
+                    _buildInputFeild(
+                        'msg_account_name'.tr, 'msg_enter_account_name'.tr,
+                            (value) {
+                          if (value == null ||
+                              value == null ||
+                              value.trim().isEmpty) {
+                            return "msg_enter_this_field".tr;
+                          }
+                          return null;
+                        }, controller.bankHolderController, [
+                      FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z\s]*$')),
+                    ],controller.focusNodes[10],
+                        textInputType: TextInputType.name
+                    ),
+
+                    SizedBox(height: 14.v),
+                    _buildInputFeild('msg_routing'.tr, 'Enter routing'.tr, (value) {
+                      if (value == null ||
+                          value == null ||
+                          value.trim().isEmpty) {
+                        return "msg_enter_this_field".tr;
+                      } else if (value.length != 9) {
+                        return 'msg_enter_routing'.tr;
+                      } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                        return 'msg_enter_routing'.tr;
+                      }
+                      return null;
+                    }, controller.routingController, [
+                      LengthLimitingTextInputFormatter(9),
+                      FilteringTextInputFormatter.digitsOnly
+                    ],controller.focusNodes[11],textInputType: TextInputType.number),
+
+
+                    SizedBox(height: 14.v),
+
+                    _buildInputFeild('msg_account'.tr, 'Enter account number'.tr, (value) {
+                      if (value == null ||
+                          value == null ||
+                          value.trim().isEmpty) {
+                        return "msg_enter_this_field".tr;
+                      } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                        return 'msg_enter_account_number'.tr;
+                      } else if (value.length < 8 || value.length > 20) {
+                        return 'msg_enter_account_number'.tr;
+                      }
+                      return null;
+                    },
+                        controller.transferAccountController,
+                        [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(18)
+                        ],controller.focusNodes[12],
+                        textInputType: TextInputType.number),
+
+                    SizedBox(height: 20.v),
+
+                    Text(
+                      'msg_billing_address'.tr,
+                      style: TextStyle(
+                        color: theme.primaryColor,
+                        fontFamily: 'Poppins',
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(height: 20.v),
+
+                    _buildInputFeild('msg_street_address1'.tr, 'msg_enter_address1'.tr,
+                          (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return "msg_enter_this_field".tr;
+                        }
+                        return null;
+                      }, controller.transferAdd1Controller, [],controller.focusNodes[13],),
+                    SizedBox(height: 14.v),
+
+                    _buildInputFeild('msg_street_address2'.tr, 'msg_enter_address2'.tr,
+                          (value) {
+                        return null;
+                      }, controller.transferAdd2Controller, [],controller.focusNodes[14],),
+                    SizedBox(height: 14.v),
+
+                    _buildInputFeild('msg_city'.tr, 'Enter city'.tr, (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return "msg_enter_this_field".tr;
+                      }
+                      return null;
+                    }, controller.transferCityController, [
+                      FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+                    ],controller.focusNodes[15],),
+                    SizedBox(height: 14.v),
+
+                    _stateDropdown(
+                        context, controller.transferSelectValue.value, 2),
+
+                    SizedBox(height: 14.v),
+
+                    zipDetails(controller.transferZipController,controller.focusNodes[17],),
+                    SizedBox(height: 14.v),
+
+                    _transferEmailAddressSection(),
+                    SizedBox(height: 35.v),
+                    Obx(() {
+                      return controller.isTranserLoading.value
+                          ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                          : Center(
+                        child: CustomOutlinedButton(
+                          width: 150.h,
+                          text: "lbl_pay".tr,
+                          buttonStyle: ElevatedButton.styleFrom(),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primary,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          onPressed: () => controller
+                              .clickOnTransferPayButton(context),
+                        ),
+                      );
+                    }),
+                    SizedBox(height: 20.v),
+                    Container(
+                      width: MediaQuery.sizeOf(context).width,
+                      margin: EdgeInsets.only(left: 10.h, right: 10.h),
+                      child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            text: "msg_by_clicking_pay".tr,
+                            style: CustomTextStyles
+                                .bodySmallPrimaryContainer10,
+                            children: [
+                              TextSpan(
+                                  text: 'Terms and Conditions.',
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () async {
+                                      var url =
+                                          'https://clearstarttax.com/paymenttermsandconditions/';
+                                      if (await canLaunch(url)) {
+                                        await launch(url,
+                                            forceWebView: true,
+                                            enableJavaScript: true);
+                                      } else {
+                                        throw 'Could not launch $url';
+                                      }
+                                    },
+                                  style: TextStyle(
+                                      color: theme.primaryColor,
+                                      fontSize: 12))
+                            ],
+                          )),
+                    ),
+                    SizedBox(height: 30.v),
+                    CW.termCondition("msg_billing_clearstarttax_com".tr)
+                  ],
+                ),
+              )
+            ],
+          )),
+        ),
+      ]))
+        ]);
   }
 
   String getCreditCardType(String creditCardNumber) {
     if (RegExp(r"^4[0-9]{0,15}$").hasMatch(creditCardNumber)) {
-      _controller.cardType.value = "visa";
+      controller.cardType.value = "visa";
       // visa card
       return "visa";
     } else if (RegExp(r"^5(?:[1-5][0-9]{0,14})?$").hasMatch(creditCardNumber)) {
       // master card
-      _controller.cardType.value = "master card";
+      controller.cardType.value = "master card";
       return "master card";
     } else if (RegExp(r"^3(?:[47][0-9]{0,13})?$").hasMatch(creditCardNumber)) {
       // AExpress card
-      _controller.cardType.value = "AExpress card";
+      controller.cardType.value = "AExpress card";
       return "AExpress card";
     } else if (RegExp(r"^3(?:(?:0[0-5]?|[68][0-9]?)[0-9]{0,11})?$")
         .hasMatch(creditCardNumber)) {
-      _controller.cardType.value = "diner card";
+      controller.cardType.value = "diner card";
       // diner card
       return "diner card";
     } else if (RegExp(r"^6(?:(?:01{0,2}|5[0-9]{0,2})[0-9]{0,12})?$")
         .hasMatch(creditCardNumber)) {
-      _controller.cardType.value = "discover card";
+      controller.cardType.value = "discover card";
       // discover card
       return "discover card";
     } else if (RegExp(
             r"^(?:2(?:1(?:31?)?)?|1(?:80{0,2})?|3(?:5\d{0,3})?)\d{0,11}$")
         .hasMatch(creditCardNumber)) {
-      _controller.cardType.value = "JCB card";
+      controller.cardType.value = "JCB card";
       // JCB card
       return "JCB card";
     } else {
@@ -1112,14 +1113,14 @@ class PaymentPage extends StatelessWidget {
             hint: Text('Select'),
             style: const TextStyle(color: Colors.black),
             onChanged: (String? value) {
-              _controller.setSelectedState(value!, type);
+              controller.setSelectedState(value!, type);
               // homePageController.selectedValue = value!;
               // print(homePageController.selectedValue);
               // homePageController.isSecurityChoosed.value =
               //     true;
             },
             value: value,
-            items: _controller.states.map((StateItem state) {
+            items: controller.states.map((StateItem state) {
               return DropdownMenuItem<String>(
                 value: state.value,
                 child: SizedBox(width: 150, child: Text(state.name)),

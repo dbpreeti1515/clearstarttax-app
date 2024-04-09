@@ -34,6 +34,7 @@ class FaqModel {
                   width: 2,
                   style: BorderStyle.solid))),
       child: Accordion(
+        disableScrolling: true,
         contentBorderRadius: 5,
         contentVerticalPadding: 0,
         contentHorizontalPadding: 0,

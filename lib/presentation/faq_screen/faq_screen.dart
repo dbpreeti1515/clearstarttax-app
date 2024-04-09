@@ -49,100 +49,144 @@ class FaqScreen extends GetWidget<FaqController> {
                 )
               : Container(
             padding: EdgeInsets.only(left: 30,right: 30),
-                child: SingleChildScrollView(
-                  child: Column(
-                      children: [
+                child: Column(
+                    children: [
 
-                        CW.buildDashboardRow(text: "msg_answers_to_your".tr),
-                        SizedBox(height: 15.v,),
-                        CW.statusCard(
-                            text: "msg_faq_screen".tr, height: 57.v),
-                        TabBar.secondary(
-                          padding: EdgeInsets.only(
-                              left: 10.h, right: 10.h, bottom: 25.v),
+                      CW.buildDashboardRow(text: "msg_answers_to_your".tr),
+                      SizedBox(height: 15.v,),
+                      CW.statusCard(
+                          text: "msg_faq_screen".tr, height: 57.v),
+                      TabBar.secondary(
+                        padding: EdgeInsets.only(
+                            left: 10.h, right: 10.h, bottom: 25.v),
+                        controller: controller.tabController,
+                        labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                        unselectedLabelStyle: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey),
+                        tabs: <Widget>[
+                          Tab(text: "msg_processing_faq".tr,),
+                          Tab(text: 'msg_service_faq'.tr),
+
+                        ],
+
+                      ),
+                      if(controller.faq_modal.value!=null)
+                      SizedBox(
+                        //   height:controller.faq_modal.value!.data!.processingFaqs!.length*100,
+                        height: mediaQueryData.size.height * 0.4,
+                        child: TabBarView(
                           controller: controller.tabController,
-                          labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                          unselectedLabelStyle: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey),
-                          tabs: <Widget>[
-                            Tab(text: "msg_processing_faq".tr,),
-                            Tab(text: 'msg_service_faq'.tr),
-                  
-                          ],
-                  
-                        ),
-                        if(controller.faq_modal.value!=null)
-                        SizedBox(
-                          //   height:controller.faq_modal.value!.data!.processingFaqs!.length*100,
-                          height: mediaQueryData.size.height * 0.4,
-                          child: TabBarView(
-                            controller: controller.tabController,
-                            physics: NeverScrollableScrollPhysics(),
-                  
-                            children: <Widget>[
-                              ListView.separated(
-                                separatorBuilder: (context, index) {
-                                  return SizedBox(
-                                    height: 10,
-                                  );
-                                },
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 5),
-                                itemBuilder: (context, index) {
-                                  print(controller.faq_modal.value!.data!
-                                      .processingFaqs!.length);
-                  
-                                  return FaqModel.Acordian(
+                          physics: NeverScrollableScrollPhysics(),
 
-                                      headerStyle,
-                                      "msg_content_text".tr,
-                                      contentStyle,
-                                      controller.processingFaqsData
-                                          .elementAt(index)
-                                          .question,
-                                      controller.processingFaqsData
-                                          .elementAt(index)
-                                          .answer,
-                                      5.0);
-                                },
-                                itemCount: controller
-                                    .faq_modal.value!.data!.processingFaqs!.length,
+
+                          children: <Widget>[
+
+                            ScrollConfiguration(
+                              behavior: ListScrollBehaviour(
+
                               ),
-                              ListView.separated(
-                                separatorBuilder: (context, index) {
-                                  return SizedBox(
-                                    height: 10,
-                                  );
-                                },
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 5),
-                                itemBuilder: (context, index) {
-                                  return FaqModel.Acordian(
-                                      headerStyle,
-                                      "msg_content_text".tr,
-                                      contentStyle,
-                                      controller.serviceFaqs
-                                          .elementAt(index)
-                                          .question,
-                                      controller.serviceFaqs
-                                          .elementAt(index)
-                                          .answer,
-                                      5.0);
-                                },
-                                itemCount: controller
-                                    .faq_modal.value!.data!.serviceFaqs!.length,
+                              child: Scrollbar(
+                                thumbVisibility: true,
+                                radius: Radius
+                                    .circular(5), // Adjust the radius of the scrollbar thumb
+
+
+                                controller: controller.scrollController1,
+                                thickness: 5, // Adjust the thickness of the scrollbar
+                                showTrackOnHover: true, // Show scrollbar track on hover
+
+
+                                interactive: true, // Allow scrollbar interaction
+
+
+
+
+                                  child: ListView.separated(
+
+                                    controller: controller.scrollController1,
+                                    separatorBuilder: (context, index) {
+                                      return SizedBox(
+                                        height: 10,
+                                      );
+                                    },
+                                    padding: EdgeInsets.only(
+                                        left: 5, right: 20, top: 5, bottom: 5),
+                                    itemBuilder: (context, index) {
+                                      print(controller.faq_modal.value!.data!
+                                          .processingFaqs!.length);
+
+                                      return FaqModel.Acordian(
+
+                                          headerStyle,
+                                          "msg_content_text".tr,
+                                          contentStyle,
+                                          controller.processingFaqsData
+                                              .elementAt(index)
+                                              .question,
+                                          controller.processingFaqsData
+                                              .elementAt(index)
+                                              .answer,
+                                          5.0);
+                                    },
+                                    itemCount: controller
+                                        .faq_modal.value!.data!.processingFaqs!.length,
+                                  ),
+
                               ),
-                            ],
-                          ),
+                            ),
+                            ScrollConfiguration(
+                              behavior: ListScrollBehaviour(
+
+                              ),
+                              child: Scrollbar(
+                                thumbVisibility: true,
+                                radius: Radius
+                                    .circular(5), // Adjust the radius of the scrollbar thumb
+
+
+                                controller: controller.scrollController2,
+                                thickness: 5, // Adjust the thickness of the scrollbar
+                                showTrackOnHover: true, // Show scrollbar track on hover
+
+
+                                interactive: true,
+                                child: ListView.separated(
+                                  controller: controller.scrollController2,
+                                  separatorBuilder: (context, index) {
+                                    return SizedBox(
+                                      height: 10,
+                                    );
+                                  },
+                                  padding: EdgeInsets.only(
+                                      left: 5, right: 20, top: 5, bottom: 5),
+                                  itemBuilder: (context, index) {
+                                    return FaqModel.Acordian(
+                                        headerStyle,
+                                        "msg_content_text".tr,
+                                        contentStyle,
+                                        controller.serviceFaqs
+                                            .elementAt(index)
+                                            .question,
+                                        controller.serviceFaqs
+                                            .elementAt(index)
+                                            .answer,
+                                        5.0);
+                                  },
+                                  itemCount: controller
+                                      .faq_modal.value!.data!.serviceFaqs!.length,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 20.v,),
-                        CW.termCondition(satOfficerEmail.value),
-                        SizedBox(height: 50.v,),
-                      ],
-                    ),
-                ),
+                      ),
+                      SizedBox(height: 20.v,),
+                      CW.termCondition(satOfficerEmail.value),
+                      SizedBox(height: 50.v,),
+                    ],
+                  ),
               );
         }));
   }

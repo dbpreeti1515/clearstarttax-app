@@ -97,6 +97,7 @@ class CustomTextFormField extends StatelessWidget {
         onChanged: onChange,
 
 
+
         enabled: enable,
         inputFormatters: inputFormatter,
         controller: controller,
@@ -122,6 +123,7 @@ class CustomTextFormField extends StatelessWidget {
         suffixIcon: suffix,
         suffixIconConstraints: suffixConstraints,
         isDense: true,
+
         contentPadding: contentPadding ??
             EdgeInsets.symmetric(
               horizontal: 10.h,

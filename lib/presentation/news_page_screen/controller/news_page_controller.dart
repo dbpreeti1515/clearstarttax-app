@@ -18,6 +18,7 @@ import '../../../data/apiModal/testmonialDescriptionModal.dart';
 
 class NewsPageController extends GetxController {
   Rx<NewsPageModel> newsPageModelObj = NewsPageModel().obs;
+  final ScrollController scrollController = ScrollController();
   RxBool isLoading = true.obs;
   RxInt testimonialDescriptionId = 0.obs;
   RxDouble contentheight = 1.0.obs;
@@ -57,6 +58,7 @@ class NewsPageController extends GetxController {
 
         webController = WebViewController()
         ..enableZoom(true)
+
         
           ..setJavaScriptMode(JavaScriptMode.unrestricted)
           ..setBackgroundColor(const Color(0x00000000))

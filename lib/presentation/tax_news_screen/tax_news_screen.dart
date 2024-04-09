@@ -48,20 +48,19 @@ class TaxNewsScreen extends GetWidget<TaxNewsController> {
                     child: Column(children: [
                       SizedBox(height: 19.v),
                       Expanded(
-                          child: SingleChildScrollView(
-                              child: Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 30.h, right: 30.h, bottom: 5.v),
-                                  child: Column(children: [
-                                    CW.buildDashboardRow(
-                                        text: "msg_heading".tr),
+                          child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: 30.h, right: 30.h, bottom: 5.v),
+                              child: Column(children: [
+                                CW.buildDashboardRow(
+                                    text: "msg_heading".tr),
 
-                                    SizedBox(height: 16.v),
-                                    _buildNewsArticle(),
-                                    SizedBox(height: 20.v,),
-                                    CW.termCondition(satOfficerEmail.value),
-                                    SizedBox(height: 50.v,),
-                                  ]))))
+                                SizedBox(height: 16.v),
+                                _buildNewsArticle(),
+                                SizedBox(height: 20.v,),
+                                CW.termCondition(satOfficerEmail.value),
+                                SizedBox(height: 50.v,),
+                              ])))
                     ]));
               })
 
@@ -88,16 +87,45 @@ class TaxNewsScreen extends GetWidget<TaxNewsController> {
   /// Section Widget
   Widget _buildNewsArticle() {
     return Obx(() {
-      return ListView.separated(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          separatorBuilder: (context, index) {
-            return SizedBox(height: 15.v);
-          },
-          itemCount: controller.testMonialData.length,
-          itemBuilder: (context, index) {
-            return TestimonialModal(index);
-          });
+      return  SizedBox(
+        height: mediaQueryData.size.height * 0.55,
+        child:  ScrollConfiguration(
+          behavior: ListScrollBehaviour(
+
+          ),
+          child: Scrollbar(
+            showTrackOnHover: true,
+            thumbVisibility: true,
+
+
+            controller:
+            controller.scrollController,
+            scrollbarOrientation:   ScrollbarOrientation.right,
+            thickness: 5,
+            radius: Radius.circular(5),
+            trackVisibility: true,
+
+            child: ListView.separated(
+                padding: EdgeInsets.only(
+                    left: 5, right: 20, top: 5, bottom: 5),
+
+                controller:
+                controller.scrollController,
+
+
+
+                shrinkWrap: true,
+                separatorBuilder: (context, index) {
+                  return SizedBox(height: 15.v);
+                },
+
+                itemCount: controller.testMonialData.length,
+                itemBuilder: (context, index) {
+                  return TestimonialModal(index);
+                }),
+          ),
+        ),
+      );
     });
   }
 

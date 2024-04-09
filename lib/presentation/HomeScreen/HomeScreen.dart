@@ -20,7 +20,7 @@ import '../splash_screen/controller/splash_screen_four_controller.dart';
 import 'controller/HomeScreenController.dart';
 import 'controller/HomeScreenController.dart';
 
-class Homescreen extends GetWidget {
+class Homescreen extends GetView<HomeScreenController> {
 
 
   int? selectedIndexValue;
@@ -29,10 +29,9 @@ class Homescreen extends GetWidget {
   Homescreen({ this.selectedIndexValue}) {
 
 
-    _controller.currentIndex.value = selectedIndexValue??0;
+    controller.currentIndex.value = selectedIndexValue??0;
   }
 
-  final HomeScreenController _controller = Get.put(HomeScreenController());
 
    PersistentTabController tabController = PersistentTabController(initialIndex: selectedIndex.value);
 
@@ -41,6 +40,7 @@ class Homescreen extends GetWidget {
     return [
       DashboardPage(),
       DocumentScreen(),
+      if(!paymentStatus.value == true)
       PaymentPage(),
       if(appoinmentNotification.value == true)
       AppionmentScreen()
@@ -75,6 +75,7 @@ class Homescreen extends GetWidget {
             width: 20,
             color: Colors.black,
           )),
+      if(!paymentStatus.value == true)
       PersistentBottomNavBarItem(
           icon: SvgPicture.asset(ImageConstant.imgCamera,
               height: 25, width: 25, color: theme.primaryColor),
@@ -147,8 +148,8 @@ class Homescreen extends GetWidget {
                   );
                   return false;
                 },
-                onItemSelected:(value) => _controller.onItemTapped(value),
-                hideNavigationBar: _controller.showNavigationBar.value,
+                onItemSelected:(value) => controller.onItemTapped(value),
+                hideNavigationBar: controller.showNavigationBar.value,
                 stateManagement: true,
 
 
@@ -181,7 +182,7 @@ class Homescreen extends GetWidget {
             }),
 
               //     IndexedStack(
-              //   index: _controller.currentIndex.value,
+              //   index: controller.currentIndex.value,
               //   children: _pages,
               // ),
 
@@ -330,21 +331,21 @@ class Homescreen extends GetWidget {
                         userImage: ImageConstant.imgSettingsBlack900,
                         appSettingsText: "lbl_tax_news".tr,
                         onTapFrameRow: () {
-                          _controller.onTaxNews();
+                          controller.onTaxNews();
                         }),
                     SizedBox(height: 15.v),
                     _buildFrameRow(
                         userImage: ImageConstant.imgGroup18,
                         appSettingsText: "lbl_app_settings".tr,
                         onTapFrameRow: () {
-                          _controller.onAppSetting();
+                          controller.onAppSetting();
                         }),
                     SizedBox(height: 15.v),
                     _buildFrameRow(
                         userImage: ImageConstant.imgProfile,
                         appSettingsText: "lbl_faq".tr,
                         onTapFrameRow: () {
-                          _controller.onFQQ();
+                          controller.onFQQ();
                         }),
                     SizedBox(height: 15.v),
                     _buildFrameRow(
@@ -353,11 +354,11 @@ class Homescreen extends GetWidget {
                         appSettingsText: "lbl_get_in_touch".tr,
 
                         onTapFrameRow: () {
-                          _controller.onGetInTouch();
+                          controller.onGetInTouch();
                         }),
                     SizedBox(height: 15.v),
                     Obx(() {
-                      return _controller.isLoading.value
+                      return controller.isLoading.value
                           ? Center(
                         child: CircularProgressIndicator(),
                       )
@@ -366,7 +367,7 @@ class Homescreen extends GetWidget {
                           appSettingsText: "lbl_sign_out".tr,
                           onTapFrameRow: () async{
 
-                            _controller.onLogout();
+                            controller.onLogout();
                           });
                     })
                   ],

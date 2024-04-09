@@ -74,8 +74,9 @@ class SignupController extends GetxController {
       if (responseMapForRegistration[ApiKey.status]) {
         CM.showToast(responseMapForRegistration[ApiKey.message],backgraoundCollor: theme.primaryColor);
         isLoading.value = false;
+        Get.offAllNamed(AppRoutes.homeScreen);
 
-        Get.off(() => Homescreen());
+       // Get.off(() => Homescreen());
       } else {
         isLoading.value = false;
         appoinmentNotification.value = true;

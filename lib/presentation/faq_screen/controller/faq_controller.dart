@@ -21,6 +21,8 @@ class FaqController extends GetxController with GetSingleTickerProviderStateMixi
     baseUrl: 'https://client.clearstarttax.com',
     authToken: 'Bearer $token',
   );
+  final ScrollController scrollController1 = ScrollController();
+  final ScrollController scrollController2 = ScrollController();
 
   @override
   void onInit()async {

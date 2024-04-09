@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 
+
+import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:intl/intl.dart';
@@ -28,6 +30,7 @@ import '../../dashboard_page/controller/dashboard_controller.dart';
 class PaymentController extends GetxController
     with GetSingleTickerProviderStateMixin {
   //PaymentController(this.paymentModelObj);
+  RxBool autoValidate = false.obs;
 
   TextEditingController nameController = TextEditingController();
 
@@ -84,32 +87,8 @@ class PaymentController extends GetxController
   RxString transferSelectValue = "saab".obs;
   RxString? selectedItem;
   final getPaymentData = Rxn<GetPaymentModal>();
+  final List<FocusNode> focusNodes = List.generate(21, (index) => FocusNode());
 
-  final List<FocusNode> focusNodes = [
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-
-  ];
 
   void setSelectedValue(String value) {
     selectedAmount.value = value;
@@ -248,8 +227,10 @@ class PaymentController extends GetxController
   }
 
   Future<void> clickOnPayButton(BuildContext context) async {
+
     //validateCreditCardInfo(cardinformationvalueController.text,monthController.text+yearController.text, cvvController.text);
     if (formKey.currentState!.validate()) {
+    autoValidate.value= true;
 
       if (selectedAmount.value.isEmpty && paymentController.value.text.isEmpty) {
         CM.showToast("Please enter amount");
@@ -259,6 +240,30 @@ class PaymentController extends GetxController
         }
         creditCardAPI(context);
       }
+      focusNodes.forEach((node) => node.unfocus());
+    }else{
+
+      int invalidFieldIndex = -1;
+      for (int i = 1; i < focusNodes.length; i++) {
+        if (!focusNodes[i].hasFocus) {
+          if(autoValidate.value==false){
+            FocusScope.of(context).requestFocus(focusNodes[i]);
+            autoValidate.value=true;
+          }
+
+
+          FocusScope.of(context).nextFocus();
+          break;
+
+        }else{
+
+        }
+        print('FocusNode $i: ${focusNodes[i].hasFocus}');
+      }
+      // If an invalid field is found, focus on it
+      // if (invalidFieldIndex != -1) {
+      //   FocusScope.of(context).requestFocus(focusNodes[invalidFieldIndex]);
+      // }
     }
   }
 

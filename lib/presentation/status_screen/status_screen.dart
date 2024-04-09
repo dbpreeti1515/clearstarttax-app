@@ -34,7 +34,7 @@ class StatusScreen extends GetWidget<StatusController> {
           width: double.maxFinite,
           child: Column(children: [
             SizedBox(height: 19.v),
-            Expanded(child: SingleChildScrollView(child: _buildStatusColumn())),
+            Expanded(child: _buildStatusColumn()),
           ])),
     );
   }
@@ -88,6 +88,9 @@ class StatusScreen extends GetWidget<StatusController> {
                             url:
                                 'https://client.clearstarttax.com/tos/app/${email.value}/${controller.randomText2.value}${controller.password}${controller.randomText1.value}'));
               }),
+
+
+
               if(db.value!.toNotification=='true')
               SizedBox(height: 35.v)
             ]));
@@ -117,8 +120,11 @@ class StatusScreen extends GetWidget<StatusController> {
                   child: TextButton(
                     onPressed: () async {
                       if (await canLaunch(url)) {
+
                         await launch(url,
-                            forceWebView: true, enableJavaScript: true);
+
+                            forceWebView: true, enableJavaScript: true,
+                        );
                       } else {
                         throw 'Could not launch $url';
                       }

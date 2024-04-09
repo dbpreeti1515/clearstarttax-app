@@ -28,12 +28,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      scrollBehavior: const MaterialScrollBehavior()
+          .copyWith(scrollbars: true,physics: AlwaysScrollableScrollPhysics(),overscroll: true),
 
 
 
       builder: DevicePreview.appBuilder,
 
       debugShowCheckedModeBanner: false,
+
       theme: theme,
       translations: AppLocalization(),
       locale: Get.deviceLocale, //for setting localization strings

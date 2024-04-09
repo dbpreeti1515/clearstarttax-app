@@ -26,7 +26,7 @@ class DocumentController extends GetxController {
   Rx<DocumentModel> documentModelObj = DocumentModel().obs;
   final getSatOfficerData = Rxn<GetSattlementOfficerModal>();
   File? pdfFile;
-
+  final ScrollController scrollController = ScrollController();
   RxMap uploadDocumentData = Map().obs;
   RxBool isLoading = false.obs;
   RxString uploadUrl = "".tr.obs;
@@ -70,7 +70,8 @@ class DocumentController extends GetxController {
     if (result != null) {
       // Filter out duplicate paths before adding to selectedFiles
       Set<String?> newPaths = result.paths.toSet();
-      newPaths.removeWhere((path) => selectedFiles.any((file) => file.path == path));
+      newPaths.removeWhere(
+          (path) => selectedFiles.any((file) => file.path == path));
 
       // Add the new unique files to selectedFiles
       selectedFiles.addAll(newPaths.map((path) => File(path!)));
@@ -88,26 +89,30 @@ class DocumentController extends GetxController {
     return;
   }
 
-
   Future<void> uploadPDF(BuildContext context) async {
+    print(selectedFiles.value.length);
+    var response;
     isLoading.value = true;
+       for (var file in selectedFiles.value) {
+         var request = http.MultipartRequest(
+             'POST',
+             Uri.parse(
+                 'https://clearstart.irslogics.com/publicapi/2020-02-22/documents/casedocument?apikey=f08f2b3c48ad4134b4ef62abd4aa721d&CaseID=$caseId&Comment=test'));
+         //   for (var file in selectedFiles.value) {
+         request.files.add(
+           await http.MultipartFile.fromPath(
+             'File', // Field name expected by your API
+            file.path,
+           ),
+         );
+         // }
+         isLoading.value = true;
+          response = await request.send();
+       }
 
-    var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-            'https://clearstart.irslogics.com/publicapi/2020-02-22/documents/casedocument?apikey=f08f2b3c48ad4134b4ef62abd4aa721d&CaseID=$caseId&Comment=test'));
-    for (var file in selectedFiles.value) {
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'File', // Field name expected by your API
-          file.path,
-        ),
-      );
-    }
-    isLoading.value = true;
-    print(4);
     try {
-      var response = await request.send();
+
+
 
       isLoading.value = true;
       var data = await response.stream.bytesToString();
@@ -120,8 +125,13 @@ class DocumentController extends GetxController {
 
         selectedFiles.value = [];
 
-        SuccessDialog.showCustomDialog(context, "lbl_done".tr,
-            Text('msg_document_sent_your'.tr,textAlign: TextAlign.center,));
+        SuccessDialog.showCustomDialog(
+            context,
+            "lbl_done".tr,
+            Text(
+              'msg_document_sent_your'.tr,
+              textAlign: TextAlign.center,
+            ));
 
         // for(var file in selectedFiles.value){
         //   selectedFiles.value.remove(file);
