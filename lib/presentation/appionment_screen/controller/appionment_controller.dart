@@ -37,6 +37,7 @@ class AppionmentController extends GetxController {
   String str = '';
   var selectedDate;
   RxString formattterSelectedDate = ''.obs;
+  RxString formattterDate = ''.obs;
   RxString formattterAPIdDate = ''.obs;
   final DatabaseHelper dbHelper = DatabaseHelper();
 
@@ -52,8 +53,7 @@ class AppionmentController extends GetxController {
   DateTime? selectedDay;
   RxInt selectedIndex = 100.obs;
   RxList getAvailableSlot = [].obs;
-  TimeZone selectedTimeZone =
-      TimeZone('(GMT-8:00) Pacific Standard Time (PST)', "PST");
+  TimeZone selectedTimeZone = TimeZone('(GMT-8:00) Pacific Standard Time (PST)', "PST");
   void handleRadioValueChanged(int value) {
     print(value);
     selectedValue.value = value;
@@ -84,11 +84,11 @@ class AppionmentController extends GetxController {
     TimeZone('(GMT-5:00) Eastern Standard Time (EST)', "EST"),
     TimeZone('(GMT-6:00) Central Standard Time (CST)', "CST"),
     TimeZone('(GMT-7:00) Mountain Standard Time (MST)', 'MST'),
-    TimeZone('(GMT-8:00) Pacific Standard Time (PST)', 'PST'),
+  TimeZone('(GMT-8:00) Pacific Standard Time (PST)', "PST"),
     TimeZone('(GMT-9:00) Alaska Standard Time (AKST)', "AKST"),
     TimeZone('(GMT-10:00) Hawaii-Aleutian Standard Time (HAST)', "HAST"),
     TimeZone('(GMT-11:00) Samoa Standard Time (SST)', "SST"),
-    TimeZone('(GMT+10:00) Chamorro Standard Time (ChST)', "ChST"),
+    TimeZone('(GMT+10:00) Chamorro Standard Time (CHST)', "CHST"),
   ];
 
   RxInt statusId = 0.obs;
@@ -113,10 +113,12 @@ class AppionmentController extends GetxController {
   void onInit() async {
     // TODO: implement onInit
     super.onInit();
+    print("this is timezone ${selectedTimeZone}");
 
     getDate();
     getTimeSlote();
     getTime();
+
     selectedIndex.value = 3;
 
     db.value = await dbHelper.getUsers();
@@ -130,6 +132,7 @@ class AppionmentController extends GetxController {
   }
 
   Future<bool> getAvailableAPI() async {
+    print("this is ${selectedTimeZone.value}");
 //    isLoading.value = true;
     bodyParamsForSlot = {
       ApiKey.email: satOfficerEmail.value,
@@ -152,7 +155,7 @@ class AppionmentController extends GetxController {
         print("object");
 
         getAvailableSlot.value = responseMapForSlot['slots'];
-        print(getAvailableSlot.value[0]);
+        print(getAvailableSlot.value);
       } else {
         //  isLoading.value = false;
 
@@ -199,6 +202,7 @@ class AppionmentController extends GetxController {
         if (bookAppoinmentData[ApiKey.status] == ApiKey.success) {
           isAppointmentAppear.value = false;
           setDate(formattterSelectedDate.value);
+          formattterSelectedDate.value = formattterSelectedDate.value;
           setTimeSlote(str);
           setTime(DateTime.now().toString());
 
@@ -246,9 +250,9 @@ class AppionmentController extends GetxController {
     final key = prefs.get('date');
 
     var value = key;
-    formattterSelectedDate.value = key.toString();
+    formattterDate.value = key.toString();
 
-    print(formattterSelectedDate.value);
+    print(formattterDate.value);
 
     print('YOUR date KEY - $key');
   }
@@ -282,6 +286,8 @@ class AppionmentController extends GetxController {
       var differentData = currrentTime.difference(data);
       if (differentData > Duration(minutes: 5)) {
         print("big time");
+        dbHelper.updateFirstUserColumn('appoinmentNotification', 'true');
+        dbHelper.updateFirstUserColumn('status', 'active');
         setDate('');
       } else {
         print("short time");

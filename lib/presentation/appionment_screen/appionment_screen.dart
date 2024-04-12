@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:intl/intl.dart';
+import 'package:preeti_s_application3/presentation/HomeScreen/controller/HomeScreenController.dart';
 import 'package:preeti_s_application3/presentation/dashboard_page/controller/dashboard_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -42,11 +43,14 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
           child: Column(children: [
             SizedBox(height: 19.v),
             Expanded(
-                child: SingleChildScrollView(
-                    child: Padding(
-                        padding: EdgeInsets.only(
-                            left: 30.h, right: 30.h, bottom: 5.v),
-                        child: SingleChildScrollView(
+                child: ScrollConfiguration(
+                  behavior: ListScrollBehaviour(
+
+                  ),
+                  child: SingleChildScrollView(
+                      child: Padding(
+                          padding: EdgeInsets.only(
+                              left: 30.h, right: 30.h, bottom: 5.v),
                           child: Column(children: [
                             Obx(
                               () => CW.buildDashboardRow(
@@ -189,14 +193,14 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                               :appoinmentTime(
                                               _controller.str,
                                               _controller
-                                                  .formattterSelectedDate
+                                                  .formattterDate
                                                   .value,
                                               _controller
                                                   .selectedTimeZone.name))
                                             : appoinmentTime(
                                                 _controller.str,
                                                 _controller
-                                                    .formattterSelectedDate
+                                                    .formattterDate
                                                     .value,
                                                 _controller
                                                     .selectedTimeZone.name);
@@ -206,8 +210,8 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                         height: 20,
                                       )
                                     ])),
-                          ]),
-                        ))))
+                          ]))),
+                ))
           ])),
     ));
   }
@@ -256,11 +260,14 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                 decoration: InputDecoration.collapsed(
                     hintText: '',
                     hintStyle: TextStyle(overflow: TextOverflow.ellipsis)),
-                value: _controller.selectedTimeZone.name,
-                onChanged: (String? newValue) {},
+                value: _controller.selectedTimeZone.value,
+                onChanged: (String? newValue) {
+                  controller.selectedTimeZone.value = newValue!;
+                  print(newValue);
+                },
                 items: _controller.timeZoneList.map((TimeZone value) {
                   return DropdownMenuItem<String>(
-                    value: value.name,
+                    value: value.value,
                     child: Text(
                       value.name,
                       style:
@@ -292,6 +299,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
 
                   if (_controller.getAvailableSlot.value.isNotEmpty)
                     showDateListDialog(context);
+
                 }
               })
         ]));
@@ -315,12 +323,13 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
           titlePadding: EdgeInsets.zero,
           title: Stack(
             children: [
-              CW.statusCard(height: 57, text: "Available Time Slots"),
+              CW.statusCard(height: 57, text: "available_time_slots".tr),
               Align(
                 alignment: Alignment.topRight,
                 child: IconButton(
                     onPressed: () {
                       Get.back();
+                      isColor.value = false;
                     },
                     icon: Icon(
                       Icons.close,
@@ -329,243 +338,246 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
               )
             ],
           ),
-          content: SingleChildScrollView(
-            child: Container(
-              margin: EdgeInsets.only(top: 10.v),
-              decoration: BoxDecoration(),
-              width: double.maxFinite,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Obx(
-                    () => Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child: RichText(
-                          text: TextSpan(children: [
-                            TextSpan(
-                                text: "lbl_officer_mail".tr,
-                                style: CustomTextStyles.titleSmallBlack900_2),
-                            TextSpan(
-                                text: satOfficerEmail.value ?? '',
-                                style: theme.textTheme.bodyMedium)
-                          ]),
-                          textAlign: TextAlign.left),
-                    ),
+          content: Container(
+            margin: EdgeInsets.only(top: 10.v),
+            decoration: BoxDecoration(),
+            width: double.maxFinite,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Obx(
+                  () => Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: "lbl_officer_mail".tr,
+                              style: CustomTextStyles.titleSmallBlack900_2),
+                          TextSpan(
+                              text: satOfficerEmail.value ?? '',
+                              style: theme.textTheme.bodyMedium)
+                        ]),
+                        textAlign: TextAlign.left),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(bottom: 10, top: 10, left: 5),
-                    child: Row(
-                      children: [
-                        Text("msg_slot_date_12_8_2023".tr,
-                            style: CustomTextStyles.titleSmallBlack900_1),
-                        Obx(
-                          () => Text(
-                              _controller.formattterSelectedDate.value ?? "",
-                              style: theme.textTheme.bodyMedium),
-                        )
-                      ],
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 10, top: 10, left: 5),
+                  child: Row(
                     children: [
+                      Text("msg_slot_date_12_8_2023".tr,
+                          style: CustomTextStyles.titleSmallBlack900_1),
                       Obx(
-                        () => Radio(
-                          value: 60,
-                          groupValue: _controller.selectedValue.value,
-                          onChanged: (int? value) =>
-                              _controller.handleRadioValueChanged(value!),
-                        ),
-                      ),
-                      Flexible(
-                        flex: 1,
-                        child: Text(
-                          'msg_30_minute_time_slot'.tr,
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
+                        () => Text(
+                            _controller.formattterSelectedDate.value ?? "",
+                            style: theme.textTheme.bodyMedium),
+                      )
                     ],
                   ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  if (_controller.getAvailableSlot.value[1].toString() ==
-                      'All slots are booked for this date')
-                    Center(
-                      child: Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(onTap: () {
-                              isColor.value = !isColor.value;
-                            },
-                                child: Obx(() {
-                              return Container(
-                                width: mediaQueryData.size.width,
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                    color:isColor.value ==false
-                                        ? theme.secondaryHeaderColor
-                                        : Colors.white,
-                                    border:
-                                        Border.all(color: Colors.grey, width: 1),
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Text(
-                                  _controller.getAvailableSlot.value[0],
-                                  textAlign: TextAlign.center,
-                                ),
-                              );
-                            })),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              _controller.getAvailableSlot.value[1],
-                              style: TextStyle(color: Colors.red),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                          ],
-                        ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Obx(
+                      () => Radio(
+                        value: 60,
+                        groupValue: _controller.selectedValue.value,
+                        onChanged: (int? value) =>
+                            _controller.handleRadioValueChanged(value!),
                       ),
                     ),
-                  Obx(() {
-                    return _controller.getAvailableSlot.value[1].toString() ==
-                            'All slots are booked for this date'
-                        ? SizedBox()
-                        : Container(
-                            height: 150,
-                            child: ListView.separated(
-                                itemBuilder: (context, index) {
-                                  print(_controller.getAvailableSlot.value[1]);
-                                  print(' color is ${
-                                      index ==
-                                          _controller
-                                              .selectedIndex.value
-                                  }');
-                                  return _controller.getAvailableSlot.value[1]
-                                              .toString() ==
-                                          'All slots are booked for this date'
-                                      ? Container(
-                                          child: Column(
-                                            children: [
-                                              GestureDetector(onTap: () {
-                                                _controller.selectedIndex.value =
-                                                    index;
-                                                {
-                                                  _controller.str = _controller.getAvailableSlot
-                                                      .value[index];
-                                                  List<String> strarray =
-                                                      _controller.str.split("-");
-            
-                                                  _controller.selectedTimeSlot
-                                                      .value = _controller
-                                                          .formattterAPIdDate
-                                                          .value +
-                                                      ' ' +
-                                                      strarray[0];
-            
-                                                  print(_controller
-                                                      .selectedTimeSlot.value);
-                                                }
-                                              }, child: Obx(() {
+                    Flexible(
+                      flex: 1,
+                      child: Text(
+                        'msg_30_minute_time_slot'.tr,
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                if(controller.getAvailableSlot.value.length>1)
+                if (_controller.getAvailableSlot.value[1].toString() ==
+                    'All slots are booked for this date')
+                  Center(
+                    child: Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(onTap: () {
+                            isColor.value = !isColor.value;
+                          },
+                              child: Obx(() {
+                            return Container(
+                              width: mediaQueryData.size.width,
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  color:isColor.value
+                                      ? theme.secondaryHeaderColor
+                                      : Colors.white,
+                                  border:
+                                      Border.all(color: Colors.grey, width: 1),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Text(
+                                _controller.getAvailableSlot.value[0],
+                                textAlign: TextAlign.center,
+                              ),
+                            );
+                          })),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            _controller.getAvailableSlot.value[1],
+                            style: TextStyle(color: Colors.red),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                Obx(() {
+                  return controller.getAvailableSlot.length>1?
+                    _controller.getAvailableSlot.value[1].toString() ==
+                          'msg_all_secheduled_appointment'.tr
+                      ? SizedBox()
+                      : Container(
+                          height: 150,
+                          child: ListView.separated(
+                            physics: AlwaysScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                              isColor.value = false;
+                              _controller.selectedIndex.value = 100;
+                                print(isColor.value);
+                                print(' color is ${
+                                    index ==
+                                        _controller
+                                            .selectedIndex.value
+                                }');
+                                return _controller.getAvailableSlot.value[1]
+                                            .toString() ==
+                                        'All slots are booked for this date'
+                                    ? Container(
+                                        child: Column(
+                                          children: [
+                                            GestureDetector(onTap: () {
+                                              _controller.selectedIndex.value =
+                                                  index;
+                                              {
+                                                _controller.str = _controller.getAvailableSlot
+                                                    .value[index];
+                                                List<String> strarray =
+                                                    _controller.str.split("-");
 
-                                                return Container(
-                                                  padding: EdgeInsets.all(8),
-                                                  decoration: BoxDecoration(
-                                                      color: index == _controller
-                                                                  .selectedIndex
-                                                                  .value
-                                                          ? theme
-                                                              .secondaryHeaderColor
-                                                          : Colors.white,
-                                                      border: Border.all(
-                                                          color: Colors.grey,
-                                                          width: 1),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5)),
-                                                  child: Text(
-                                                    _controller.getAvailableSlot
-                                                        .value[0],
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                );
-                                              }))
-                                            ],
-                                          ),
-                                        )
-                                      : GestureDetector(
-                                      onTap: () {
-                                          _controller.selectedIndex.value = index;
-                                          {
-                                            _controller.str = _controller
-                                                .getAvailableSlot.value[index];
-                                            List<String> strarray =
-                                                _controller.str.split("-");
-            
-                                            _controller.selectedTimeSlot.value =
-                                                _controller.formattterAPIdDate
+                                                _controller.selectedTimeSlot
+                                                    .value = _controller
+                                                        .formattterAPIdDate
                                                         .value +
                                                     ' ' +
                                                     strarray[0];
-            
-                                            print(_controller
-                                                .selectedTimeSlot.value);
-                                          }
-                                        }, child: Obx(() {
-                                          return Container(
-                                            padding: EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                                color: index ==
-                                                        _controller
-                                                            .selectedIndex.value
-                                                    ? theme.secondaryHeaderColor
-                                                    : Colors.white,
-                                                border: Border.all(
-                                                    color: Colors.grey, width: 1),
-                                                borderRadius:
-                                                    BorderRadius.circular(5)),
-                                            child: Text(
-                                              _controller
-                                                  .getAvailableSlot.value[index],
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          );
-                                        }));
-                                },
-                                separatorBuilder: (context, index) {
-                                  return SizedBox(
-                                    height: 10,
-                                  );
-                                },
-                                itemCount:
-                                    _controller.getAvailableSlot.value.length),
-                          );
-                  }),
-                  SizedBox(
-                    height: 10,
+
+                                                print(_controller
+                                                    .selectedTimeSlot.value);
+                                              }
+                                            }, child: Obx(() {
+
+                                              return Container(
+                                                padding: EdgeInsets.all(8),
+                                                decoration: BoxDecoration(
+                                                    color: index == _controller
+                                                                .selectedIndex
+                                                                .value
+                                                        ? theme
+                                                            .secondaryHeaderColor
+                                                        : Colors.white,
+                                                    border: Border.all(
+                                                        color: Colors.grey,
+                                                        width: 1),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5)),
+                                                child: Text(
+                                                  _controller.getAvailableSlot
+                                                      .value[0],
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              );
+                                            }))
+                                          ],
+                                        ),
+                                      )
+                                    : GestureDetector(
+                                    onTap: () {
+                                        _controller.selectedIndex.value = index;
+                                        {
+                                          _controller.str = _controller
+                                              .getAvailableSlot.value[index];
+                                          List<String> strarray =
+                                              _controller.str.split("-");
+
+                                          _controller.selectedTimeSlot.value =
+                                              _controller.formattterAPIdDate
+                                                      .value +
+                                                  ' ' +
+                                                  strarray[0];
+
+                                          print(_controller
+                                              .selectedTimeSlot.value);
+                                        }
+                                      }, child: Obx(() {
+                                        return Container(
+                                          padding: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                              color: index ==
+                                                      _controller
+                                                          .selectedIndex.value
+                                                  ? theme.secondaryHeaderColor
+                                                  : Colors.white,
+                                              border: Border.all(
+                                                  color: Colors.grey, width: 1),
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                          child: Text(
+                                            _controller
+                                                .getAvailableSlot.value[index],
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        );
+                                      }));
+                              },
+                              separatorBuilder: (context, index) {
+                                return SizedBox(
+                                  height: 10,
+                                );
+                              },
+                              itemCount:
+                                  _controller.getAvailableSlot.value.length),
+                        ):SizedBox();
+                }),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 10),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: Colors.grey, width: 1)),
+                  height: 100,
+                  child: TextFormField(
+                    controller: _controller.messsageController,
+                    maxLines: 15,
+                    decoration: InputDecoration(
+                        hintText: 'Write message', border: InputBorder.none),
                   ),
-                  Container(
-                    padding: EdgeInsets.only(left: 10),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Colors.grey, width: 1)),
-                    height: 100,
-                    child: TextFormField(
-                      controller: _controller.messsageController,
-                      maxLines: 15,
-                      decoration: InputDecoration(
-                          hintText: 'Write message', border: InputBorder.none),
-                    ),
-                  )
-                ],
-              ),
+                )
+              ],
             ),
           ),
           actions: [
@@ -593,6 +605,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                           } else {
                             CM.showToast("Please select valid slot");
                           }
+                          isColor.value = false;
                         },
                         child: Text(
                           'Book Appointment',
@@ -653,7 +666,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                 timeText(
                     Icons.person,
                     Text(
-                      "Clear Start tax",
+                      "clear_start_tax".tr,
                       style: CustomTextStyles.textBlackMedium,
                     )),
                 SizedBox(
@@ -776,9 +789,5 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
   }
 
   /// Navigates to the appointmentScreen when the action is triggered.
-  onTapGetAvailableSlots() {
-    Get.toNamed(
-      AppRoutes.appointmentScreen,
-    );
-  }
+
 }

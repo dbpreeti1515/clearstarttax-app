@@ -72,8 +72,10 @@ class StatusScreen extends GetWidget<StatusController> {
                         child: _buildCompleteOnlineRow(
                             completeOnlineText: "msg_complete_online".tr,
                             clickHereText: "lbl_click_here".tr,
-                            url:
-                                'https://client.clearstarttax.com/fqs/app/${email.value}/${controller.randomText1.value}${controller.password}${controller.randomText2.value}'));
+
+                        OnClick: () {
+                          Get.toNamed(AppRoutes.fqScreen);
+                        }));
               }),
               SizedBox(height: 20.v),
               if(db.value!.toNotification=='true')
@@ -85,8 +87,9 @@ class StatusScreen extends GetWidget<StatusController> {
                         child: _buildCompleteOnlineRow(
                             completeOnlineText: "msg_complete_online2".tr,
                             clickHereText: "lbl_click_here".tr,
-                            url:
-                                'https://client.clearstarttax.com/tos/app/${email.value}/${controller.randomText2.value}${controller.password}${controller.randomText1.value}'));
+                            OnClick: () {
+                              Get.toNamed(AppRoutes.toScreen);
+                            }));
               }),
 
 
@@ -99,7 +102,7 @@ class StatusScreen extends GetWidget<StatusController> {
   Widget _buildCompleteOnlineRow(
       {required String completeOnlineText,
       required String clickHereText,
-      required String url}) {
+      required VoidCallback OnClick}) {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 8.v),
         decoration: AppDecoration.fillYellow
@@ -118,17 +121,7 @@ class StatusScreen extends GetWidget<StatusController> {
               Padding(
                   padding: EdgeInsets.only(left: 14.h, top: 10.v, bottom: 11.v),
                   child: TextButton(
-                    onPressed: () async {
-                      if (await canLaunch(url)) {
-
-                        await launch(url,
-
-                            forceWebView: true, enableJavaScript: true,
-                        );
-                      } else {
-                        throw 'Could not launch $url';
-                      }
-                    },
+                    onPressed: OnClick??(){},
                     child: Text(clickHereText,
                         style: CustomTextStyles.labelLargeOnError
                             .copyWith(color: theme.colorScheme.onError)),

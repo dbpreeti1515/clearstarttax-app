@@ -75,7 +75,7 @@ class Homescreen extends GetView<HomeScreenController> {
             width: 20,
             color: Colors.black,
           )),
-      if(!paymentStatus.value == true)
+if(!paymentStatus.value == true)
       PersistentBottomNavBarItem(
           icon: SvgPicture.asset(ImageConstant.imgCamera,
               height: 25, width: 25, color: theme.primaryColor),
@@ -295,14 +295,15 @@ class Homescreen extends GetView<HomeScreenController> {
                             userImage: ImageConstant.imgGroup18Black900,
                             appSettingsText: "lbl_fq".tr,
                             onTapFrameRow: ()async {
-                              var url = 'https://client.clearstarttax.com/fqs/app/${email.value}/${randomText1.value}${password}${randomText2.value}';
-
-                              if (await canLaunch(url)) {
-                                await launch(url,
-                                    forceWebView: true, enableJavaScript: true);
-                              } else {
-                                throw 'Could not launch $url';
-                              }
+                              // var url = 'https://client.clearstarttax.com/fqs/app/${email.value}/${randomText1.value}${password}${randomText2.value}';
+                              //
+                              // if (await canLaunch(url)) {
+                              //   await launch(url,
+                              //       forceWebView: true, enableJavaScript: true);
+                              // } else {
+                              //   throw 'Could not launch $url';
+                              // }
+                              Get.toNamed(AppRoutes.fqScreen);
                             }
                         ),
                     if(db.value!.toNotification=='true')
@@ -314,16 +315,17 @@ class Homescreen extends GetView<HomeScreenController> {
                           userImage: ImageConstant.imgGroup18Black900,
                           appSettingsText: "lbl_to".tr,
                           onTapFrameRow: ()async {
-                            var url =
-                                'https://client.clearstarttax.com/tos/app/${email.value}/${randomText2.value}${password}${randomText1.value}'
-                            ;
-
-                            if (await canLaunch(url)) {
-                              await launch(url,
-                                  forceWebView: true, enableJavaScript: true);
-                            } else {
-                              throw 'Could not launch $url';
-                            }
+                            // var url =
+                            //     'https://client.clearstarttax.com/tos/app/${email.value}/${randomText2.value}${password}${randomText1.value}'
+                            // ;
+                            //
+                            // if (await canLaunch(url)) {
+                            //   await launch(url,
+                            //       forceWebView: true, enableJavaScript: true);
+                            // } else {
+                            //   throw 'Could not launch $url';
+                            // }
+                            Get.toNamed(AppRoutes.toScreen);
                           }
                       ),
                     SizedBox(height: 15.v),

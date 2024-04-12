@@ -55,7 +55,10 @@ class DashboardController extends GetxController {
   RxList<String> statusForTO = <String>[].obs;
   RxList<String> statusForFAppointment = <String>[].obs;
   RxList testMonialData = [].obs;
-  RxBool notification = true.obs;
+  RxBool isAppointmentNotification = true.obs;
+  RxBool isToNotification = true.obs;
+  RxBool isFQNotification = true.obs;
+
 
   final DatabaseHelper dbHelper = DatabaseHelper();
   Rx<PageController> pageController = PageController(viewportFraction: 0.8).obs;
@@ -155,8 +158,15 @@ class DashboardController extends GetxController {
     }
   }
 
-  onClickNotification() {
-    notification.value = false;
+  onClickNotification(value) {
+
+    if (value == 0) {
+      isFQNotification.value = false;
+    } else if (value == 1) {
+      isToNotification.value = false;
+    } else if (value == 2) {
+      isAppointmentNotification.value = false;
+    }
   }
 
 

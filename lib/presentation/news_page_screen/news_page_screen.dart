@@ -63,59 +63,64 @@ class NewsPageScreen extends GetWidget<NewsPageController> {
                       children: [
                     SizedBox(height: 7.v),
                     Expanded(
-                        child: SingleChildScrollView(
-                            child: Padding(
-                                padding: EdgeInsets.only(left: 0.h),
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(height: 3.v),
-                                      if(controller.webController!=null)
+                        child: ScrollConfiguration(
+                          behavior: ListScrollBehaviour(
+
+                          ),
+                          child: SingleChildScrollView(
+                              child: Padding(
+                                  padding: EdgeInsets.only(left: 0.h),
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 3.v),
+                                        if(controller.webController!=null)
 
 
-                                      _buildFiftyNine(),
-                                      SizedBox(height: 10.v),
-                                      Obx(() => Align(
-                                          alignment: Alignment.center,
-                                          child: Container(
+                                        _buildFiftyNine(),
+                                        SizedBox(height: 10.v),
+                                        Obx(() => Align(
+                                            alignment: Alignment.center,
+                                            child: Container(
 
-                                              height:controller.contentheight.value,
-                                              margin: EdgeInsets.only(
-                                                  left: 20.h, right: 20.h),
-                                              child: WebViewWidget(
-                                                controller: controller.webController!,
+                                                height:controller.contentheight.value,
+                                                margin: EdgeInsets.only(
+                                                    left: 20.h, right: 20.h),
+                                                child: WebViewWidget(
+                                                  controller: controller.webController!,
 
-                                              ).marginZero)),),
+                                                ).marginZero)),),
 
-                                      SizedBox(height: 7.v),
-                                      Container(
-                                          margin: EdgeInsets.only(
-                                                         left: 20.h, right: 20.h,top: 0),
-                                          height:controller.contentheight1.value,
-                                          child: WebViewWidget(
-                                              controller: controller.webController1!)),
+                                        SizedBox(height: 7.v),
+                                        Container(
+                                            margin: EdgeInsets.only(
+                                                           left: 20.h, right: 20.h,top: 0),
+                                            height:controller.contentheight1.value,
+                                            child: WebViewWidget(
+                                                controller: controller.webController1!)),
 
-                                      SizedBox(height: 11.v),
-                                      SizedBox(height: 10.v),
-                                      Padding(
-                                          padding: EdgeInsets.only(left: 31.h),
-                                          child: Text("lbl_recent_post".tr,
-                                              style: CustomTextStyles
-                                                  .titleMediumPrimary)),
-                                      SizedBox(height: 9.v),
-                                      _buildUserProfile(),
-                                      SizedBox(height: 10.v),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 25),
-                                        child: pageSliderModal(
-
-                                        ),
-                                      ),
-                                      SizedBox(height: 20.v,),
-                                      CW.termCondition(satOfficerEmail.value),
-                                      SizedBox(height: 60.v,),
-                                    ]))))
+                                        SizedBox(height: 11.v),
+                                        SizedBox(height: 10.v),
+                                        Padding(
+                                            padding: EdgeInsets.only(left: 31.h),
+                                            child: Text("lbl_recent_post".tr,
+                                                style: CustomTextStyles
+                                                    .titleMediumPrimary)),
+                                        SizedBox(height: 9.v),
+                                        _buildUserProfile(),
+                                        // SizedBox(height: 10.v),
+                                        // Padding(
+                                        //   padding: const EdgeInsets.symmetric(horizontal: 25),
+                                        //   child: pageSliderModal(
+                                        //
+                                        //   ),
+                                        // ),
+                                        SizedBox(height: 20.v,),
+                                        CW.termCondition(satOfficerEmail.value),
+                                        SizedBox(height: 60.v,),
+                                      ]))),
+                        ))
                   ]));
         }));
   }
@@ -186,7 +191,7 @@ class NewsPageScreen extends GetWidget<NewsPageController> {
                                   .testimonialRelatedData.value[index]['image']
                                   .toString(),
                               fit: BoxFit.cover,
-                              height: 123.v,
+                              height: mediaQueryData.size.height * .136,
                               width: mediaQueryData.size.width,
                               radius: BorderRadius.only(
                                 topLeft: Radius.circular(10),

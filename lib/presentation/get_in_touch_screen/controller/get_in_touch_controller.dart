@@ -42,7 +42,8 @@ class GetInTouchController extends GetxController {
 
   Rx<GetInTouchModel> getInTouchModelObj = GetInTouchModel().obs;
 
-
+final subjectFocusNode = FocusNode();
+final messageFocusNode = FocusNode();
 
   Map<String, dynamic> bodyParamsForGetInTouch = {};
   Map<String, dynamic> responseMapForGetInTouch = {};
@@ -51,7 +52,7 @@ class GetInTouchController extends GetxController {
 
   RxString uploadUrl = "msg_file_choose".tr.obs;
 
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   final List<FocusNode> focusNodes = [
     FocusNode(),

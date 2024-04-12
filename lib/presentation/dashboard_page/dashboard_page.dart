@@ -59,189 +59,195 @@ class DashboardPage extends GetWidget<DashboardController> {
                 )
               : SizedBox(
                   width: mediaQueryData.size.width,
-                  child: SingleChildScrollView(
-                      padding: EdgeInsets.only(top: 19.v),
-                      child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 30.h),
-                          child: Column(children: [
-                            CW.buildDashboardRow(
-                                text: "msg_welcome_back_to".tr +
-                                    "\n\n" +
-                                    "msg_explore_your_personalized".tr +
-                                    name.value),
-                            SizedBox(height: 12.v),
-                            Column(children: [
-                              Obx(() {
-                                return controller.notification.value == true
-                                    ? Column(
-                                        children: [
-                                          Obx(() {
-                                            return controller
-                                                    .fqNotification.value
-                                                ? NotificationModal(context,
-                                                    'lbl_fq_notification'.tr,
-                                                    () async {
-                                                    var url =
-                                                        'https://client.clearstarttax.com/fqs/app/${email.value}/${randomText1.value}${password}${randomText2.value}';
+                  child:ScrollConfiguration(
+                    behavior: ListScrollBehaviour(
 
-                                                    if (await canLaunch(url)) {
-                                                      await launch(url,
-                                                          forceWebView: true,
-                                                          enableJavaScript:
-                                                              true);
-                                                    } else {
-                                                      throw 'Could not launch $url';
-                                                    }
-                                                  })
-                                                : SizedBox();
-                                          }),
-                                          Obx(() {
-                                            return controller
-                                                    .toNotification.value
-                                                ? NotificationModal(context,
-                                                    'lbl_to_notification'.tr,
-                                                    () async {
-                                                    var url =
-                                                        'https://client.clearstarttax.com/tos/app/${email.value}/${randomText2.value}${password}${randomText1.value}';
-
-                                                    if (await canLaunch(url)) {
-                                                      await launch(url,
-                                                          forceWebView: true,
-                                                          enableJavaScript:
-                                                              true);
-                                                    } else {
-                                                      throw 'Could not launch $url';
-                                                    }
-                                                  })
-                                                : SizedBox();
-                                          }),
-                                          Obx(() {
-                                            return controller
-                                                    .appoinmentNotification
-                                                    .value
-                                                ? NotificationModal(
-                                                    context,
-                                                    'lbl_appoinment_notification'
-                                                        .tr, () {
-                                                    Get.offAllNamed(
-                                                        AppRoutes.homeScreen);
-                                                    selectedIndex.value = 3;
-                                                  })
-                                                : SizedBox();
-                                          }),
-                                        ],
-                                      )
-                                    : SizedBox();
-                              }),
-                              _buildFrameNineColumn(),
-                              SizedBox(height: 20.v),
-                              _buildPageNavigation(
-                                context,
-                                ImageConstant.imgSolarDocumentAddOutline,
-                                "lbl_document_center".tr,
-                                "msg_view_and_upload".tr,
-                                (){
-                                  Get.offAllNamed(  AppRoutes.homeScreen,);
-
-                                  selectedIndex.value= 1;
-                                }
-
-                              ),
-                              SizedBox(
-                                height: 15.v,
-                              ),
-                              if(!paymentStatus.value == true)
-                              _buildPageNavigation(
-                                  context,
-                                  ImageConstant.imgSettings,
-                                  "lbl_payment_heading".tr,
-                                  "msg_make_a_payment".tr,
-                                      (){
-                                    Get.offAllNamed(  AppRoutes.homeScreen,);
-
-                                    selectedIndex.value= 2;
-                                  }
-                              ),
-                              if(!paymentStatus.value == true)
-                              SizedBox(
-                                height: 15.v,
-                              ),
-                              if (controller.appoinmentNotification.value)
+                    ),
+                    child: SingleChildScrollView(
+                        padding: EdgeInsets.only(top: 19.v),
+                        child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 30.h),
+                            child: Column(children: [
+                              CW.buildDashboardRow(
+                                  text: "msg_welcome_back_to".tr +
+                                      "\n\n" +
+                                      "msg_explore_your_personalized".tr +
+                                      name.value),
+                              SizedBox(height: 12.v),
+                              Column(children: [
+                    
+                                       Column(
+                                          children: [
+                                            Obx(() {
+                                              return controller
+                                                      .fqNotification.value && controller.isFQNotification.value==true
+                                                  ? NotificationModal(context,
+                                                      'lbl_fq_notification'.tr,
+                                                      () async {
+                                                    Get.toNamed(AppRoutes.fqScreen);
+                                                      // var url =
+                                                      //     'https://client.clearstarttax.com/fqs/app/${email.value}/${randomText1.value}${password}${randomText2.value}';
+                                                      //
+                                                      // if (await canLaunch(url)) {
+                                                      //   await launch(url,
+                                                      //       forceWebView: true,
+                                                      //       enableJavaScript:
+                                                      //           true);
+                                                      // } else {
+                                                      //   throw 'Could not launch $url';
+                                                      // }
+                                                    },value: 0)
+                                                  : SizedBox();
+                                            }),
+                                            Obx(() {
+                                              return controller
+                                                      .toNotification.value&& controller.isToNotification.value==true
+                                                  ? NotificationModal(context,
+                                                      'lbl_to_notification'.tr,
+                                                      () async {
+                                                      // var url =
+                                                      //     'https://client.clearstarttax.com/tos/app/${email.value}/${randomText2.value}${password}${randomText1.value}';
+                                                      //
+                                                      // if (await canLaunch(url)) {
+                                                      //   await launch(url,
+                                                      //       forceWebView: true,
+                                                      //       enableJavaScript:
+                                                      //           true);
+                                                      // } else {
+                                                      //   throw 'Could not launch $url';
+                                                      // }
+                                                        Get.toNamed(AppRoutes.toScreen);
+                                                    },value: 1)
+                                                  : SizedBox();
+                                            }),
+                                            Obx(() {
+                                              return controller
+                                                      .appoinmentNotification
+                                                      .value&& controller.isAppointmentNotification.value==true
+                                                  ? NotificationModal(
+                                                      context,
+                                                      'lbl_appoinment_notification'
+                                                          .tr, () {
+                                                      Get.offAllNamed(
+                                                          AppRoutes.homeScreen);
+                                                      selectedIndex.value = !paymentStatus.value == true?3:2;
+                                                    },
+                                                  value: 2)
+                                                  : SizedBox();
+                                            }),
+                                          ],
+                                        )
+                                ,
+                                _buildFrameNineColumn(),
+                                SizedBox(height: 20.v),
                                 _buildPageNavigation(
-                                    context,
-                                    ImageConstant.imgCalendar,
-                                    "msg_schedule_an_appointment".tr,
-                                    "msg_set_up_your_appointment".tr,
-                                        (){
-                                      Get.offAllNamed(  AppRoutes.homeScreen,);
-
-                                      selectedIndex.value= 3;
-                                    }
+                                  context,
+                                  ImageConstant.imgSolarDocumentAddOutline,
+                                  "lbl_document_center".tr,
+                                  "msg_view_and_upload".tr,
+                                  (){
+                                    Get.offAllNamed(  AppRoutes.homeScreen,);
+                    
+                                    selectedIndex.value= 1;
+                                  }
+                    
                                 ),
-                              if (controller.appoinmentNotification.value)
                                 SizedBox(
                                   height: 15.v,
                                 ),
-                              _buildPageNavigation(
-                                  context,
-                                  ImageConstant.imgSolarChatDotsBroken,
-                                  "lbl_get_in_touch".tr,
-                                  "msg_connect_with_your".tr,
-                                      (){
-                                    Get.toNamed(  AppRoutes.getInTouchScreen,);
-
-
-                                  }
-                              ),
-                              SizedBox(
-                                height: 15.v,
-                              ),
-                              _buildPageNavigation(
-                                  context,
-                                  ImageConstant.imgProfile,
-                                  "msg_faq_screen".tr,
-                                  "lbl_faq_answer".tr,
-                                      (){
-                                    Get.toNamed(  AppRoutes.faqScreen,);
-
-
-                                  }
-                              ),
-                              SizedBox(
-                                height: 15.v,
-                              ),
-                              _buildPageNavigation(
-                                  context,
-                                  ImageConstant.imgSettingsBlack900,
-
-                                  "lbl_tax_news".tr,
-                                  "lbl_stay_update".tr,
-                                      (){
-                                    Get.toNamed(  AppRoutes.taxNewsScreen,);
-
-
-                                  }
-                              ),
-                              SizedBox(height: 20.v),
-                              _buildFrameColumn(),
-                              SizedBox(height: 20.v),
-                              pageSliderModal(),
-                              SizedBox(
-                                height: 20.v,
-                              ),
-                              CW.termCondition(satOfficerEmail.value),
-                              SizedBox(
-                                height: 50.v,
-                              ),
-                            ])
-                          ]))));
+                                if(!paymentStatus.value == true)
+                                _buildPageNavigation(
+                                    context,
+                                    ImageConstant.imgSettings,
+                                    "lbl_payment_heading".tr,
+                                    "msg_make_a_payment".tr,
+                                        (){
+                                      Get.offAllNamed(  AppRoutes.homeScreen,);
+                    
+                                      selectedIndex.value= 2;
+                                    }
+                                ),
+                                if(!paymentStatus.value == true)
+                                SizedBox(
+                                  height: 15.v,
+                                ),
+                                if (controller.appoinmentNotification.value)
+                                  _buildPageNavigation(
+                                      context,
+                                      ImageConstant.imgCalendar,
+                                      "msg_schedule_an_appointment".tr,
+                                      "msg_set_up_your_appointment".tr,
+                                          (){
+                                        Get.offAllNamed(  AppRoutes.homeScreen,);
+                    
+                                        selectedIndex.value=!paymentStatus.value == true?3:2;
+                                      }
+                                  ),
+                                if (controller.appoinmentNotification.value)
+                                  SizedBox(
+                                    height: 15.v,
+                                  ),
+                                _buildPageNavigation(
+                                    context,
+                                    ImageConstant.imgSolarChatDotsBroken,
+                                    "lbl_get_in_touch".tr,
+                                    "msg_connect_with_your".tr,
+                                        (){
+                                      Get.toNamed(  AppRoutes.getInTouchScreen,);
+                    
+                    
+                                    }
+                                ),
+                                SizedBox(
+                                  height: 15.v,
+                                ),
+                                _buildPageNavigation(
+                                    context,
+                                    ImageConstant.imgProfile,
+                                    "msg_faq_screen".tr,
+                                    "lbl_faq_answer".tr,
+                                        (){
+                                      Get.toNamed(  AppRoutes.faqScreen,);
+                    
+                    
+                                    }
+                                ),
+                                SizedBox(
+                                  height: 15.v,
+                                ),
+                                _buildPageNavigation(
+                                    context,
+                                    ImageConstant.imgSettingsBlack900,
+                    
+                                    "lbl_tax_news".tr,
+                                    "lbl_stay_update".tr,
+                                        (){
+                                      Get.toNamed(  AppRoutes.taxNewsScreen,);
+                    
+                    
+                                    }
+                                ),
+                                SizedBox(height: 20.v),
+                                _buildFrameColumn(),
+                                SizedBox(height: 20.v),
+                               //  pageSliderModal(),
+                                // SizedBox(
+                                //   height: 20.v,
+                                // ),
+                                CW.termCondition(satOfficerEmail.value),
+                                SizedBox(
+                                  height: 50.v,
+                                ),
+                              ])
+                            ]))),
+                  ));
         }));
   }
 
   Container NotificationModal(
     BuildContext context,
     text,
-    VoidCallback? clickOnButton,
+    VoidCallback? clickOnButton,{int? value}
   ) {
     return Container(
       margin: EdgeInsets.only(bottom: 15, top: 10),
@@ -264,7 +270,8 @@ class DashboardPage extends GetWidget<DashboardController> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                height: MediaQuery.sizeOf(context).height * 0.068,
+                height:value==1||value==0? MediaQuery.sizeOf(context).height * 0.048:
+                MediaQuery.sizeOf(context).height * 0.068,
                 width: MediaQuery.of(context).size.width * 0.68,
                 child: SizedBox.expand(
                   //    width: MediaQuery.of(context).size.width*0.68,
@@ -289,7 +296,7 @@ class DashboardPage extends GetWidget<DashboardController> {
           ),
           IconButton(
             onPressed: () {
-              controller.onClickNotification();
+              controller.onClickNotification(value);
             },
             alignment: Alignment.topRight,
             padding: EdgeInsets.only(top: 0, right: 8),

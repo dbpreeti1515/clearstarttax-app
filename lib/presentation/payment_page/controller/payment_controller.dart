@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-
-
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
@@ -69,6 +67,7 @@ class PaymentController extends GetxController
 
   TabController? tabController;
   final formKey = GlobalKey<FormState>();
+  final paymentFormKey = GlobalKey<FormState>();
   final transerFormKey = GlobalKey<FormState>();
   Map<String, dynamic> bodyParamsForCredit = {};
   Map<String, dynamic> responseMapForCard = {};
@@ -88,7 +87,7 @@ class PaymentController extends GetxController
   RxString? selectedItem;
   final getPaymentData = Rxn<GetPaymentModal>();
   final List<FocusNode> focusNodes = List.generate(21, (index) => FocusNode());
-
+  final paymentFocus = FocusNode();
 
   void setSelectedValue(String value) {
     selectedAmount.value = value;
@@ -173,7 +172,6 @@ class PaymentController extends GetxController
     super.onInit();
     await getPaymentAPI();
 
-
     tabController = TabController(length: 2, vsync: this);
     //  await creditCardAPI();
   }
@@ -184,7 +182,6 @@ class PaymentController extends GetxController
     cvvController..clear();
     paymentController.value.clear();
 
-    emailController..clear();
     nameController..clear();
     monthController..clear();
     yearController..clear();
@@ -196,11 +193,11 @@ class PaymentController extends GetxController
 
     cardinformationvalueController.clear();
     cvvController.clear();
-   // emailController.clear();
+    // emailController.clear();
   }
 
   void bankClear() {
- transferSelectValue.value = "saab";
+    transferSelectValue.value = "saab";
     bankNameController.clear();
     paymentController.value.clear();
     bankHolderController.clear();
@@ -210,15 +207,13 @@ class PaymentController extends GetxController
     transferZipController.clear();
     transferAdd1Controller.clear();
     transferAdd2Controller.clear();
-  //  transferEmailController.clear();
+    //  transferEmailController.clear();
     transferCityController.clear();
   }
 
   @override
   void dispose() {
     super.dispose();
-
-
   }
 
   @override
@@ -227,60 +222,68 @@ class PaymentController extends GetxController
   }
 
   Future<void> clickOnPayButton(BuildContext context) async {
-
     //validateCreditCardInfo(cardinformationvalueController.text,monthController.text+yearController.text, cvvController.text);
     if (formKey.currentState!.validate()) {
-    autoValidate.value= true;
+      if (selectedAmount.value.isEmpty &&
+          paymentController.value.text.isEmpty) {
+        if (paymentFocus.hasFocus || paymentController.value.text.isNotEmpty) {
+        } else {
+          autoValidate.value = true;
+          FocusScope.of(context).requestFocus(paymentFocus);
 
-      if (selectedAmount.value.isEmpty && paymentController.value.text.isEmpty) {
+
+        }
+
         CM.showToast("Please enter amount");
       } else {
-        if(selectedAmount.value.isEmpty){
+        if (selectedAmount.value.isEmpty) {
           selectedAmount.value = paymentController.value.text;
         }
         creditCardAPI(context);
       }
       focusNodes.forEach((node) => node.unfocus());
-    }else{
-
-      int invalidFieldIndex = -1;
+    } else {
       for (int i = 1; i < focusNodes.length; i++) {
         if (!focusNodes[i].hasFocus) {
-          if(autoValidate.value==false){
-            FocusScope.of(context).requestFocus(focusNodes[i]);
-            autoValidate.value=true;
-          }
-
+          FocusScope.of(context).requestFocus(focusNodes[i]);
 
           FocusScope.of(context).nextFocus();
           break;
-
-        }else{
-
         }
-        print('FocusNode $i: ${focusNodes[i].hasFocus}');
       }
-      // If an invalid field is found, focus on it
-      // if (invalidFieldIndex != -1) {
-      //   FocusScope.of(context).requestFocus(focusNodes[invalidFieldIndex]);
-      // }
     }
   }
 
   Future<void> clickOnTransferPayButton(BuildContext context) async {
     if (transerFormKey.currentState!.validate()) {
+      if (selectedAmount.value.isEmpty &&
+          paymentController.value.text.isEmpty) {
+        if (paymentFocus.hasFocus || paymentController.value.text.isNotEmpty) {
+        } else {
+          autoValidate.value = true;
+          FocusScope.of(context).requestFocus(paymentFocus);
 
-      if (selectedAmount.value.isEmpty && paymentController.value.text.isEmpty) {
+
+        }
         CM.showToast("Please enter amount");
       } else {
-        if(selectedAmount.value.isEmpty){
+        if (selectedAmount.value.isEmpty) {
           selectedAmount.value = paymentController.value.text;
         }
         BankTransfer(context);
       }
+      focusNodes.forEach((node) => node.unfocus());
 
-      // SuccessDialog.showCustomDialog(
-      //     context, "msg_congratulations".tr, 'msg_well_done_thank'.tr, true);
+
+    }else{
+      for (int i = 9; i < focusNodes.length; i++) {
+        if (!focusNodes[i].hasFocus) {
+          FocusScope.of(context).requestFocus(focusNodes[i]);
+
+         // FocusScope.of(context).nextFocus();
+          break;
+        }
+      }
     }
   }
 
@@ -298,17 +301,16 @@ class PaymentController extends GetxController
             getPaymentData.value?.data != null) {
           selectedAmount.value =
               getPaymentData.value!.data!.data!.pastDue.toString();
-          emailController.text = getPaymentData.value!.data!.data!.email.toString();
-          transferEmailController.text = getPaymentData.value!.data!.data!.email.toString();
+          emailController.text =
+              getPaymentData.value!.data!.data!.email.toString();
+          transferEmailController.text =
+              getPaymentData.value!.data!.data!.email.toString();
 
           var dateString =
               getPaymentData.value!.data!.paymentSchedular![0].scheduledDate;
           DateTime dateTime = DateTime.parse(dateString!);
           String formattedDate = DateFormat('dd/MM/yyyy').format(dateTime);
           print(formattedDate);
-
-
-
         }
       }
     } catch (error) {

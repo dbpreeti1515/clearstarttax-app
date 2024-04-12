@@ -140,6 +140,7 @@ final Map<String, String> enUs = {
   "msg_enter_cvv": "Please enter valid cvv number ",
   "msg_enter_zip": "Please enter valid zip code",
   "msg_enter_name": "Please enter valid name ",
+  "msg_valid_address": "Please enter valid address ",
   "msg_enter_routing": "Please enter valid routing number ",
   "msg_enter_account_number": "Please enter valid account number ",
 
@@ -194,6 +195,10 @@ final Map<String, String> enUs = {
   "msg_officer_mail_i": "Officer mail: info@clearstarttax.com",
   "msg_seamless_scheduling":
       "Book Your Appointments with Ease!",
+  "msg_all_secheduled_appointment": "All slots are booked for this date",
+  "clear_start_tax": "Clear Start tax",
+  "available_time_slots": "Available Time Slots",
+
   "msg_select_your_time": "Select your time zone:",
   "msg_press": " and press #3.",
   "msg_slot_date_12_8_2023": "Slot date: ",

@@ -115,6 +115,8 @@ class SplashScreenFourController extends GetxController {
 
       if (getDashboardData.value != null &&
           getDashboardData.value?.data != null) {
+        dbHelper.updateFirstUserColumn('fqNotification', 'false');
+        dbHelper.updateFirstUserColumn('toNotification', 'false');
 
 
         statusInfo.value = getDashboardData.value!.data!.statusinfo;
@@ -133,7 +135,7 @@ class SplashScreenFourController extends GetxController {
             dbHelper.updateFirstUserColumn('fqNotification', 'true');
 
           }else{
-            dbHelper.updateFirstUserColumn('fqNotification', 'false');
+           // dbHelper.updateFirstUserColumn('fqNotification', 'false');
           }
         });
 
@@ -144,7 +146,7 @@ class SplashScreenFourController extends GetxController {
             dbHelper.updateFirstUserColumn('toNotification', 'true');
 
           }else{
-            dbHelper.updateFirstUserColumn('toNotification', 'false');
+           // dbHelper.updateFirstUserColumn('toNotification', 'false');
           }
         });
         getDashboardData.value!.data!.statusForPayment!.forEach((element) {
@@ -153,8 +155,6 @@ class SplashScreenFourController extends GetxController {
            print("payment status ${element.toString()} and ${statusId.value.toString()}");
            paymentStatus.value = true;
 
-          }else{
-            dbHelper.updateFirstUserColumn('toNotification', 'false');
           }
         });
         getDashboardData.value!.data!.statusForAppointment!.forEach((element) {

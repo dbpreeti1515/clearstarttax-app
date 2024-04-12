@@ -21,22 +21,22 @@ class GetInTouchScreen extends GetWidget<GetInTouchController> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: buildCustomAppBar(),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(children: [
-          SizedBox(height: 19.v),
-          Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.h),
-              child: Form(
-                key: _controller.formKey,
-                child: Column(children: [
-                  CW.buildDashboardRow(text: "lbl_write_heading".tr),
-                  SizedBox(height: 16.v),
-                  Container(
-                      decoration: AppDecoration.outlineBlack.copyWith(
-                          borderRadius: BorderRadiusStyle.roundedBorder10),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
+      body: ScrollConfiguration(
+        behavior: ListScrollBehaviour(),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(children: [
+            SizedBox(height: 19.v),
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30.h),
+                child: Form(
+                  key: _controller.formKey,
+                  child: Column(children: [
+                    CW.buildDashboardRow(text: "lbl_write_heading".tr),
+                    SizedBox(height: 16.v),
+                    Container(
+                        decoration: AppDecoration.outlineBlack.copyWith(
+                            borderRadius: BorderRadiusStyle.roundedBorder10),
                         child:
                             Column(mainAxisSize: MainAxisSize.min, children: [
                           _buildColumnFrameTwentySix(),
@@ -51,13 +51,13 @@ class GetInTouchScreen extends GetWidget<GetInTouchController> {
                           SizedBox(height: 14.v),
                           _messageField(context),
                           SizedBox(height: 20.v)
-                        ]),
-                      )),
-                  SizedBox(height: 50.v),
-                ]),
-              )),
-          SizedBox(height: 190.v),
-        ]),
+                        ])),
+                    SizedBox(height: 50.v),
+                  ]),
+                )),
+            SizedBox(height: 190.v),
+          ]),
+        ),
       ),
     );
   }
@@ -125,6 +125,11 @@ class GetInTouchScreen extends GetWidget<GetInTouchController> {
                   Text("lbl_message".tr, style: theme.textTheme.titleMedium)),
           SizedBox(height: 9.v),
           CustomTextFormField(
+              onChange: (value) {
+                if (controller.formKey.currentState!.validate()) {
+
+                }
+              },
               focusNode: _controller.focusNodes[1],
               controller: controller.messageController,
               hintText: "lbl_write_message".tr,
@@ -260,8 +265,14 @@ class GetInTouchScreen extends GetWidget<GetInTouchController> {
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.h),
               child: CustomTextFormField(
+                onChange: (value) {
+    if (controller.formKey.currentState!.validate()) {
+
+    }
+                },
+                focusNode: controller.subjectFocusNode,
                   validator: (value) {
-                    if (!isText(value) || value == null || value.isEmpty) {
+                    if ( value == null || value.isEmpty) {
                       return "msg_enter_this_field".tr;
                     }
                     return null;
@@ -284,6 +295,7 @@ class GetInTouchScreen extends GetWidget<GetInTouchController> {
           Text("lbl_full_name".tr, style: theme.textTheme.titleMedium),
           SizedBox(height: 11.v),
           CustomTextFormField(
+            focusNode: controller.messageFocusNode,
               controller: controller.fullNameController,
               hintText: "lbl_enter_full_name".tr,
               hintStyle: CustomTextStyles.bodyLargeGray60001,
