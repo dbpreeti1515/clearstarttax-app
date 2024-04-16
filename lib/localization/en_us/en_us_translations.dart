@@ -196,6 +196,7 @@ final Map<String, String> enUs = {
   "msg_seamless_scheduling":
       "Book Your Appointments with Ease!",
   "msg_all_secheduled_appointment": "All slots are booked for this date",
+  "msg_no_secheduled_appointment": "no slots available for today",
   "clear_start_tax": "Clear Start tax",
   "available_time_slots": "Available Time Slots",
 

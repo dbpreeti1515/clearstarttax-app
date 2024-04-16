@@ -496,7 +496,10 @@ class DashboardPage extends GetWidget<DashboardController> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        Get.toNamed(AppRoutes.newsPageScreen);
+                        Get.to(() => NewsPageScreen(id:controller.testMonialData
+                            .value[index]['ID']));
+
+                       // Get.toNamed(AppRoutes.newsPageScreen);
                         // Get.off(() => NewsPageScreen(
                         //       id: controller.testMonialData.value[index]['ID'],
                         //     ));
@@ -555,7 +558,9 @@ class DashboardPage extends GetWidget<DashboardController> {
                                   SizedBox(height: 9.v),
                                   GestureDetector(
                                     onTap: () {
-                                      //onTapFrameEighteen!.call();
+                                    //  Get.toNamed(AppRoutes.newsPageScreen);
+                                      Get.to(() => NewsPageScreen(id:controller.testMonialData
+                                          .value[index]['ID']));
                                     },
                                     child: Row(
                                       children: [

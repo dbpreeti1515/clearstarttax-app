@@ -1,5 +1,6 @@
 
 
+import 'package:flutter/cupertino.dart';
 import 'package:preeti_s_application3/data/apiModal/testmonialDescriptionModal.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -24,10 +25,9 @@ class NewsPageScreen extends GetWidget<NewsPageController> {
 
 
     controller.testimonialDescriptionId.value = id??0;
-    print("this is $id");
-    print("this is ${controller.testimonialDescriptionId.value}");
+
      controller.TestimonialDescriptionAPI(controller.testimonialDescriptionId.value);
-     controller.updateHeight();
+   //  controller.updateHeight();
 
 
   }
@@ -107,7 +107,8 @@ class NewsPageScreen extends GetWidget<NewsPageController> {
                                             child: Text("lbl_recent_post".tr,
                                                 style: CustomTextStyles
                                                     .titleMediumPrimary)),
-                                        SizedBox(height: 9.v),
+                                        SizedBox(height: 12.v),
+
                                         _buildUserProfile(),
                                         // SizedBox(height: 10.v),
                                         // Padding(
@@ -161,84 +162,114 @@ class NewsPageScreen extends GetWidget<NewsPageController> {
 
   /// Section Widget
   Widget _buildUserProfile() {
-    return Align(
-        alignment: Alignment.centerRight,
-        child: SizedBox(
-            height: 225.v,
-            child: Obx(() => ListView.separated(
-                padding: EdgeInsets.only(left: 31.h),
-                scrollDirection: Axis.horizontal,
-                separatorBuilder: (context, index) {
-                  return SizedBox(width: 15.h);
-                },
-                itemCount: controller.testimonialRelatedData.value.length,
-                itemBuilder: (context, index) {
-                  return SizedBox(
-                    width: 220.h,
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        decoration: AppDecoration.outlineBlack900.copyWith(
-                          borderRadius: BorderRadiusStyle.roundedBorder10,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomImageView(
-                              imagePath: controller
-                                  .testimonialRelatedData.value[index]['image']
-                                  .toString(),
-                              fit: BoxFit.cover,
-                              height: mediaQueryData.size.height * .136,
-                              width: mediaQueryData.size.width,
-                              radius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                              ),
-                            ),
-                            SizedBox(height: 5.v),
-                            Container(
-                              width: mediaQueryData.size.width,
-                              margin: EdgeInsets.only(left: 10.h),
-                              child: Obx(
-                                () => Text(
-                                  controller.testimonialRelatedData
-                                      .value[index]['post_title']
-                                      .toString(),
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: theme.textTheme.labelLarge,
+    return Obx((){
+      return controller.testimonialRelatedData.value.isNotEmpty?
+      Align(
+          alignment: Alignment.centerRight,
+          child: SizedBox(
+              height: 225.v,
+              child: Obx(() => ListView.separated(
+                  padding: EdgeInsets.only(left: 31.h),
+                  scrollDirection: Axis.horizontal,
+                  separatorBuilder: (context, index) {
+                    return SizedBox(width: 15.h);
+                  },
+                  itemCount: controller.testimonialRelatedData.value.length,
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      width: 220.h,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: 10),
+                          decoration: AppDecoration.outlineBlack900.copyWith(
+                            borderRadius: BorderRadiusStyle.roundedBorder10,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomImageView(
+                                imagePath: controller
+                                    .testimonialRelatedData.value[index]['image']
+                                    .toString(),
+                                fit: BoxFit.cover,
+                                height: mediaQueryData.size.height * .137,
+                                width: mediaQueryData.size.width,
+                                radius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 8.v),
-                            Padding(
-                              padding: EdgeInsets.only(left: 10.h),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "msg_read_more".tr,
-                                    style: theme.textTheme.bodySmall,
+                              SizedBox(height: 5.v),
+                              Container(
+                                width: mediaQueryData.size.width,
+                                margin: EdgeInsets.only(left: 10.h),
+                                child: Obx(
+                                      () => Text(
+                                    controller.testimonialRelatedData
+                                        .value[index]['post_title']
+                                        .toString(),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: theme.textTheme.labelLarge!.copyWith(
+                                        height: 1.3
+                                    ),
+
                                   ),
-                                  CustomImageView(
-                                    imagePath:
-                                        ImageConstant.imgArrowRightBlack900,
-                                    height: 15.adaptSize,
-                                    width: 15.adaptSize,
-                                    margin: EdgeInsets.only(left: 5.h),
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 5.v),
-                          ],
+                              SizedBox(height: 8.v),
+                              TextButton(
+
+
+                                style:TextButton.styleFrom(
+
+                                  minimumSize: Size(20, 15),
+                                  padding: EdgeInsets.only(left: 5, top: 0),
+                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                ),
+                                onPressed: (){
+
+
+                                  controller.webController?.loadRequest(Uri.parse("about:blank"));
+                                 
+
+                                  // Get.off(() => NewsPageScreen(id:controller.testimonialDescriptionData.value[0]['ID']));
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => NewsPageScreen(id:controller.testimonialRelatedData.value[index]['ID']),));
+                                },
+
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 10.h),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "msg_read_more".tr,
+                                        style: theme.textTheme.bodySmall!.copyWith(
+                                            color: theme.primaryColor
+
+                                      )),
+                                      CustomImageView(
+                                        imagePath:
+                                        ImageConstant.imgArrowRightBlack900,
+                                        color: theme.primaryColor,
+                                        height: 15.adaptSize,
+                                        width: 15.adaptSize,
+                                        margin: EdgeInsets.only(left: 5.h),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 5.v),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }))));
+                    );
+                  }))))
+          :SizedBox();
+    });
   }
 
   /// Section Widget

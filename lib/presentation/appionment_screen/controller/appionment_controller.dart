@@ -155,7 +155,7 @@ class AppionmentController extends GetxController {
         print("object");
 
         getAvailableSlot.value = responseMapForSlot['slots'];
-        print(getAvailableSlot.value);
+        print(getAvailableSlot.value[0].toString()=="msg_no_secheduled_appointment".tr);
       } else {
         //  isLoading.value = false;
 

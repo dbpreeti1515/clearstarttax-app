@@ -35,9 +35,10 @@ class NewsPageController extends GetxController {
   void onInit() async{
     super.onInit();
 
+    contentheight.value = 0;
+    contentheight1.value = 0;
 
 
-    TestimonialRelatedAPI(7087, 46);
     //TestimonialDescriptionAPI();
   }
 
@@ -54,7 +55,16 @@ class NewsPageController extends GetxController {
       if (response.statusCode == 200) {
         //print(testimonialDescriptionModal.fromJson(jsonDecode(response.body??'') as Map<String,dynamic>));
 
+        //testimonialDescriptionId.value = json.decode(response.body);
         testimonialDescriptionData.value = json.decode(response.body);
+
+        print(testimonialDescriptionId.value);
+         TestimonialRelatedAPI(testimonialDescriptionId.value, testimonialDescriptionData.value[0]['categories'][0]);
+
+        print('this categories ${testimonialDescriptionData.value[0]['post_content']}');
+        print('this categories ${testimonialDescriptionData.value[0]['content2']}');
+
+
 
         webController = WebViewController()
         ..enableZoom(true)
@@ -93,7 +103,7 @@ class NewsPageController extends GetxController {
 
               },
               onPageStarted: (String url) {
-                updateHeight();
+              //  updateHeight();
               },
 
               onPageFinished: (String url) {},
@@ -135,6 +145,7 @@ class NewsPageController extends GetxController {
         //print(testimonialDescriptionModal.fromJson(jsonDecode(response.body??'') as Map<String,dynamic>));
 
         testimonialRelatedData.value = json.decode(response.body);
+        print("related data ${testimonialRelatedData.value[0]['ID']}");
 
       } else {
         print('Failed with status: ${response.statusCode}');
@@ -151,15 +162,15 @@ class NewsPageController extends GetxController {
       contentheight.value = double.parse(height.toString());
 
 
-    print(contentheight.value);
+    print("scroll ${contentheight.value}");
     }
     if(webController1 !=null) {
       var height=(await
       webController1!.runJavaScriptReturningResult('document.documentElement.scrollHeight;'));
       contentheight1.value = double.parse(height.toString());
 
+      print("scroll 1 ${contentheight1.value}");
 
-    print(contentheight1.value);
     }
   // prints height
   }

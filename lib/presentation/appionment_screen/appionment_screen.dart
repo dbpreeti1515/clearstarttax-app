@@ -18,7 +18,7 @@ import 'package:preeti_s_application3/widgets/custom_outlined_button.dart';
 
 class AppionmentScreen extends GetWidget<AppionmentController> {
   AppionmentScreen({Key? key}) : super(key: key);
-  final AppionmentController _controller = Get.put(AppionmentController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -70,13 +70,13 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                       SizedBox(height: 20.v),
                                       _buildColumnFrame(),
                                       Obx(() {
-                                        print("${_controller
+                                        print("${controller
                                             .isAppointmentAppear.value ==
                                             true} and i ${db.value!.status=="active"}");
                                         return db.value!.status=="active"
                                             ?  Obx(() =>
 
-                                          _controller
+                                          controller
                                               .isAppointmentAppear.value == true
                                               ?Container(
                                                 padding:
@@ -118,9 +118,9 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                                         ),
                                                       ),
 
-                                                      if (_controller
+                                                      if (controller
                                                           .formattterSelectedDate
-                                                        .value!='null'&& _controller
+                                                        .value!='null'&& controller
                                                           .formattterSelectedDate
                                                           .value!='') ...{
                                                         Container(
@@ -138,7 +138,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                                                       .titleSmallBlack900_1),
                                                               Obx(
                                                                 () => Text(
-                                                                    _controller
+                                                                    controller
                                                                             .formattterSelectedDate
                                                                             .value ??
                                                                         "",
@@ -162,7 +162,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                                               () => Radio(
                                                                   value: 60,
                                                                   groupValue:
-                                                                      _controller
+                                                                      controller
                                                                           .selectedValue
                                                                           .value,
                                                                   onChanged: (int?
@@ -191,18 +191,18 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                                     ]),
                                               )
                                               :appoinmentTime(
-                                              _controller.str,
-                                              _controller
+                                              controller.str,
+                                              controller
                                                   .formattterDate
                                                   .value,
-                                              _controller
+                                              controller
                                                   .selectedTimeZone.name))
                                             : appoinmentTime(
-                                                _controller.str,
-                                                _controller
+                                                controller.str,
+                                                controller
                                                     .formattterDate
                                                     .value,
-                                                _controller
+                                                controller
                                                     .selectedTimeZone.name);
                                       }),
                                       CW.termCondition(satOfficerEmail.value),
@@ -230,10 +230,10 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                   return date.weekday != DateTime.sunday &&
                       date.weekday != DateTime.saturday;
                 },
-                initialDate: _controller.selectedDate,
+                initialDate: controller.selectedDate,
                 firstDate: DateTime.now(),
                 lastDate: DateTime(2101),
-                onDateChanged: _controller.handleDateChanged,
+                onDateChanged: controller.handleDateChanged,
               ))
         ]));
   }
@@ -260,12 +260,12 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                 decoration: InputDecoration.collapsed(
                     hintText: '',
                     hintStyle: TextStyle(overflow: TextOverflow.ellipsis)),
-                value: _controller.selectedTimeZone.value,
+                value: controller.selectedTimeZone.value,
                 onChanged: (String? newValue) {
                   controller.selectedTimeZone.value = newValue!;
                   print(newValue);
                 },
-                items: _controller.timeZoneList.map((TimeZone value) {
+                items: controller.timeZoneList.map((TimeZone value) {
                   return DropdownMenuItem<String>(
                     value: value.value,
                     child: Text(
@@ -286,18 +286,18 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                   ElevatedButton.styleFrom(backgroundColor: theme.primaryColor),
               text: "msg_get_available_slots".tr,
               onPressed: () async {
-                if (_controller.formattterSelectedDate.value == '' ||
-                    _controller.formattterSelectedDate.value=='null') {
+                if (controller.formattterSelectedDate.value == '' ||
+                    controller.formattterSelectedDate.value=='null') {
                   CM.showToast('msg_date_selection'.tr);
                 } else {
-                  if (_controller.formattterAPIdDate.value.isNotEmpty &&
-                      _controller.selectedDate != null) {
-                    print(_controller.formattterAPIdDate.value);
-                    print(_controller.selectedDate);
-                    await _controller.getAvailableAPI();
+                  if (controller.formattterAPIdDate.value.isNotEmpty &&
+                      controller.selectedDate != null) {
+                    print(controller.formattterAPIdDate.value);
+                    print(controller.selectedDate);
+                    await controller.getAvailableAPI();
                   }
 
-                  if (_controller.getAvailableSlot.value.isNotEmpty)
+                  if (controller.getAvailableSlot.value.isNotEmpty)
                     showDateListDialog(context);
 
                 }
@@ -370,7 +370,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                           style: CustomTextStyles.titleSmallBlack900_1),
                       Obx(
                         () => Text(
-                            _controller.formattterSelectedDate.value ?? "",
+                            controller.formattterSelectedDate.value ?? "",
                             style: theme.textTheme.bodyMedium),
                       )
                     ],
@@ -382,9 +382,9 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                     Obx(
                       () => Radio(
                         value: 60,
-                        groupValue: _controller.selectedValue.value,
+                        groupValue: controller.selectedValue.value,
                         onChanged: (int? value) =>
-                            _controller.handleRadioValueChanged(value!),
+                            controller.handleRadioValueChanged(value!),
                       ),
                     ),
                     Flexible(
@@ -400,7 +400,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                   height: 15,
                 ),
                 if(controller.getAvailableSlot.value.length>1)
-                if (_controller.getAvailableSlot.value[1].toString() ==
+                if (controller.getAvailableSlot.value[1].toString() ==
                     'All slots are booked for this date')
                   Center(
                     child: Container(
@@ -423,7 +423,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                                       Border.all(color: Colors.grey, width: 1),
                                   borderRadius: BorderRadius.circular(5)),
                               child: Text(
-                                _controller.getAvailableSlot.value[0],
+                                controller.getAvailableSlot.value[0],
                                 textAlign: TextAlign.center,
                               ),
                             );
@@ -432,7 +432,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                             height: 20,
                           ),
                           Text(
-                            _controller.getAvailableSlot.value[1],
+                            controller.getAvailableSlot.value[1],
                             style: TextStyle(color: Colors.red),
                           ),
                           SizedBox(
@@ -444,121 +444,173 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                   ),
                 Obx(() {
                   return controller.getAvailableSlot.length>1?
-                    _controller.getAvailableSlot.value[1].toString() ==
+                    controller.getAvailableSlot.value[1].toString() ==
                           'msg_all_secheduled_appointment'.tr
                       ? SizedBox()
                       : Container(
                           height: 150,
-                          child: ListView.separated(
-                            physics: AlwaysScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                              isColor.value = false;
-                              _controller.selectedIndex.value = 100;
-                                print(isColor.value);
-                                print(' color is ${
-                                    index ==
-                                        _controller
-                                            .selectedIndex.value
-                                }');
-                                return _controller.getAvailableSlot.value[1]
-                                            .toString() ==
-                                        'All slots are booked for this date'
-                                    ? Container(
-                                        child: Column(
-                                          children: [
-                                            GestureDetector(onTap: () {
-                                              _controller.selectedIndex.value =
-                                                  index;
-                                              {
-                                                _controller.str = _controller.getAvailableSlot
-                                                    .value[index];
-                                                List<String> strarray =
-                                                    _controller.str.split("-");
+                          child: Scrollbar(
+                            thickness: 4,
+                            thumbVisibility: true,
 
-                                                _controller.selectedTimeSlot
-                                                    .value = _controller
-                                                        .formattterAPIdDate
+                            child: ListView.separated(
+                              padding: EdgeInsets.only(left: 5, right: 15) ,
+                              physics: AlwaysScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                isColor.value = false;
+                                controller.selectedIndex.value = 100;
+
+
+                                  return controller.getAvailableSlot.value[1]
+                                              .toString() ==
+                                          'All slots are booked for this date'||
+                                      controller.getAvailableSlot.value[0].toString()=="msg_no_secheduled_appointment".tr
+                            
+                                      ? Container(
+
+                                          child: Column(
+                                            children: [
+                                              GestureDetector(
+                                                  onTap: () {
+                                                controller.selectedIndex.value =
+                                                    index;
+                                                {
+                                                  controller.str = controller.getAvailableSlot
+                                                      .value[index];
+                                                  List<String> strarray =
+                                                      controller.str.split("-");
+                            
+                                                  controller.selectedTimeSlot
+                                                      .value = controller
+                                                          .formattterAPIdDate
+                                                          .value +
+                                                      ' ' +
+                                                      strarray[0];
+                            
+                                                  print(controller
+                                                      .selectedTimeSlot.value);
+                                                }
+                                              },
+                                                  child: Obx(() {
+                            
+                                                return Container(
+                                                  padding: EdgeInsets.all(8),
+                                                  decoration: BoxDecoration(
+                                                      color: index == controller
+                                                                  .selectedIndex
+                                                                  .value
+                                                          ? theme
+                                                              .secondaryHeaderColor
+                                                          : Colors.white,
+                                                      border: Border.all(
+                                                          color: Colors.grey,
+                                                          width: 1),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5)),
+                                                  child: Text(
+                                                    controller.getAvailableSlot
+                                                        .value[0],
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                );
+                                              }))
+                                            ],
+                                          ),
+                                        )
+                                      : GestureDetector(
+                                      onTap: () {
+                                          controller.selectedIndex.value = index;
+                                          {
+                                            controller.str = controller
+                                                .getAvailableSlot.value[index];
+                                            List<String> strarray =
+                                                controller.str.split("-");
+                            
+                                            controller.selectedTimeSlot.value =
+                                                controller.formattterAPIdDate
                                                         .value +
                                                     ' ' +
                                                     strarray[0];
+                            
+                                            print(controller
+                                                .selectedTimeSlot.value);
+                                          }
+                                        }, child: Obx(() {
+                                          return Container(
+                                            padding: EdgeInsets.all(8),
+                                            decoration: BoxDecoration(
+                                                color: index ==
+                                                        controller
+                                                            .selectedIndex.value
+                                                    ? theme.secondaryHeaderColor
+                                                    : Colors.white,
+                                                border: Border.all(
+                                                    color: Colors.grey, width: 1),
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                            child: Text(
+                                              controller
+                                                  .getAvailableSlot.value[index],
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          );
+                                        }));
+                                },
+                                separatorBuilder: (context, index) {
+                                  return SizedBox(
+                                    height: 10,
+                                  );
+                                },
+                                itemCount:
+                                    controller.getAvailableSlot.value.length),
+                          ),
+                        )
+                      :SizedBox(
+                    width: mediaQueryData.size.width,
+                    child: GestureDetector(
+                        onTap: () {
+                          // controller.selectedIndex.value =
+                          //     index;
+                          {
+                            // controller.str = controller.getAvailableSlot
+                            //     .value[index];
+                            List<String> strarray =
+                            controller.str.split("-");
 
-                                                print(_controller
-                                                    .selectedTimeSlot.value);
-                                              }
-                                            }, child: Obx(() {
+                            controller.selectedTimeSlot
+                                .value = controller
+                                .formattterAPIdDate
+                                .value +
+                                ' ' +
+                                strarray[0];
 
-                                              return Container(
-                                                padding: EdgeInsets.all(8),
-                                                decoration: BoxDecoration(
-                                                    color: index == _controller
-                                                                .selectedIndex
-                                                                .value
-                                                        ? theme
-                                                            .secondaryHeaderColor
-                                                        : Colors.white,
-                                                    border: Border.all(
-                                                        color: Colors.grey,
-                                                        width: 1),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5)),
-                                                child: Text(
-                                                  _controller.getAvailableSlot
-                                                      .value[0],
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              );
-                                            }))
-                                          ],
-                                        ),
-                                      )
-                                    : GestureDetector(
-                                    onTap: () {
-                                        _controller.selectedIndex.value = index;
-                                        {
-                                          _controller.str = _controller
-                                              .getAvailableSlot.value[index];
-                                          List<String> strarray =
-                                              _controller.str.split("-");
+                            print(controller
+                                .selectedTimeSlot.value);
+                          }
+                        },
+                        child: Obx(() {
 
-                                          _controller.selectedTimeSlot.value =
-                                              _controller.formattterAPIdDate
-                                                      .value +
-                                                  ' ' +
-                                                  strarray[0];
+                          return Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1),
+                                borderRadius:
+                                BorderRadius.circular(
+                                    5)),
+                            child: Text(
+                              controller.getAvailableSlot
+                                  .value[0].toString().capitalizeFirst!,
+                              textAlign: TextAlign.center,
 
-                                          print(_controller
-                                              .selectedTimeSlot.value);
-                                        }
-                                      }, child: Obx(() {
-                                        return Container(
-                                          padding: EdgeInsets.all(8),
-                                          decoration: BoxDecoration(
-                                              color: index ==
-                                                      _controller
-                                                          .selectedIndex.value
-                                                  ? theme.secondaryHeaderColor
-                                                  : Colors.white,
-                                              border: Border.all(
-                                                  color: Colors.grey, width: 1),
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          child: Text(
-                                            _controller
-                                                .getAvailableSlot.value[index],
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        );
-                                      }));
-                              },
-                              separatorBuilder: (context, index) {
-                                return SizedBox(
-                                  height: 10,
-                                );
-                              },
-                              itemCount:
-                                  _controller.getAvailableSlot.value.length),
-                        ):SizedBox();
+                            ),
+                          );
+                        })),
+
+                  );
                 }),
                 SizedBox(
                   height: 10,
@@ -571,7 +623,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                       border: Border.all(color: Colors.grey, width: 1)),
                   height: 100,
                   child: TextFormField(
-                    controller: _controller.messsageController,
+                    controller: controller.messsageController,
                     maxLines: 15,
                     decoration: InputDecoration(
                         hintText: 'Write message', border: InputBorder.none),
@@ -582,7 +634,7 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
           ),
           actions: [
             Center(
-              child: _controller.isLoading.value
+              child: controller.isLoading.value
                   ? CircularProgressIndicator()
                   : Container(
                       margin: EdgeInsets.only(top: 20),
@@ -596,12 +648,12 @@ class AppionmentScreen extends GetWidget<AppionmentController> {
                             backgroundColor: Colors.transparent,
                             shadowColor: Colors.transparent),
                         onPressed: () {
-                          if (_controller.selectedTimeSlot.value.isNotEmpty &&
-                                  _controller.selectedIndex.value != 0 ||
-                              _controller.selectedTimeSlot.value != '' &&
-                                  _controller.selectedIndex.value != 0) {
-                            print(_controller.selectedIndex.value);
-                            _controller.bookAppoinmentAPI();
+                          if (controller.selectedTimeSlot.value.isNotEmpty &&
+                                  controller.selectedIndex.value != 0 ||
+                              controller.selectedTimeSlot.value != '' &&
+                                  controller.selectedIndex.value != 0) {
+                            print(controller.selectedIndex.value);
+                            controller.bookAppoinmentAPI();
                           } else {
                             CM.showToast("Please select valid slot");
                           }
