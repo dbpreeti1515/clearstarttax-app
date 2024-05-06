@@ -24,9 +24,12 @@ class NewsPageScreen extends GetWidget<NewsPageController> {
   NewsPageScreen({Key? key, this.id}) : super(key: key){
 
 
+
+
+
     controller.testimonialDescriptionId.value = id??0;
 
-     controller.TestimonialDescriptionAPI(controller.testimonialDescriptionId.value);
+     controller.TestimonialDescriptionAPI( controller.testimonialDescriptionId.value);
    //  controller.updateHeight();
 
 
